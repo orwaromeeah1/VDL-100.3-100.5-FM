@@ -36,6 +36,8 @@ dependencies:
 
   flutter_open_whatsapp: any
 
+  cached_network_image: ^2.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

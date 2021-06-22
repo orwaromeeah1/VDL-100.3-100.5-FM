@@ -45,7 +45,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.tv ,),
+        icon: Icon(Icons.calendar_today ,),
           activeColorPrimary: Colors.grey,
           activeColorSecondary: Colors.green,
         title: 'جدول البرامج',
