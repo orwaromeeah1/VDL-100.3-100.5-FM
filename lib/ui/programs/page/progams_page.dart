@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
+import 'package:vdl/data/models/category_model.dart';
+import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 
 class ProgramsPage extends StatefulWidget {
   @override
@@ -10,10 +12,27 @@ class _ProgramsPageState extends State<ProgramsPage> {
   double width;
   final GlobalKey<FormState> _searchFormKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
+  List<Widget> categoriesWidget = [] ;
+
+  //fake data
+  List<Category> categories =[
+    new Category (id: '1',name: 'أرشيف'),
+    new Category (id: '1',name: 'ثقافة'),
+    new Category (id: '1',name: 'سياسة'),
+    new Category (id: '1',name: 'فن'),
+    new Category (id: '1',name: 'اقتصاد'),
+    new Category (id: '1',name: 'صحة'),
+    new Category (id: '1',name: 'شبابي'),
+    new Category (id: '1',name: 'منوعات'),
+    new Category (id: '1',name: 'مجتمع'),
+  ];
+
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
+    _getCategoriesWidget();
+
 
     return Scaffold(
 //      appBar: AppBar(),
@@ -115,26 +134,31 @@ class _ProgramsPageState extends State<ProgramsPage> {
             ),
             new Container(
                 alignment: Alignment.bottomCenter,
-                padding: new EdgeInsets.only(top: 250, right: 20.0, left: 20.0),
-                child: Column(
-                  children: [
-                    ProgramCard(
-                      category: 'محلية',
-                      name: 'صوت جديد',
-                      date: 'الخميس 20 تشرين الثاني',
-                    ),
-                    ProgramCard(
-                      category: 'محلية',
-                      name: 'صوت جديد',
-                      date: 'الخميس 20 تشرين الثاني',
-                    ),
-                    ProgramCard(
-                      category: 'محلية',
-                      name: 'صوت جديد',
-                      date: 'الخميس 20 تشرين الثاني',
-                    ),
-                  ],
-                ))
+                padding: new EdgeInsets.only(top: 200, right: 20.0, left: 20.0),
+                child:ListView.builder(
+                    itemCount: 5,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder:  (BuildContext context, int index){
+                      return  GestureDetector(
+                        onTap: ()=> Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                 builder: (BuildContext context) => ProgramDetailsPage()
+                            )
+                        ),
+                        child: Container(
+                          child: ProgramCard(
+                            image: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
+                            category: 'محلية',
+                            name: 'صوت جديد',
+                            date: 'الخميس 20 تشرين الثاني',
+                          ),
+                        ),
+                      );
+                    }
+                )
+            )
           ],
         ),
       ),
@@ -157,48 +181,91 @@ class _ProgramsPageState extends State<ProgramsPage> {
             color: Colors.transparent,
               padding: EdgeInsets.all(20),//could change this to Color(0xFF737373),
             //so you don't have to change MaterialApp canvasColor
-            child: new Container(
+              child :StatefulBuilder(builder: (context, setState) {
+                return new Container(
 
-                child:Column(
-                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flex(
-                         direction: Axis.horizontal,
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                color: Colors.grey,
-                                size: 35,
-                              ),
-                              onPressed:()=> Navigator.pop(context)
-                          ),
-                          Text(
-                            'تصنيف النتائج',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: Colors.grey,
+                                      size: 35,
+                                    ),
+                                    onPressed:()=> Navigator.pop(context)
+                                ),
+                                Text(
+                                  'تصنيف النتائج',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
 
-                      Text(
-                        'الغاء',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.green
+                            GestureDetector(
+                              onTap: (){
+//                                setState(() {
+//                                });
+                              },
+                              child: Text(
+                                'الغاء',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.green
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  )
-                 ],
-          )
+//                        Wrap(
+//                          children: categoriesWidget,
+//                        ),
+//                          SingleChildScrollView(
+//                            child: Container(
+//                              height: 150,
+//                              child:
+//
+//                            ),
+//                          ),
+                      ],
+                    )
+                );
+              }
             )
           );
         }
     );
+  }
+
+  _getCategoriesWidget(){
+    categories.forEach((element) {categoriesWidget.add(
+       Container(
+         width: 75,
+         height: 50,
+         decoration: BoxDecoration(
+           borderRadius: BorderRadius.circular(15),
+           border: Border.all(
+             color: Colors.grey,
+             width: 1,
+           )
+         ),
+         padding: EdgeInsets.all(5),
+         child: new Center(
+            child: Text(
+              element.name
+            ),
+          ),
+       )
+    );
+    });
   }
 }

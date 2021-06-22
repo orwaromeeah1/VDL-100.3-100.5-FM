@@ -30,7 +30,7 @@ class ProgramCard extends StatelessWidget {
                  decoration: BoxDecoration(
                    image: DecorationImage(
                      fit: BoxFit.cover,
-                     image: NetworkImage( 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',),
+                     image: NetworkImage( '$image',),
                    )
                  ),
 //                 child:  CachedNetworkImage(
