@@ -22,7 +22,7 @@ class EpisodeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 175,
-      padding: EdgeInsets.symmetric(horizontal: 13,vertical: 7),
+      padding: EdgeInsets.only(bottom: 14),
       child: Card(
         elevation: 1,
         shape: RoundedRectangleBorder(

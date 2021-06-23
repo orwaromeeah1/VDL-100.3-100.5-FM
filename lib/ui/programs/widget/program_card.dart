@@ -27,25 +27,20 @@ class ProgramCard extends StatelessWidget {
             children: <Widget>[
               new Container(
                 height: 200,
-                 decoration: BoxDecoration(
-                   image: DecorationImage(
-                     fit: BoxFit.cover,
-                     image: NetworkImage( '$image',),
-                   )
+
+                 child:  CachedNetworkImage(
+                   imageUrl:  '$image',
+                   imageBuilder: (context, imageProvider) => Container(
+                       width: MediaQuery.of(context).size.width,
+                       padding: EdgeInsets.symmetric(horizontal: 25),
+                       decoration: BoxDecoration(
+                         image: DecorationImage(
+                           image: imageProvider,
+                           fit: BoxFit.cover,
+                         ),
+                       ),
+              ),
                  ),
-//                 child:  CachedNetworkImage(
-//                   imageUrl:  'https://www.wbcsd.org/var/site/storage/images/media/images/fresh_pa/80809-2-eng-GB/FRESH_PA_i1140.jpg',
-//                   imageBuilder: (context, imageProvider) => Container(
-//                       width: MediaQuery.of(context).size.width,
-//                       padding: EdgeInsets.symmetric(horizontal: 25),
-//                       decoration: BoxDecoration(
-//                         image: DecorationImage(
-//                           image: imageProvider,
-//                           fit: BoxFit.cover,
-//                         ),
-//                       ),
-//              ),
-//                 ),
               ),
             ],
           ),
