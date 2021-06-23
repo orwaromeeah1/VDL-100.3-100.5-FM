@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/data/models/day_model.dart';
 import 'package:vdl/ui/programs_schedule/widget/program_schedule_card.dart';
+import 'package:vdl/utils/date_helper/date_hepler.dart';
 
 class ProgramsSchedulePage extends StatefulWidget {
   @override
@@ -8,6 +10,14 @@ class ProgramsSchedulePage extends StatefulWidget {
 
 class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   double width;
+  List<DayModel> currentMonthDays =[];
+  int selectedDay = DateTime.now().day;
+
+  @override
+  void initState() {
+    super.initState();
+    currentMonthDays = DateHelper.getDays();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +30,22 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           Positioned(
             top: 0,
             child: Container(
-            height: 200,
+            height: 175,
             width: width,
             color: Colors.black87,
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.only(top: 50),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'البرامج',
+                  DateHelper.getMonthNameInArabic(DateTime.now().month)+' ' + DateTime.now().year.toString(),
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                      color: Colors.grey,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
+                daysSlider(),
               ],
             ),
           ),),
@@ -45,12 +56,17 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                   itemCount: 10,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context,int index){
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: ProgramScheduleCard(
-                        name: 'السجل الذهبي',
-                        duration: '2:30',
-                        image: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
+                    return GestureDetector(
+                      onTap: (){
+                        print(currentMonthDays[0].name);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: ProgramScheduleCard(
+                          name: 'السجل الذهبي',
+                          duration: '2:30',
+                          image: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
+                        ),
                       ),
                     );
                   })
@@ -59,6 +75,128 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
       ),
 
 
+    );
+  }
+
+  Widget daysSlider(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+      children: [
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              selectedDay--;
+            });
+          },
+          child: Container(
+            height: 35,
+            width: 35,
+            margin: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(right: 7),
+            decoration: BoxDecoration(
+              color: Colors.white12,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child:Center(
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.green,
+              ),
+            ) ,
+          ),
+        ),
+
+        Container(
+          width: 50,
+          child: Flex(
+            direction: Axis.vertical,
+            children: [
+              Text(
+                '${currentMonthDays[(selectedDay-2)%currentMonthDays.length].number}',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                '${currentMonthDays[(selectedDay-2)%currentMonthDays.length].name}',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: 50,
+          child: Flex(
+            direction: Axis.vertical,
+            children: [
+              Text(
+                '${currentMonthDays[(selectedDay-1)%currentMonthDays.length].number}',
+                style: TextStyle(
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                 '${currentMonthDays[(selectedDay-1)%currentMonthDays.length].name}',
+                style: TextStyle(
+                  color: Colors.green,
+                ),
+              ),
+              Container(
+                height: 1,
+                width: 50,
+                color: Colors.green,
+              )
+            ],
+          ),
+        ),
+        Container(
+          width: 50,
+          child: Flex(
+            direction: Axis.vertical,
+            children: [
+              Text(
+                '${currentMonthDays[(selectedDay)%currentMonthDays.length].number}',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                '${currentMonthDays[(selectedDay)%currentMonthDays.length].name}',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              selectedDay++;
+            });
+          },
+          child: Container(
+            height: 35,
+            width: 35,
+            margin: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              color: Colors.white12,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child:Center(
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.green,
+              ),
+            ) ,
+          ),
+        ),
+
+
+      ],
     );
   }
 }
