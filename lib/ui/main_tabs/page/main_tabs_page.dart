@@ -63,10 +63,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PersistentTabView(context,
+      body: PersistentTabView(
+        context,
         controller: _controller,
         screens: _pages,
         items: _navBarsItems(),
+        navBarHeight: 75,
         confineInSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
@@ -74,6 +76,25 @@ class _MainTabsPageState extends State<MainTabsPage> {
         hideNavigationBarWhenKeyboardShows: true,
         popAllScreensOnTapOfSelectedTab: true,
         navBarStyle: NavBarStyle.style6,
+        padding: NavBarPadding.only(top: 15),
+        decoration: NavBarDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(-5,0),
+              blurRadius: 1,
+            ),
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(5,0),
+              blurRadius: 1,
+            ),
+          ],
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(35),
+              topLeft: Radius.circular(35)
+          )
+        ),
 
       ),
     );
