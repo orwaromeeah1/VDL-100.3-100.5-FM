@@ -1,7 +1,12 @@
 import 'dart:ui';
 
-class ProjectColors{
-  static const ThemeColor = Color(0xff26776D);
-  static const LightGreen = Color(0xff23A180);
-  static const red = Color(0xffEC1C24);
-}
+const ThemeColor = Color(0xff26776D);
+const green = Color(0xff329560);
+const red = Color(0xffEC1C24);
+const blue = Color(0xff015289);
+const backgroundGrey = Color(0xffF5F6F8);
+const black = Color(0xff000000);
+
+const brown = Color(0xffDB934C);
+const iconGrey = Color(0xff9B9B9B);
+const darkBlue = Color(0xff2A2839);
