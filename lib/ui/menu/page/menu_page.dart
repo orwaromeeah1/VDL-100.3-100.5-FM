@@ -24,7 +24,10 @@ class _MenuPageState extends State<MenuPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 53.0, left: 23),
+              padding: const EdgeInsets.only(
+                top: 53.0,
+                right: 23,
+              ),
               child: Text(
                 'القائمة',
                 style: TextStyle(
