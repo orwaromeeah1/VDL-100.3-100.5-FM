@@ -39,7 +39,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.radio ),
+        icon: Icon(Icons.wifi_tethering ),
           activeColorPrimary: Colors.grey,
           activeColorSecondary: Colors.green,
         title: 'بث مباشر',
