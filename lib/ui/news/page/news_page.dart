@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
+import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -168,62 +169,76 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 19.0),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/twitter.svg',
-                        height: 21,
-                        width: 17,
-                      ),
+          isSpeacialReports
+              ? SliverList(
+                  delegate: SliverChildListDelegate([
+                  Container(
+                      height: 150 * newsTypes.length.toDouble(),
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => SpecialReportsCard(),
+                          itemCount: newsTypes.length)),
+                  SizedBox(
+                    height: 40,
+                  )
+                ]))
+              : SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
                       SizedBox(
-                        width: 8,
+                        height: 30,
                       ),
-                      Text(
-                        'أحدث التغريدات',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 19.0),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/twitter.svg',
+                              height: 21,
+                              width: 17,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'أحدث التغريدات',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 19.0),
-                  child: Column(
-                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 19.0),
+                        child: Column(
+                          children: [
+                            Container(
+                                height: 130,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        twitterCard(),
+                                    itemCount: newsTypes.length)),
+                          ],
+                        ),
+                      ),
                       Container(
-                          height: 130,
+                          height: 360 * newsTypes.length.toDouble(),
                           child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => twitterCard(),
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) => NewsCardWidget(),
                               itemCount: newsTypes.length)),
+                      SizedBox(
+                        height: 50,
+                      )
                     ],
                   ),
-                ),
-                Container(
-                    height: 360 * newsTypes.length.toDouble(),
-                    child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => NewsCardWidget(),
-                        itemCount: newsTypes.length)),
-                SizedBox(
-                  height: 80,
                 )
-              ],
-            ),
-          )
         ],
       ),
     );

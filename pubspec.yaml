@@ -39,6 +39,9 @@ dependencies:
 
   flutter_icons: ^1.1.0
 
+  flutter_card_swipper: ^0.4.0
+  flutter_switch: ^0.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

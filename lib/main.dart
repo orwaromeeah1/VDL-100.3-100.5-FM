@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
       locale: Locale('ar'),
       title: 'VDL',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.green,
+        secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home:

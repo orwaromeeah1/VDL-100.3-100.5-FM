@@ -8,3 +8,4 @@ const backgroundGrey = Color(0xffF5F6F8);
 const black = Color(0xff000000);
 
 const brown = Color(0xffDB934C);
+const iconGrey = Color(0xff9B9B9B);
