@@ -21,4 +21,6 @@ class DateHelper{
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 
+  //DateFormat('EEEE').format(date);
+
 }

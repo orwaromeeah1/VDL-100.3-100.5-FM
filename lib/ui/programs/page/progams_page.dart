@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/ui/programs/widget/category_widget.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
@@ -226,16 +227,38 @@ class _ProgramsPageState extends State<ProgramsPage> {
                             ),
                           ],
                         ),
-//                        Wrap(
-//                          children: categoriesWidget,
-//                        ),
-//                          SingleChildScrollView(
-//                            child: Container(
-//                              height: 150,
-//                              child:
-//
-//                            ),
-//                          ),
+                        Container(
+                          height: 150,
+                          child: GridView.builder(
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                         categories[index].isSelected = !categories[index].isSelected;
+                                      });
+                                    },
+                                    child: CategoryWidget(
+                                      name: categories[index].name,
+                                      isSelected: categories[index].isSelected,
+                                    )
+                                  ),
+                                ),
+                              );
+                            },
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                mainAxisSpacing: 5,
+                                crossAxisSpacing: 3,
+                                childAspectRatio: (2/1)),
+                            itemCount: categories.length,
+                            shrinkWrap: true,
+                          ),
+                        ),
+
                       ],
                     )
                 );
