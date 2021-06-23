@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -38,7 +40,14 @@ class _MenuPageState extends State<MenuPage> {
             ),
             MenuItem(
               title: 'مقالات',
-              onClick: () {},
+              onClick: () {
+                pushNewScreen(
+                  context,
+                  screen: ArticlesPage(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
             ),
             MenuItem(
               title: 'نشرة الاخبار',

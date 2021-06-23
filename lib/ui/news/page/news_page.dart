@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
+import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsPage extends StatefulWidget {
@@ -83,13 +85,25 @@ class _NewsPageState extends State<NewsPage> {
                                     ),
                                     Row(
                                       children: [
-                                        CircleAvatar(
-                                          radius: 20,
-                                          child: Icon(
-                                            CupertinoIcons.bell,
-                                            color: Colors.black,
+                                        InkWell(
+                                          onTap: () {
+                                            pushNewScreen(
+                                              context,
+                                              screen: NotificationPage(),
+                                              withNavBar: true,
+                                              pageTransitionAnimation:
+                                                  PageTransitionAnimation
+                                                      .cupertino,
+                                            );
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 20,
+                                            child: Icon(
+                                              CupertinoIcons.bell,
+                                              color: Colors.black,
+                                            ),
+                                            backgroundColor: backgroundGrey,
                                           ),
-                                          backgroundColor: backgroundGrey,
                                         ),
                                         SizedBox(
                                           width: 10,

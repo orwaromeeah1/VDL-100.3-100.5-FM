@@ -9,3 +9,4 @@ const black = Color(0xff000000);
 
 const brown = Color(0xffDB934C);
 const iconGrey = Color(0xff9B9B9B);
+const darkBlue = Color(0xff2A2839);
