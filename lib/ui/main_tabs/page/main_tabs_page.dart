@@ -19,7 +19,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
   List<Widget> _pages = [
     NewsPage(),
     ProgramsPage(),
-    NewsBroadcastsPage(),
+    LiveBroadcastPage(),
     ProgramsSchedulePage(),
     MenuPage(),
     // see the SettingsPage class

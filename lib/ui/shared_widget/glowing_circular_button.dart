@@ -21,32 +21,31 @@ class GlowingCircularButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: GestureDetector(
-        onTap: onClick,
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
+      width: size+10,
+      height: size+10,
+      padding: EdgeInsets.all(5),
 
-            color: color,
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: isGlowing ? [
-              BoxShadow(
-                color: color.withOpacity(0.8),
-                blurRadius: 20,
-                offset: Offset(4, 4,), // Shadow position
-              ),
-              BoxShadow(
-                color: color.withOpacity(0.8),
-                blurRadius: 20,
-                offset: Offset(-4, -4,), // Shadow position
-              ),
-            ]:
-            [],
+      decoration: BoxDecoration(
+        color: isGlowing ? color.withOpacity(0.3) : Colors.transparent,
+        borderRadius: BorderRadius.circular(60),
+
+      ),
+      child: Container(
+        child: GestureDetector(
+          onTap: onClick,
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+
+              color: color,
+              borderRadius: BorderRadius.circular(50),
+
+            ),
+            child:iconImage != ''
+                  ?Image.asset(iconImage,height: size,width: size,)
+                  :icon
           ),
-          child:iconImage != ''
-                ?Image.asset(iconImage,height: size,width: size,)
-                :icon
         ),
       ),
     );

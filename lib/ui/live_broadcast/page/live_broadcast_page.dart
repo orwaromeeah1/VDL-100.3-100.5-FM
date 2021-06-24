@@ -1,5 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
+import 'package:vdl/ui/live_broadcast/widget/logo_widget.dart';
+import 'package:vdl/utils/file_path/file_path.dart';
+
+import 'live_audio/live_audio_page.dart';
+import 'live_video/live_video_page.dart';
 
 class LiveBroadcastPage extends StatefulWidget {
   @override
@@ -7,13 +13,64 @@ class LiveBroadcastPage extends StatefulWidget {
 }
 
 class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
+  double width;
+
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(),
       body: Container(
-        child: Center(
-          child: Text('live broadcast'),
+        width: width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image:AssetImage(
+              FilePath.LIVE_BACKGROUND,
+            ),
+            fit: BoxFit.fitHeight
+
+          )
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Container(
+            width: width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image:AssetImage(
+                        FilePath.MASK
+                    ),
+                    fit: BoxFit.fitHeight
+                )
+            ),
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: LogoWidget(size: 200,),
+                ),
+                LiveStreamButton(
+                  image: FilePath.AUDIO_LOGO,
+                  text: 'بث سمعي',
+                  onClick: ()=> Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=> LiveAudioPage())
+                  ),
+                ),
+                LiveStreamButton(
+                  image: FilePath.VIDEO_LOGO,
+                  text: 'بث بصري',
+                  onClick: ()=> Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context)=> LiveVideoPage())
+                ),
+                ),
+              ],
+            )
+
+          ),
         ),
       ),
     );
