@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class HistoricalPrograms extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _HistoricalProgramsState extends State<HistoricalPrograms> {
                 new Container(
                   height: 200,
                   width: width,
-                  color: Colors.black87,
+                  color: ProjectColors.BLACK,
                   padding: EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

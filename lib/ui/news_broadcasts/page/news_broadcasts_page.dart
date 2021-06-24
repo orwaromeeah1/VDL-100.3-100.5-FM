@@ -286,7 +286,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                 new Container(
                   height: 200,
                   width: width,
-                  color: Colors.black87,
+                  color: ProjectColors.BLACK,
                   padding: EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

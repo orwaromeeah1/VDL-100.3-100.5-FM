@@ -50,7 +50,7 @@ class _NewsBroadcastDeteilsPageState extends State<NewsBroadcastDeteilsPage> {
                 new Container(
                   height: 200,
                   width: width,
-                  color: Colors.black87,
+                  color: ProjectColors.BLACK,
                   padding: EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

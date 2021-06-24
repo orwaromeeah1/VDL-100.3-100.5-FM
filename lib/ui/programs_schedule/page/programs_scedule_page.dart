@@ -32,7 +32,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             child: Container(
             height: 175,
             width: width,
-            color: Colors.black87,
+            color: ProjectColors.BLACK,
             padding: EdgeInsets.only(top: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

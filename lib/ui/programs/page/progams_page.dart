@@ -48,7 +48,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                 new Container(
                   height: 300,
                   width: width,
-                  color: Colors.black87,
+                  color: ProjectColors.BLACK,
                   padding: EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
