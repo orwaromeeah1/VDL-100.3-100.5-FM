@@ -15,7 +15,6 @@ class _HistoricalProgramsState extends State<HistoricalPrograms> {
     width = MediaQuery.of(context).size.width;
 
     return  Scaffold(
-//      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[

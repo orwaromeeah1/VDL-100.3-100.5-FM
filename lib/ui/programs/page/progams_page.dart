@@ -40,7 +40,6 @@ class _ProgramsPageState extends State<ProgramsPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-            // image
             new Column(
               children: <Widget>[
                 new Container(
@@ -135,7 +134,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
             ),
             new Container(
                 alignment: Alignment.bottomCenter,
-                padding: new EdgeInsets.only(top: 200, right: 20.0, left: 20.0),
+                padding: new EdgeInsets.only(top: 200, right: 20.0, left: 20.0,bottom: 50),
                 child:ListView.builder(
                     itemCount: 5,
                     physics: NeverScrollableScrollPhysics(),

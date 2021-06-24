@@ -4,6 +4,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
 import 'package:vdl/ui/menu/page/menu_page.dart';
 import 'package:vdl/ui/news/page/news_page.dart';
+import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/programs/page/progams_page.dart';
 import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 
@@ -17,7 +18,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
   List<Widget> _pages = [
     NewsPage(),
     ProgramsPage(),
-    LiveBroadcastPage(),
+    NewsBroadcastsPage(),
     ProgramsSchedulePage(),
     MenuPage(),
     // see the SettingsPage class

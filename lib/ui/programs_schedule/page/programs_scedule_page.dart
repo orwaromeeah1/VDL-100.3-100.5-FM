@@ -26,7 +26,6 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // image
           Positioned(
             top: 0,
             child: Container(
@@ -51,7 +50,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           ),),
           Container(
               width: width,
-              margin: EdgeInsets.only(top: 200),
+              margin: EdgeInsets.only(top: 175),
               child: ListView.builder(
                   itemCount: 10,
                   shrinkWrap: true,
@@ -181,6 +180,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           child: Container(
             height: 35,
             width: 35,
+            padding: EdgeInsets.only(right: 7),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               color: Colors.white12,
