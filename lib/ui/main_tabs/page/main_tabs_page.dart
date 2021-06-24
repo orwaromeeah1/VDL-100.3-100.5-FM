@@ -7,6 +7,7 @@ import 'package:vdl/ui/news/page/news_page.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/programs/page/progams_page.dart';
 import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 
 class MainTabsPage extends StatefulWidget {
@@ -30,31 +31,31 @@ class _MainTabsPageState extends State<MainTabsPage> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
         activeColorPrimary: Colors.grey,
-        activeColorSecondary: Colors.green,
+        activeColorSecondary: ProjectColors.ThemeColor,
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.grid_view ),
           activeColorPrimary: Colors.grey,
-          activeColorSecondary: Colors.green,
+          activeColorSecondary: ProjectColors.ThemeColor,
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.wifi_tethering ),
           activeColorPrimary: Colors.grey,
-          activeColorSecondary: Colors.green,
+          activeColorSecondary: ProjectColors.ThemeColor,
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.calendar_today ,),
           activeColorPrimary: Colors.grey,
-          activeColorSecondary: Colors.green,
+          activeColorSecondary: ProjectColors.ThemeColor,
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.menu ),
           activeColorPrimary: Colors.grey,
-          activeColorSecondary: Colors.green,
+          activeColorSecondary: ProjectColors.ThemeColor,
         title: 'قائمة',
       ),
 

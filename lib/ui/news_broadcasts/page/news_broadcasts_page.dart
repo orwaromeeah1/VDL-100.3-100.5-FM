@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vdl/data/models/days_news_broadcasts_model.dart';
 import 'package:vdl/data/models/news_broadcast_model.dart';
 import 'package:vdl/ui/news_broadcasts/widget/days_news_broadcasts_list_widget.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 
 class NewsBroadcastsPage extends StatefulWidget {
@@ -334,7 +335,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                               child: Container(
                                 width: width,
                                 padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
-                                color: daysNews[index].isOpened ? Colors.green : Colors.white,
+                                color: daysNews[index].isOpened ? ProjectColors.ThemeColor : Colors.white,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

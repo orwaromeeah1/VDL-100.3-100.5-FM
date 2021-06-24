@@ -3,6 +3,9 @@ import 'package:vdl/ui/programs/widget/category_widget.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
+import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
+import 'package:vdl/utils/file_path/file_path.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramsPage extends StatefulWidget {
   @override
@@ -108,21 +111,15 @@ class _ProgramsPageState extends State<ProgramsPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                onTap: () => _modalBottomSheetMenu(),
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Icon(
-                                    Icons.filter_list,
-                                    color: Colors.orangeAccent,
-                                  ),
-                                ),
+                              child:GlowingCircularButton(
+                                size: 40,
+                                color: ProjectColors.ThemeColor,
+                                onClick: (){
+                                  _modalBottomSheetMenu();
+                                },
+                                iconImage: FilePath.FILTER,
                               ),
+
                             )
                           ],
                         ),
@@ -220,7 +217,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                 'الغاء',
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.green
+                                    color: ProjectColors.ThemeColor
                                 ),
                               ),
                             ),

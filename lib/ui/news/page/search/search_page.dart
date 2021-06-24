@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 
 class SearchPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SearchPageState extends State<SearchPage> {
                     IconButton(
                         icon: Icon(
                           Icons.search,
-                          color: Colors.green,
+                          color: ProjectColors.ThemeColor,
                         ),
                         onPressed: () {
 

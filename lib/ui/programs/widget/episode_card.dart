@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class EpisodeCard extends StatelessWidget {
   final String episodeNumber;
@@ -76,11 +77,11 @@ class EpisodeCard extends StatelessWidget {
                         Flex(
                           direction: Axis.horizontal,
                           children: [
-                           Icon(Icons.headset,color: Colors.blue,),
+                           Icon(Icons.headset,color: ProjectColors.BLUE,),
                             Text(
                               'استمع الآن',
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: ProjectColors.BLUE,
                               ),
                             ),
                           ],
@@ -88,11 +89,11 @@ class EpisodeCard extends StatelessWidget {
                         Flex(
                           direction: Axis.horizontal,
                           children: [
-                            Icon(Icons.play_arrow,color: Colors.green,),
+                            Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
                             Text(
                               'شاهد الآن',
                               style: TextStyle(
-                                color: Colors.green,
+                                color: ProjectColors.ThemeColor,
                               ),
                             ),
                           ],

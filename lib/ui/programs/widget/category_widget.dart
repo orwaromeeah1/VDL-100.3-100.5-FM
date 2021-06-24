@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class CategoryWidget extends StatelessWidget {
   final String name;
@@ -15,18 +16,21 @@ class CategoryWidget extends StatelessWidget {
       width: 50,
       height: 25,
       decoration: BoxDecoration(
-        borderRadius:BorderRadius.circular(15),
-        border: Border.all(
+        borderRadius:BorderRadius.circular(30),
+        color: Color(0xffF4F5F7),
+        border:isSelected
+            ? Border.all(
           width: 1,
-          color: isSelected ? Colors.green : Colors.grey,
+          color:  ProjectColors.ThemeColor
         )
+            :null,
       ),
 
       child: Center(
         child: Text(
           '$name',
           style: TextStyle(
-            color: isSelected ? Colors.green : Colors.grey,
+            color: isSelected ? ProjectColors.ThemeColor : Colors.grey,
           ),
         ),
       ),

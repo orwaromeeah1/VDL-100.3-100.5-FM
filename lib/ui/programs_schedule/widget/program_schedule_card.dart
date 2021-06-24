@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
@@ -55,7 +56,7 @@ class ProgramScheduleCard extends StatelessWidget {
                     Text(
                       '$duration',
                       style: TextStyle(
-                          color: Colors.green
+                          color: ProjectColors.ThemeColor
                       ),
                     ),
                     Text(

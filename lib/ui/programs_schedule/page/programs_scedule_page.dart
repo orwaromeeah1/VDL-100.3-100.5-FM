@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vdl/data/models/day_model.dart';
 import 'package:vdl/ui/programs_schedule/widget/program_schedule_card.dart';
 import 'package:vdl/utils/date_helper/date_hepler.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramsSchedulePage extends StatefulWidget {
   @override
@@ -100,7 +101,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             child:Center(
               child: Icon(
                 Icons.arrow_back_ios,
-                color: Colors.green,
+                color: ProjectColors.ThemeColor,
               ),
             ) ,
           ),
@@ -134,19 +135,19 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
               Text(
                 '${currentMonthDays[(selectedDay-1)%currentMonthDays.length].number}',
                 style: TextStyle(
-                  color: Colors.green,
+                  color: ProjectColors.ThemeColor,
                 ),
               ),
               Text(
                  '${currentMonthDays[(selectedDay-1)%currentMonthDays.length].name}',
                 style: TextStyle(
-                  color: Colors.green,
+                  color: ProjectColors.ThemeColor,
                 ),
               ),
               Container(
                 height: 1,
                 width: 50,
-                color: Colors.green,
+                color: ProjectColors.ThemeColor,
               )
             ],
           ),
@@ -189,7 +190,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             child:Center(
               child: Icon(
                 Icons.arrow_forward_ios,
-                color: Colors.green,
+                color: ProjectColors.ThemeColor,
               ),
             ) ,
           ),

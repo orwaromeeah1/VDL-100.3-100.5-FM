@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vdl/ui/programs/widget/episode_card.dart';
+import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
+import 'package:vdl/utils/file_path/file_path.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramDetailsPage extends StatefulWidget {
   @override
@@ -61,52 +64,27 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 
                           Padding(
                             padding: const EdgeInsets.only(right: 10),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Icon(
-                                  Icons.refresh,
-                                  color: Colors.green,
-                                ),
-                              ),
+                            child:GlowingCircularButton(
+                              size: 50,
+                              color: Colors.white,
+                              onClick: (){},
+                              iconImage: FilePath.SHARE,
                             ),
+
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 20,left: 20),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(50),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.green.withOpacity(0.8),
-                                      blurRadius: 20,
-                                      offset: Offset(4, 4,), // Shadow position
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.green.withOpacity(0.8),
-                                      blurRadius: 20,
-                                      offset: Offset(-4, -4,), // Shadow position
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
+                            child: GlowingCircularButton(
+                              size: 50,
+                              color: ProjectColors.ThemeColor,
+                              isGlowing: true,
+                              onClick: (){},
+                              icon: Icon(
                                   Icons.volume_down,
-                                  color: Colors.white,
-                                ),
+                                color: Colors.white,
                               ),
                             ),
+
                           ),
                         ],
                       ),
@@ -121,7 +99,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                       Flex(
                         direction: Axis.horizontal,
                         children: [
-                          Icon(Icons.watch_later,color: Colors.green,),
+                          Icon(Icons.watch_later,color: ProjectColors.ThemeColor,),
                           Text(
                             'من الاثنين إلى الخميس بعد نشرة الخامسة والربع مساء'
                           ),

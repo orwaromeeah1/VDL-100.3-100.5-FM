@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramCard extends StatelessWidget {
   final String name;
@@ -79,7 +80,7 @@ class ProgramCard extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.watch_later,
-                                color: Colors.green,
+                                color: ProjectColors.ThemeColor,
                                 size: 15,
                               ),
                               Text(
