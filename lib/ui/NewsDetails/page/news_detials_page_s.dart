@@ -44,6 +44,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                   child: Stack(
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
@@ -82,7 +83,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                                   Expanded(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 16.0, left: 15, bottom: 12),
+                                          top: 16.0, left: 15),
                                       child: Column(
                                         children: [
                                           Container(
@@ -143,6 +144,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                             child: Container(
                               child: Text(
                                 'سامي الجميّل ينشر لقطات "صادمة"',
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20),
                               ),

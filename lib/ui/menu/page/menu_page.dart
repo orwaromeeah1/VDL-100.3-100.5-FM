@@ -8,8 +8,6 @@ import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
-import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
-import 'package:vdl/ui/programs/page/historical_programs/historical_programs_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MenuPage extends StatefulWidget {
@@ -55,25 +53,11 @@ class _MenuPageState extends State<MenuPage> {
             ),
             MenuItem(
               title: 'نشرة الاخبار',
-              onClick: () {
-                Navigator.push(
-                    context,
-                  MaterialPageRoute(
-                    builder: (context)=> NewsBroadcastsPage()
-                  )
-                );
-              },
+              onClick: () {},
             ),
             MenuItem(
               title: 'برامج تاريخية',
-              onClick: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=> HistoricalPrograms()
-                    )
-                );
-              },
+              onClick: () {},
             ),
             MenuItem(
               title: 'من نحن',
@@ -103,7 +87,7 @@ class _MenuPageState extends State<MenuPage> {
                   child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0, top: 25),
+                    padding: const EdgeInsets.only(bottom: 33.0, top: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
