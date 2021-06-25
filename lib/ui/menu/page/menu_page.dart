@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/ui/Aboutus/pages/about_us_page.dart';
 import 'package:vdl/ui/Articles/page/articles.dart';
+import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -59,11 +61,25 @@ class _MenuPageState extends State<MenuPage> {
             ),
             MenuItem(
               title: 'من نحن',
-              onClick: () {},
+              onClick: () {
+                pushNewScreen(
+                  context,
+                  screen: AboutUsPage(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
             ),
             MenuItem(
               title: 'اتصل بنا',
-              onClick: () {},
+              onClick: () {
+                pushNewScreen(
+                  context,
+                  screen: ContactUsPage(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 21.0, right: 23),
