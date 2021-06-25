@@ -4,7 +4,6 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
 import 'package:vdl/ui/menu/page/menu_page.dart';
 import 'package:vdl/ui/news/page/news_page.dart';
-import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/programs/page/progams_page.dart';
 import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -90,6 +89,11 @@ class _MainTabsPageState extends State<MainTabsPage> {
               color: Colors.black12,
               offset: Offset(5,0),
               blurRadius: 1,
+            ),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 5,
+              offset: Offset(0, 5),
             ),
           ],
           borderRadius: BorderRadius.only(

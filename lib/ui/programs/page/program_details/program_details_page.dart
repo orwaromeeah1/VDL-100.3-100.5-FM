@@ -31,30 +31,52 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                     height: 250,
                     width: width,
                     padding: EdgeInsets.only(top: 40),
-                    child: CachedNetworkImage(
-                      imageUrl: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
-                      imageBuilder: (context, imageProvider) =>
-                          Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            padding: EdgeInsets.symmetric(horizontal: 25),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                    child: Stack(
+                      children: [
+                                                CachedNetworkImage(
+                          imageUrl: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
+                          imageBuilder: (context, imageProvider) =>
+                              Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width,
+                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                    ),
+                        ),
+                        Positioned(
+                            top: 10,
+                            left: 10,
+                            child: GlowingCircularButton(
+                              color: Colors.black26,
+                              onClick:(){
+                                Navigator.pop(context);
+                              },
+                              size: 35,
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white,
+                              ),
+                            )
+
+                        ),
+
+
+                      ],
+                    )
                   ),
                 ],
               ),
               new Container(
                   alignment: Alignment.bottomCenter,
                   padding:
-                      new EdgeInsets.only(top: 225, right: 10.0, left: 10.0),
+                      new EdgeInsets.only(top: 215, right: 10.0, left: 10.0),
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

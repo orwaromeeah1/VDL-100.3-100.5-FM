@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vdl/data/models/day_model.dart';
+import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/ui/programs_schedule/widget/program_schedule_card.dart';
 import 'package:vdl/utils/date_helper/date_hepler.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -58,7 +59,10 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                   itemBuilder: (BuildContext context,int index){
                     return GestureDetector(
                       onTap: (){
-                        print(currentMonthDays[0].name);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context)=>ProgramDetailsPage())
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),

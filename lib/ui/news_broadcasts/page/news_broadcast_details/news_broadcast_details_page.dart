@@ -48,14 +48,23 @@ class _NewsBroadcastDeteilsPageState extends State<NewsBroadcastDeteilsPage> {
             new Column(
               children: <Widget>[
                 new Container(
-                  height: 200,
+                  height: 250,
                   width: width,
                   color: ProjectColors.BLACK,
-                  padding: EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                       Text(
                         'نشرة الأخبار',
                         style: TextStyle(
@@ -70,14 +79,16 @@ class _NewsBroadcastDeteilsPageState extends State<NewsBroadcastDeteilsPage> {
                             fontSize: 24,
                             fontWeight: FontWeight.bold),
                       ),
+
                     ],
                   ),
                 ),
+
               ],
             ),
             new Container(
                 alignment: Alignment.bottomCenter,
-                padding: new EdgeInsets.only(top: 160, right: 20.0, left: 20.0,bottom: 50),
+                padding: new EdgeInsets.only(top: 210, right: 20.0, left: 20.0,bottom: 50),
               child: Column(
                 children: [
                   Container(

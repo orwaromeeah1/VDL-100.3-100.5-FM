@@ -284,14 +284,24 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
             new Column(
               children: <Widget>[
                 new Container(
-                  height: 200,
+                  height: 230,
                   width: width,
                   color: ProjectColors.BLACK,
-                  padding: EdgeInsets.all(30),
+                  padding: EdgeInsets.only(right: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                        Text(
                           'نشرات الأخبار',
                           style: TextStyle(
@@ -313,7 +323,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
             ),
             new Container(
                 alignment: Alignment.bottomCenter,
-                padding: new EdgeInsets.only(top: 130, right: 20.0, left: 20.0,bottom: 50),
+                padding: new EdgeInsets.only(top: 160, right: 20.0, left: 20.0,bottom: 50),
                 child:ListView.builder(
                     itemCount: daysNews.length,
                     physics: NeverScrollableScrollPhysics(),

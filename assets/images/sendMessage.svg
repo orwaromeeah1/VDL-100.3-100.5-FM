@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="198" height="102" viewBox="0 0 198 102">
+  <defs>
+    <filter id="Rectangle_49" x="0" y="0" width="198" height="102" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feFlood flood-opacity="0.114"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_4850" data-name="Group 4850" transform="translate(-179 -921)">
+    <g id="Group_4784" data-name="Group 4784" transform="translate(-801 282)">
+      <g transform="matrix(1, 0, 0, 1, 980, 639)" filter="url(#Rectangle_49)">
+        <rect id="Rectangle_49-2" data-name="Rectangle 49" width="138" height="42" rx="21" transform="translate(30 30)" fill="#fff"/>
+      </g>
+      <circle id="Ellipse_9" data-name="Ellipse 9" cx="28" cy="28" r="28" transform="translate(1099 662)" fill="#329560" opacity="0.251"/>
+      <circle id="Ellipse_10" data-name="Ellipse 10" cx="21" cy="21" r="21" transform="translate(1106 669)" fill="#329560"/>
+      <text id="أرسل_رسالتك" data-name="أرسل رسالتك" transform="translate(1090 694)" fill="#329560" font-size="12" font-family="GeezaPro-Bold, Geeza Pro" font-weight="700"><tspan x="-60.773" y="0">رسالتك</tspan><tspan y="0" font-family="Helvetica-Bold, Helvetica"> </tspan><tspan y="0">أرسل</tspan></text>
+    </g>
+    <g id="mail_3_" data-name="mail (3)" transform="translate(316.585 885.625)">
+      <g id="Group_4049" data-name="Group 4049" transform="translate(12.207 82.334)">
+        <g id="Group_4048" data-name="Group 4048">
+          <path id="Path_3359" data-name="Path 3359" d="M339.392,148.986l6.208,3.925V144.9Z" transform="translate(-339.392 -144.896)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_4051" data-name="Group 4051" transform="translate(0 82.334)">
+        <g id="Group_4050" data-name="Group 4050">
+          <path id="Path_3360" data-name="Path 3360" d="M0,144.9v8.015l6.208-3.925Z" transform="translate(0 -144.896)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_4053" data-name="Group 4053" transform="translate(0.035 80)">
+        <g id="Group_4052" data-name="Group 4052" transform="translate(0 0)">
+          <path id="Path_3361" data-name="Path 3361" d="M18.189,80H2.076a1.137,1.137,0,0,0-1.116.979l9.173,6.044,9.173-6.044A1.137,1.137,0,0,0,18.189,80Z" transform="translate(-0.96 -80)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_4055" data-name="Group 4055" transform="translate(0.037 87.118)">
+        <g id="Group_4054" data-name="Group 4054">
+          <path id="Path_3362" data-name="Path 3362" d="M12.14,277.921l-1.629,1.073a.578.578,0,0,1-.633,0L8.25,277.92l-7.226,4.57a1.135,1.135,0,0,0,1.114.971H18.251a1.135,1.135,0,0,0,1.114-.971Z" transform="translate(-1.024 -277.92)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

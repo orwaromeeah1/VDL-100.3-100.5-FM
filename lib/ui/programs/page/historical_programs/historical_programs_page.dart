@@ -26,11 +26,21 @@ class _HistoricalProgramsState extends State<HistoricalPrograms> {
                   height: 200,
                   width: width,
                   color: ProjectColors.BLACK,
-                  padding: EdgeInsets.all(30),
+                  padding: EdgeInsets.only(right: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                       Text(
                         'البرامج التاريخية',
                         style: TextStyle(
