@@ -35,12 +35,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                     Column(
                       children: [
                         Container(
-                          height: 170,
+                          height: 189,
                           child: Stack(
                             children: [
                               Positioned(
                                 left: 19,
-                                top: 19,
+                                top: 40,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -60,7 +60,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 12,
+                                      height: 22,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -110,7 +110,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                                 ),
                               ),
                               Positioned(
-                                top: 23,
+                                top: 40,
                                 right: 19,
                                 child: Column(
                                   children: [

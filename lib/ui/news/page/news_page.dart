@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
+import 'package:vdl/ui/news/widgets/podcasts_widget.dart';
 import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
@@ -53,132 +54,135 @@ class _NewsPageState extends State<NewsPage> {
       backgroundColor: backgroundGrey,
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: isSpeacialReports ? 154 : 180.0,
-            pinned: false,
-            snap: true,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 17.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 24.0, left: 19),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/VDL_LOGO-image.jpg.svg',
-                                      height: 52,
-                                      width: 67,
-                                    ),
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            pushNewScreen(
-                                              context,
-                                              screen: NotificationPage(),
-                                              withNavBar: true,
-                                              pageTransitionAnimation:
-                                                  PageTransitionAnimation
-                                                      .cupertino,
-                                            );
-                                          },
-                                          child: CircleAvatar(
+          Theme(
+            data: ThemeData(primarySwatch: blue),
+            child: SliverAppBar(
+              expandedHeight: isSpeacialReports ? 154 : 180.0,
+              pinned: false,
+              snap: true,
+              floating: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  color: Colors.white,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 17.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 40.0, left: 19),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/VDL_LOGO-image.jpg.svg',
+                                        height: 52,
+                                        width: 67,
+                                      ),
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              pushNewScreen(
+                                                context,
+                                                screen: NotificationPage(),
+                                                withNavBar: true,
+                                                pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .cupertino,
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              child: Icon(
+                                                CupertinoIcons.bell,
+                                                color: Colors.black,
+                                              ),
+                                              backgroundColor: backgroundGrey,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          CircleAvatar(
                                             radius: 20,
                                             child: Icon(
-                                              CupertinoIcons.bell,
+                                              CupertinoIcons.search,
                                               color: Colors.black,
                                             ),
                                             backgroundColor: backgroundGrey,
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        CircleAvatar(
-                                          radius: 20,
-                                          child: Icon(
-                                            CupertinoIcons.search,
-                                            color: Colors.black,
-                                          ),
-                                          backgroundColor: backgroundGrey,
-                                        ),
-                                      ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isSpeacialReports = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        'الاخبار',
+                                        style: TextStyle(
+                                            color: isSpeacialReports
+                                                ? black.withOpacity(0.25)
+                                                : black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 32),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 14,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(
+                                            () => {isSpeacialReports = true});
+                                      },
+                                      child: Text(
+                                        'تقارير خاصة',
+                                        style: TextStyle(
+                                            color: isSpeacialReports
+                                                ? black
+                                                : black.withOpacity(0.25),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 32),
+                                      ),
                                     )
                                   ],
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isSpeacialReports = false;
-                                      });
-                                    },
-                                    child: Text(
-                                      'الاخبار',
-                                      style: TextStyle(
-                                          color: isSpeacialReports
-                                              ? black.withOpacity(0.25)
-                                              : black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 32),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 14,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(
-                                          () => {isSpeacialReports = true});
-                                    },
-                                    child: Text(
-                                      'تقارير خاصة',
-                                      style: TextStyle(
-                                          color: isSpeacialReports
-                                              ? black
-                                              : black.withOpacity(0.25),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 32),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              isSpeacialReports
-                                  ? Container()
-                                  : Container(
-                                      height: 50,
-                                      child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) =>
-                                              InkWell(
-                                                  onTap: () =>
-                                                      selectType(index),
-                                                  child: tabBarCell(
-                                                      newsType:
-                                                          newsTypes[index])),
-                                          itemCount: newsTypes.length))
-                            ],
+                                isSpeacialReports
+                                    ? Container()
+                                    : Container(
+                                        height: 50,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) =>
+                                                InkWell(
+                                                    onTap: () =>
+                                                        selectType(index),
+                                                    child: tabBarCell(
+                                                        newsType:
+                                                            newsTypes[index])),
+                                            itemCount: newsTypes.length)),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -247,9 +251,7 @@ class _NewsPageState extends State<NewsPage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) => NewsCardWidget(),
                               itemCount: newsTypes.length)),
-                      SizedBox(
-                        height: 50,
-                      )
+                      PodcastsWidet(),
                     ],
                   ),
                 )

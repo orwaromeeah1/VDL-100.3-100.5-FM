@@ -269,7 +269,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 children: [
                   Positioned(
                     left: 19,
-                    top: 19,
+                    top: 40,
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
                       child: CircleAvatar(

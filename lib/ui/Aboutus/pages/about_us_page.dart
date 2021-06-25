@@ -21,7 +21,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               color: darkBlue,
             ),
             Positioned(
-              top: 24,
+              top: 40,
               left: 19,
               child: InkWell(
                 onTap: () => Navigator.pop(context),

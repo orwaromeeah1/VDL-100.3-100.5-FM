@@ -25,10 +25,10 @@ class _NotificationPageState extends State<NotificationPage> {
           children: [
             Container(
                 color: Colors.white,
-                height: 87,
+                height: 110,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      top: 27.0, right: 19, left: 19, bottom: 23),
+                      top: 49.0, right: 19, left: 19, bottom: 23),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

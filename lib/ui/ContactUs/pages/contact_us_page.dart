@@ -446,7 +446,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
               ],
             ),
             Positioned(
-              top: 24.5,
+              top: 40,
               left: 19,
               child: InkWell(
                 onTap: () => Navigator.pop(context),
