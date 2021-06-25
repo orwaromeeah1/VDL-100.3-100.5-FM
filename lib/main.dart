@@ -12,7 +12,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       locale: Locale('ar'),
       title: 'VDL',
+
       theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            }),
         primarySwatch: Colors.green,
         secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,

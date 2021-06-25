@@ -28,3 +28,9 @@ const MaterialColor blue = const MaterialColor(
     900: const Color(0xff015289),
   },
 );
+
+class ProjectColors{
+  static const ThemeColor = Color(0xff329560);
+  static const BLUE = Color(0xff005189);
+  static const BLACK = Color(0xff2A2839);
+}

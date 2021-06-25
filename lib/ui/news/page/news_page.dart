@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/ui/news/page/search/search_page.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/news/widgets/podcasts_widget.dart';
 import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
@@ -111,13 +112,23 @@ class _NewsPageState extends State<NewsPage> {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          CircleAvatar(
-                                            radius: 20,
-                                            child: Icon(
-                                              CupertinoIcons.search,
-                                              color: Colors.black,
+                                          GestureDetector(
+                                            onTap:()=> pushNewScreen(
+                                              context,
+                                              screen: SearchPage(),
+                                              withNavBar: true,
+                                              pageTransitionAnimation:
+                                              PageTransitionAnimation
+                                                  .cupertino,
                                             ),
-                                            backgroundColor: backgroundGrey,
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              child: Icon(
+                                                CupertinoIcons.search,
+                                                color: Colors.black,
+                                              ),
+                                              backgroundColor: backgroundGrey,
+                                            ),
                                           ),
                                         ],
                                       )

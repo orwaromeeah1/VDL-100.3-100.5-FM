@@ -20,6 +20,7 @@ class MenuItem extends StatelessWidget {
         padding: const EdgeInsets.only(left: 21.0, right: 23),
         child: Container(
             height: 71,
+            width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
