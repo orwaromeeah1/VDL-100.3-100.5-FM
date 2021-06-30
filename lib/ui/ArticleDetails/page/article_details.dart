@@ -12,7 +12,18 @@ class ArticleDetailsPage extends StatefulWidget {
   _ArticleDetailsPageState createState() => _ArticleDetailsPageState();
 }
 
-class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
+class _ArticleDetailsPageState extends State<ArticleDetailsPage>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +44,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                 child: Stack(
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           height: 189,
@@ -177,9 +189,13 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                                     child: CircleAvatar(
                                       backgroundColor: blue,
                                       radius: 15,
-                                      child: Icon(
-                                        Icons.play_arrow,
-                                        size: 20,
+                                      child: InkWell(
+                                        onTap: () => _handleOnPressed(),
+                                        child: AnimatedIcon(
+                                          icon: AnimatedIcons.play_pause,
+                                          progress: _animationController,
+                                          size: 20,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -187,7 +203,9 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 16.0, left: 15, bottom: 12),
+                                      top: 16.0,
+                                      left: 15,
+                                    ),
                                     child: Column(
                                       children: [
                                         Container(
@@ -340,5 +358,14 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
         ),
       ),
     );
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+    });
   }
 }

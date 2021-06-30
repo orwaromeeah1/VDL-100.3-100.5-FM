@@ -64,16 +64,18 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       SizedBox(
                         width: 13,
                       ),
-                      Container(
-                        height: 89,
-                        width: 272,
-                        child: Text(
-                          'صوت لبنان’’ إذاعة لبنانية وطنية جامعة منفتحة مضمونا واسلوبا على شرائح المجتمع كافة',
-                          maxLines: 3,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Container(
+                          height: 89,
+                          width: 272,
+                          child: Text(
+                            'صوت لبنان’’ إذاعة لبنانية وطنية جامعة منفتحة مضمونا واسلوبا على شرائح المجتمع كافة',
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -168,7 +170,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              top: 13.0, right: 25, left: 37),
+                              top: 13.0, right: 25, left: 19),
                           child: Container(
                             height: 157,
                             width: MediaQuery.of(context).size.width,

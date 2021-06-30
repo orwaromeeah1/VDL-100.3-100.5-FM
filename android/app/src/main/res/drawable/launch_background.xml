@@ -2,9 +2,11 @@
 <!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@android:color/white" />
-      <item>
+     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/vdl" />
-    </item> 
+            android:src="@mipmap/vdllogo"
+            android:width="100dp"
+            android:height="100dp" />
+    </item>
 </layer-list>

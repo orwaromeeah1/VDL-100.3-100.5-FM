@@ -13,7 +13,18 @@ class NewsPageDetails extends StatefulWidget {
   _NewsPageDetailsState createState() => _NewsPageDetailsState();
 }
 
-class _NewsPageDetailsState extends State<NewsPageDetails> {
+class _NewsPageDetailsState extends State<NewsPageDetails>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -73,9 +84,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                                       child: CircleAvatar(
                                         backgroundColor: blue,
                                         radius: 15,
-                                        child: Icon(
-                                          Icons.play_arrow,
-                                          size: 20,
+                                        child: InkWell(
+                                          onTap: () => _handleOnPressed(),
+                                          child: AnimatedIcon(
+                                            icon: AnimatedIcons.play_pause,
+                                            progress: _animationController,
+                                            size: 20,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -246,6 +261,15 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
         ),
       ),
     );
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+    });
   }
 }
 

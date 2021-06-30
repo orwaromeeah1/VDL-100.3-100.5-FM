@@ -8,6 +8,8 @@ import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
+import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
+import 'package:vdl/ui/programs/page/historical_programs/historical_programs_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MenuPage extends StatefulWidget {
@@ -24,122 +26,138 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       body: Container(
         width: width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 53.0,
-                right: 23,
-              ),
-              child: Text(
-                'القائمة',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 53.0,
+                  right: 23,
+                ),
+                child: Text(
+                  'القائمة',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            MenuItem(
-              title: 'مقالات',
-              onClick: () {
-                pushNewScreen(
-                  context,
-                  screen: ArticlesPage(),
-                  withNavBar: true,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-              },
-            ),
-            MenuItem(
-              title: 'نشرة الاخبار',
-              onClick: () {},
-            ),
-            MenuItem(
-              title: 'برامج تاريخية',
-              onClick: () {},
-            ),
-            MenuItem(
-              title: 'من نحن',
-              onClick: () {
-                pushNewScreen(
-                  context,
-                  screen: AboutUsPage(),
-                  withNavBar: true,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-              },
-            ),
-            MenuItem(
-              title: 'اتصل بنا',
-              onClick: () {
-                pushNewScreen(
-                  context,
-                  screen: ContactUsPage(),
-                  withNavBar: true,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 21.0, right: 23),
-              child: Container(
-                  child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 33.0, top: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'اشعارات',
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        FlutterSwitch(
-                          height: 30.0,
-                          width: 49.0,
-                          padding: 4.0,
-                          toggleSize: 22.0,
-                          borderRadius: 21.0,
-                          activeColor: green,
-                          value: notificationOn,
-                          onToggle: (value) {
-                            setState(() {
-                              notificationOn = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 23.0),
-              child: Row(
-                children: [
-                  SocialButton(
-                    tag: 3,
-                  ),
-                  SizedBox(
-                    width: 13,
-                  ),
-                  SocialButton(
-                    tag: 2,
-                  ),
-                  SizedBox(
-                    width: 13,
-                  ),
-                  SocialButton(
-                    tag: 1,
-                  )
-                ],
+              MenuItem(
+                title: 'مقالات',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: ArticlesPage(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
               ),
-            )
-          ],
+              MenuItem(
+                title: 'نشرة الاخبار',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: NewsBroadcastsPage(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              MenuItem(
+                title: 'برامج تاريخية',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: HistoricalPrograms(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              MenuItem(
+                title: 'من نحن',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: AboutUsPage(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              MenuItem(
+                title: 'اتصل بنا',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: ContactUsPage(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 21.0, right: 23),
+                child: Container(
+                    child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 33.0, top: 25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'اشعارات',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                          FlutterSwitch(
+                            height: 30.0,
+                            width: 49.0,
+                            padding: 4.0,
+                            toggleSize: 22.0,
+                            borderRadius: 21.0,
+                            activeColor: green,
+                            value: notificationOn,
+                            onToggle: (value) {
+                              setState(() {
+                                notificationOn = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23.0, bottom: 99),
+                child: Row(
+                  children: [
+                    SocialButton(
+                      tag: 3,
+                    ),
+                    SizedBox(
+                      width: 13,
+                    ),
+                    SocialButton(
+                      tag: 2,
+                    ),
+                    SizedBox(
+                      width: 13,
+                    ),
+                    SocialButton(
+                      tag: 1,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
