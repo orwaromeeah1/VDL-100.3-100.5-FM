@@ -7,6 +7,8 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/vdl" />
+            android:src="@mipmap/vdllogo"
+            android:width="100dp"
+            android:height="100dp" />
     </item>
 </layer-list>

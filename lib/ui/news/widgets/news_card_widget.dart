@@ -46,8 +46,8 @@ class NewsCardWidget extends StatelessWidget {
                   ),
                   Container(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 19.0, left: 14, right: 15, bottom: 16),
+                      padding:
+                          const EdgeInsets.only(top: 19.0, left: 14, right: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -63,6 +63,7 @@ class NewsCardWidget extends StatelessWidget {
                             'الجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنان',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
+                            maxLines: 2,
                           )
                         ],
                       ),

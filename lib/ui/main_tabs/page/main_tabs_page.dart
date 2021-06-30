@@ -8,7 +8,6 @@ import 'package:vdl/ui/programs/page/progams_page.dart';
 import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
-
 class MainTabsPage extends StatefulWidget {
   @override
   _MainTabsPageState createState() => _MainTabsPageState();
@@ -24,7 +23,8 @@ class _MainTabsPageState extends State<MainTabsPage> {
     // see the SettingsPage class
   ];
 
-  PersistentTabController _controller =PersistentTabController(initialIndex: 0);
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
@@ -34,30 +34,31 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.grid_view ),
-          activeColorPrimary: Colors.grey,
-          activeColorSecondary: ProjectColors.ThemeColor,
+        icon: Icon(Icons.grid_view),
+        activeColorPrimary: Colors.grey,
+        activeColorSecondary: ProjectColors.ThemeColor,
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.wifi_tethering ),
-          activeColorPrimary: Colors.grey,
-          activeColorSecondary: ProjectColors.ThemeColor,
+        icon: Icon(Icons.wifi_tethering),
+        activeColorPrimary: Colors.grey,
+        activeColorSecondary: ProjectColors.ThemeColor,
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.calendar_today ,),
-          activeColorPrimary: Colors.grey,
-          activeColorSecondary: ProjectColors.ThemeColor,
+        icon: Icon(
+          Icons.calendar_today,
+        ),
+        activeColorPrimary: Colors.grey,
+        activeColorSecondary: ProjectColors.ThemeColor,
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.menu ),
-          activeColorPrimary: Colors.grey,
-          activeColorSecondary: ProjectColors.ThemeColor,
+        icon: Icon(Icons.menu),
+        activeColorPrimary: Colors.grey,
+        activeColorSecondary: ProjectColors.ThemeColor,
         title: 'قائمة',
       ),
-
     ];
   }
 
@@ -69,7 +70,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         controller: _controller,
         screens: _pages,
         items: _navBarsItems(),
-        navBarHeight: 75,
+        navBarHeight: 70,
         confineInSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
@@ -79,29 +80,25 @@ class _MainTabsPageState extends State<MainTabsPage> {
         navBarStyle: NavBarStyle.style6,
         padding: NavBarPadding.only(top: 15),
         decoration: NavBarDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(-5,0),
-              blurRadius: 1,
-            ),
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(5,0),
-              blurRadius: 1,
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 5,
-              offset: Offset(0, 5),
-            ),
-          ],
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(35),
-              topLeft: Radius.circular(35)
-          )
-        ),
-
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(-5, 0),
+                blurRadius: 5,
+              ),
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(5, 0),
+                blurRadius: 5,
+              ),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                offset: Offset(0, 5),
+              ),
+            ],
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(35), topLeft: Radius.circular(35))),
       ),
     );
   }

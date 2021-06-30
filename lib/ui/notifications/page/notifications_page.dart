@@ -28,7 +28,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 height: 110,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      top: 49.0, right: 19, left: 19, bottom: 23),
+                      top: 49.0, right: 19, left: 19, bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -79,7 +79,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   itemCount: 20),
             )),
             SizedBox(
-              height: 50,
+              height: 30,
             )
           ],
         ));

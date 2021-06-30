@@ -25,7 +25,7 @@ class MenuItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0, top: 25),
+                  padding: const EdgeInsets.only(bottom: 24.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -43,7 +43,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               padding:
                                   const EdgeInsets.only(top: 48.0, right: 29),
                               child: Container(
-                                height: 40,
+                                height: 42,
                                 child: Text(
                                   'اتصل بنا',
                                   style: TextStyle(

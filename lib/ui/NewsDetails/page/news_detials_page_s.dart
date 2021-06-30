@@ -13,7 +13,18 @@ class NewsPageDetails extends StatefulWidget {
   _NewsPageDetailsState createState() => _NewsPageDetailsState();
 }
 
-class _NewsPageDetailsState extends State<NewsPageDetails> {
+class _NewsPageDetailsState extends State<NewsPageDetails>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -44,6 +55,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                   child: Stack(
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
@@ -72,9 +84,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                                       child: CircleAvatar(
                                         backgroundColor: blue,
                                         radius: 15,
-                                        child: Icon(
-                                          Icons.play_arrow,
-                                          size: 20,
+                                        child: InkWell(
+                                          onTap: () => _handleOnPressed(),
+                                          child: AnimatedIcon(
+                                            icon: AnimatedIcons.play_pause,
+                                            progress: _animationController,
+                                            size: 20,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -82,7 +98,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                                   Expanded(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 16.0, left: 15, bottom: 12),
+                                          top: 16.0, left: 15),
                                       child: Column(
                                         children: [
                                           Container(
@@ -143,6 +159,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
                             child: Container(
                               child: Text(
                                 'سامي الجميّل ينشر لقطات "صادمة"',
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20),
                               ),
@@ -244,6 +261,15 @@ class _NewsPageDetailsState extends State<NewsPageDetails> {
         ),
       ),
     );
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+    });
   }
 }
 

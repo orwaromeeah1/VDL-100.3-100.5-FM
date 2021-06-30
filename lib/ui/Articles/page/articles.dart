@@ -21,10 +21,25 @@ class _ArticlesPageState extends State<ArticlesPage> {
             height: 128,
             color: darkBlue,
           ),
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
               children: [
+                Positioned(
+                  left: 19,
+                  top: 40,
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Icon(
+                        CupertinoIcons.back,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 50.0,
@@ -39,29 +54,27 @@ class _ArticlesPageState extends State<ArticlesPage> {
                     ),
                   ),
                 ),
-                Container(
-                    height: (5 * 150).toDouble(),
-                    child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => ArticleCardWidget(),
-                        itemCount: 5)),
-                SizedBox(
-                  height: 50,
-                )
               ],
             ),
           ),
-          Positioned(
-            left: 19,
-            top: 40,
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Icon(
-                  CupertinoIcons.back,
-                  color: Colors.white,
-                  size: 25,
+          Padding(
+            padding: const EdgeInsets.only(top: 101.0),
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: (5 * 150).toDouble(),
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) =>
+                                ArticleCardWidget(),
+                            itemCount: 5)),
+                    SizedBox(
+                      height: 50,
+                    )
+                  ],
                 ),
               ),
             ),

@@ -36,6 +36,8 @@ class twitterCard extends StatelessWidget {
               Text(
                 'التقى رئيس حزب الكتائب اللبنانية النائب سامي الجميل في بيت الكتائب المركزي المنسق الخاص للأمم المتحدة في لبنان يان كوبيتش وكانت مناسبة للبحث في آخر التطورات',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
               )
             ],
           ),
