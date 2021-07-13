@@ -4,7 +4,6 @@ import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
 import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
-import 'package:vdl/service/auth/auth_service.dart';
 import 'package:vdl/utils/secrets/app_keys.dart';
 import 'package:vdl/utils/urls/urls.dart';
 
