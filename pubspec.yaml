@@ -43,6 +43,16 @@ dependencies:
 
   cached_network_image: ^2.4.1
   audioplayers: 0.17.0
+  flutter_bloc: 7.0.0
+
+  http: 0.13.0
+
+  shared_preferences: ^0.5.3+5
+
+  equatable: ^0.6.1
+
+  get_it: ^4.0.2
+
   intl: ^0.17.0
   
 
