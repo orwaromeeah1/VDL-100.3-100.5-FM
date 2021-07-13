@@ -6,15 +6,11 @@ import 'data/shared_preferences/auth_prefes_helper.dart';
 final locator = GetIt.instance;
 
 Future setLocator() async {
-
   locator.registerLazySingleton<HttpClient>(() => HttpClient());
   locator.registerLazySingleton<AuthPrefsHelper>(() => AuthPrefsHelper());
 
-
-  locator.registerLazySingleton<Repository>(
-      () => Repository(locator(), locator(),)
-  );
-
-
-
- }
+  locator.registerLazySingleton<Repository>(() => Repository(
+        locator(),
+        locator(),
+      ));
+}
