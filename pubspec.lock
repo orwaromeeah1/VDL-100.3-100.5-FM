@@ -8,15 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
-<<<<<<< HEAD
-  audioplayers:
-    dependency: "direct main"
-    description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.17.0"
-=======
   bloc:
     dependency: transitive
     description:
@@ -24,7 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.0.0"
->>>>>>> 1ff38682b32bae87c831776106225924382ba0fa
   boolean_selector:
     dependency: transitive
     description:
@@ -193,11 +183,8 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.12.2"
-=======
     version: "0.13.0"
->>>>>>> 1ff38682b32bae87c831776106225924382ba0fa
   http_parser:
     dependency: transitive
     description:
