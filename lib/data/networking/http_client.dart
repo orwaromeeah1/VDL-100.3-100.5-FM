@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:vdl/core/Exceptions.dart';
 import 'dart:convert' as convert;
@@ -7,20 +8,30 @@ import 'dart:convert' as convert;
 class HttpClient{
 
 
-  Future<Map<String, dynamic>> get(String url,String token) async {
+  Future get(String url,{String token}) async {
     try {
-
-      var response = await http.get(
+     log('GET :'+url);
+     var response;
+      token!= null
+     ? response = await http.get(
         Uri.parse(url),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
         },
-      );
+      )
+     :response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Accept": "application/json",
+        },
+      )
+     ;
 
       switch (response.statusCode) {
         case 200:
           {
+            log('response :'+response.body.toString());
             return convert.jsonDecode(response.body);
           }
 
@@ -36,7 +47,8 @@ class HttpClient{
 
   Future<Map<String, dynamic>> post(String url,Map<String, dynamic> payLoad,{String token}) async {
     try {
-
+      log('POST :'+url);
+      log('body :'+payLoad.toString());
       var response;
       token != null
           ? response = await http.post(
@@ -59,6 +71,7 @@ class HttpClient{
       switch (response.statusCode) {
         case 200:
           {
+            log('POST :'+response.body);
             return convert.jsonDecode(response.body);
           }
 

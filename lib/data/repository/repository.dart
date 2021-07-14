@@ -1,8 +1,13 @@
 
+import 'dart:developer';
+
 import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
+import 'package:vdl/data/responses/program_details_response.dart';
+import 'package:vdl/data/responses/programs_response.dart';
+import 'package:vdl/data/responses/search_response.dart';
 import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/utils/secrets/app_keys.dart';
 import 'package:vdl/utils/urls/urls.dart';
@@ -52,4 +57,38 @@ class Repository{
 
   }
 
+  Future<List<ProgramsResponse>> getPrograms(int page,int perPage)async{
+
+    dynamic response = await _client.get(
+      Urls.PROGRAMS+'?page=$page&per_page=$perPage',
+    );
+
+    List<ProgramsResponse> result =[];
+
+    for(int i=0; i<response.length; i++){
+      result.add(ProgramsResponse.fromJson(response[i]));
+    }
+
+    return result;
+  }
+
+  Future<ProgramDetailsResponse> getProgramDetails(int programId)async{
+    dynamic response = await _client.get(
+      Urls.PROGRAMS+'$programId',
+    );
+    return ProgramDetailsResponse.fromJson(response);
+  }
+
+  Future<List<SearchResponse>> search(String searchQuery)async{
+    dynamic response = await _client.get(
+      Urls.SEARCH+'$searchQuery',
+    );
+    List<SearchResponse> result =[];
+
+    for(int i=0; i<response.length; i++){
+      result.add(SearchResponse.fromJson(response[i]));
+    }
+
+    return result;
+  }
 }

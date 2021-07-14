@@ -1,11 +1,11 @@
 
 
-class Category{
+class CategoryModel{
   String id;
   String name;
   bool isSelected;
 
-  Category({
+  CategoryModel({
    this.name,
    this.id,
    this.isSelected : false,
