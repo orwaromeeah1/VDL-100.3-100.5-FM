@@ -1,11 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vdl/data/responses/programs_response.dart';
+import 'package:vdl/ui/programs/bloc/programs/programs_bloc.dart';
+import 'package:vdl/ui/programs/bloc/programs/programs_event.dart';
+import 'package:vdl/ui/programs/bloc/programs/programs_state.dart';
 import 'package:vdl/ui/programs/widget/category_widget.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
+import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
+import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+
+import '../../../injection.dart';
 
 class ProgramsPage extends StatefulWidget {
   @override
@@ -19,18 +30,27 @@ class _ProgramsPageState extends State<ProgramsPage> {
   List<Widget> categoriesWidget = [] ;
 
   //fake data
-  List<Category> categories =[
-    new Category (id: '1',name: 'أرشيف'),
-    new Category (id: '1',name: 'ثقافة'),
-    new Category (id: '1',name: 'سياسة'),
-    new Category (id: '1',name: 'فن'),
-    new Category (id: '1',name: 'اقتصاد'),
-    new Category (id: '1',name: 'صحة'),
-    new Category (id: '1',name: 'شبابي'),
-    new Category (id: '1',name: 'منوعات'),
-    new Category (id: '1',name: 'مجتمع'),
+  List<CategoryModel> categories =[
+    new CategoryModel (id: '1',name: 'أرشيف'),
+    new CategoryModel (id: '1',name: 'ثقافة'),
+    new CategoryModel (id: '1',name: 'سياسة'),
+    new CategoryModel (id: '1',name: 'فن'),
+    new CategoryModel (id: '1',name: 'اقتصاد'),
+    new CategoryModel (id: '1',name: 'صحة'),
+    new CategoryModel (id: '1',name: 'شبابي'),
+    new CategoryModel (id: '1',name: 'منوعات'),
+    new CategoryModel (id: '1',name: 'مجتمع'),
   ];
 
+  List<ProgramsResponse> programs = [];
+  final _bloc = locator<ProgramsBloc>();
+
+
+  @override
+  void initState() {
+    _bloc.add(FetchPrograms());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +58,35 @@ class _ProgramsPageState extends State<ProgramsPage> {
     _getCategoriesWidget();
 
 
+    return BlocBuilder(
+        bloc: _bloc,
+        builder: (context, ProgramsState state) {
+          if (state is ProgramsEmpty) {
+            _bloc.add(FetchPrograms());
+          }
+          if (state is ProgramsError) {
+            return ErrorScreen(
+              onRetry: () => _bloc.add(FetchPrograms()),
+            );
+          }
+          if (state is ProgramsLoaded) {
+            programs = state.programs;
+            return screenUi();
+          }
+
+          if (state is ProgramsLoading) {
+            return LoadingScreen();
+          }
+
+          return Center(
+            child: LoadingScreen(),
+          );
+        });
+
+
+  }
+
+  Widget screenUi(){
     return Scaffold(
 //      appBar: AppBar(),
       body: SingleChildScrollView(
@@ -91,11 +140,11 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                          BorderRadius.circular(20),
                                         ),
                                         labelText: 'إضغط للبحث هنا',
                                         labelStyle:
-                                            TextStyle(color: Colors.white)),
+                                        TextStyle(color: Colors.white)),
 //                                 textInputAction: TextInputAction.next,
 //                               onEditingComplete: () => node.nextFocus(),
                                     // Move focus to next
@@ -133,7 +182,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                 alignment: Alignment.bottomCenter,
                 padding: new EdgeInsets.only(top: 200, right: 20.0, left: 20.0,bottom: 50),
                 child:ListView.builder(
-                    itemCount: 5,
+                    itemCount: programs.length,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder:  (BuildContext context, int index){
@@ -141,14 +190,14 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         onTap: ()=> Navigator.push(
                             context,
                             MaterialPageRoute(
-                                 builder: (BuildContext context) => ProgramDetailsPage()
+                                builder: (BuildContext context) => ProgramDetailsPage(programId: programs[index].id,)
                             )
                         ),
                         child: Container(
                           child: ProgramCard(
-                            image: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
+                            image: '${programs[index].image.original}',
                             category: 'محلية',
-                            name: 'صوت جديد',
+                            name: '${programs[index].title}',
                             date: 'الخميس 20 تشرين الثاني',
                           ),
                         ),
@@ -160,9 +209,8 @@ class _ProgramsPageState extends State<ProgramsPage> {
         ),
       ),
     );
-
-
   }
+
 
   void _modalBottomSheetMenu(){
     showModalBottomSheet(
