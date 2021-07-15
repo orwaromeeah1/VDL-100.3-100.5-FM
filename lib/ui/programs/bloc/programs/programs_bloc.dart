@@ -42,6 +42,16 @@ class ProgramsBloc extends Bloc<ProgramsEvent, ProgramsState> {
         yield CategoriesError();
       }
     }
+    if (event is SearchPrograms) {
+      try {
+        yield ProgramsLoading();
+        List<ProgramsResponse> programs = await repository.programsSearch(event.categoryId,1,100,event.searchQuery);
+
+        yield ProgramsLoaded(programs: programs);
+      } catch (_) {
+        yield CategoriesError();
+      }
+    }
     if (event is FetchCategories) {
       try {
 

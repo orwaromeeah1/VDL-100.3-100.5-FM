@@ -79,7 +79,7 @@ class Repository{
   Future<List<ProgramsResponse>> getCategoryPrograms(int categoryId,int page,int perPage)async{
 
     dynamic response = await _client.get(
-      Urls.CATEGORY_PROGRAMS+'=$categoryId&page=$page&per_page=$perPage',
+      Urls.PROGRAMS+'?program-category=$categoryId&page=$page&per_page=$perPage',
     );
 
     List<ProgramsResponse> result =[];
@@ -106,6 +106,25 @@ class Repository{
 
     return categories;
   }
+
+  Future<List<ProgramsResponse>> programsSearch(int categoryId,int page,int perPage,String searchQuery)async{
+    String queryParamerter = categoryId == -100
+                             ?'page=$page&per_page=$perPage&s=$searchQuery'
+                             :'?program-category=$categoryId&page=$page&per_page=$perPage&s=$searchQuery';
+
+    dynamic response = await _client.get(
+      Urls.PROGRAMS+queryParamerter,
+    );
+
+    List<ProgramsResponse> result =[];
+
+    for(int i=0; i<response.length; i++){
+      result.add(ProgramsResponse.fromJson(response[i]));
+    }
+
+    return result;
+  }
+
 
   Future<ProgramDetailsResponse> getProgramDetails(int programId)async{
     dynamic response = await _client.get(

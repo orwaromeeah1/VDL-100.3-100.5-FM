@@ -80,136 +80,152 @@ class _ProgramsPageState extends State<ProgramsPage> {
   Widget screenUi(){
     return Scaffold(
 //      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            new Column(
-              children: <Widget>[
-                new Container(
-                  height: 300,
-                  width: width,
-                  color: ProjectColors.BLACK,
-                  padding: EdgeInsets.all(30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'البرامج',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Form(
-                        key: _searchFormKey,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: 60,
-                              width: width * 0.65,
-                              child: Card(
-                                elevation: 10,
-                                color: Colors.white12,
-                                margin: EdgeInsets.only(top: 20),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.transparent,
-                                  ),
-                                  child: TextFormField(
-                                    controller: _searchController,
-                                    decoration: InputDecoration(
-                                        prefixIcon: Icon(
-                                          Icons.search,
-                                          color: Colors.white,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                          BorderRadius.circular(20),
-                                        ),
-                                        labelText: 'إضغط للبحث هنا',
-                                        labelStyle:
-                                        TextStyle(color: Colors.white)),
+      body: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            child: new Container(
+              height: 300,
+              width: width,
+              color: ProjectColors.BLACK,
+              padding: EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'البرامج',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Form(
+                    key: _searchFormKey,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 60,
+                          width: width * 0.65,
+                          child: Card(
+                            elevation: 10,
+                            color: Colors.white12,
+                            margin: EdgeInsets.only(top: 20),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.transparent,
+                              ),
+                              child: TextFormField(
+                                controller: _searchController,
+                                style: TextStyle(
+                                  color: ProjectColors.ThemeColor
+                                ),
+                                onFieldSubmitted: (value) {
+                                  _bloc.add(SearchPrograms(
+                                      categoryId: selectedCategoryId,
+                                      searchQuery: _searchController.text.trim()
+                                  ));
+                                },
+                                decoration: InputDecoration(
+                                    prefixIcon: GestureDetector(
+                                      onTap: (){
+                                        _bloc.add(SearchPrograms(
+                                            categoryId: selectedCategoryId,
+                                            searchQuery: _searchController.text.trim()
+                                        ));
+                                      },
+                                      child: Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius:
+                                      BorderRadius.circular(20),
+                                    ),
+                                    labelText: 'إضغط للبحث هنا',
+                                    labelStyle:
+                                    TextStyle(color: Colors.white)),
 //                                 textInputAction: TextInputAction.next,
 //                               onEditingComplete: () => node.nextFocus(),
-                                    // Move focus to next
+                                // Move focus to next
 //                                 validator: (result) {
 //                                   if (result.isEmpty) {
 //                                     return '';
 //                                   }
 //                                   return null;
 //                                 },
-                                  ),
-                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child:GlowingCircularButton(
-                                size: 40,
-                                color: ProjectColors.ThemeColor,
-                                onClick: (){
-                                  _modalBottomSheetMenu();
-                                },
-                                iconImage: FilePath.FILTER,
-                              ),
-
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            new Container(
-                alignment: Alignment.bottomCenter,
-                padding: new EdgeInsets.only(top: 200, right: 20.0, left: 20.0,bottom: 50),
-                child:ListView.builder(
-                    itemCount: programs.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder:  (BuildContext context, int index){
-                      return  GestureDetector(
-                        onTap: ()=> Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => ProgramDetailsPage(programId: programs[index].id,)
-                            )
-                        ),
-                        child: Container(
-                          child: ProgramCard(
-                            image: '${programs[index].image.original}',
-                            category: 'محلية',
-                            name: '${programs[index].title}',
-                            date: '${programs[index].humanDate}',
                           ),
                         ),
-                      );
-                    }
-                )
-            ),
-            BlocListener(
-              bloc: _bloc,
-              listener: (context, state) {
-                if (state is CategoriesLoaded) {
-                 setState(() {
-                   categories = state.categories;
-                 });
-                  log('categories fetched successfully');
-                }
-              },
-              child: Container(),
-            ),
-          ],
-        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child:GlowingCircularButton(
+                            size: 40,
+                            color: ProjectColors.ThemeColor,
+                            onClick: (){
+                              _modalBottomSheetMenu();
+                            },
+                            iconImage: FilePath.FILTER,
+                          ),
+
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ),
+          new Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top: 230),
+              padding: new EdgeInsets.only(top: 0, right: 20.0, left: 20.0,bottom: 50),
+              child:ListView.builder(
+                  itemCount: programs.length,
+                  padding: EdgeInsets.only(top: 0),
+//                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder:  (BuildContext context, int index){
+                    return  GestureDetector(
+                      onTap: ()=> Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => ProgramDetailsPage(programId: programs[index].id,)
+                          )
+                      ),
+                      child: Container(
+                        child: ProgramCard(
+                          image: '${programs[index].image.original}',
+                          category: 'محلية',
+                          name: '${programs[index].title}',
+                          date: '${programs[index].humanDate}',
+                        ),
+                      ),
+                    );
+                  }
+              )
+          ),
+          BlocListener(
+            bloc: _bloc,
+            listener: (context, state) {
+              if (state is CategoriesLoaded) {
+               setState(() {
+                 categories = state.categories;
+               });
+                log('categories fetched successfully');
+              }
+            },
+            child: Container(),
+          ),
+        ],
       ),
     );
   }
@@ -261,6 +277,8 @@ class _ProgramsPageState extends State<ProgramsPage> {
 
                             GestureDetector(
                               onTap: (){
+                                selectedCategoryId = -100;
+                                Navigator.pop(context);
                                 _bloc.add(FetchPrograms());
                               },
                               child: Text(
@@ -274,6 +292,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                             GestureDetector(
                               onTap: (){
                                 _bloc.add(FetchCategoryPrograms(categoryId: selectedCategoryId));
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 'تم',

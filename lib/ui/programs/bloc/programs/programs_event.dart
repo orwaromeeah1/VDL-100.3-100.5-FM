@@ -20,6 +20,15 @@ class FetchCategoryPrograms extends ProgramsEvent{
   @override
   List<Object> get props => [];
 }
+class SearchPrograms extends ProgramsEvent{
+  final int categoryId;
+  final String searchQuery;
+
+  SearchPrograms({this.categoryId,this.searchQuery});
+
+  @override
+  List<Object> get props => [];
+}
 
 class FetchCategories extends ProgramsEvent {
 
