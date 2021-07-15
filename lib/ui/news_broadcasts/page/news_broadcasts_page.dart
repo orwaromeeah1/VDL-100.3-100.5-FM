@@ -160,6 +160,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                         : new BoxConstraints(maxHeight: 0.0),
                                     child:DaysNewsBroadcastsWidget(
                                       broadcasts: newsCasts[index].timeSlots,
+                                      date: newsCasts[index].slug,
                                     )
                                 )
                             ),
