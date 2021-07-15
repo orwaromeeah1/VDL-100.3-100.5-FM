@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/injection.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 
 void main() {
+  setLocator();
   runApp(MyApp());
 }
 

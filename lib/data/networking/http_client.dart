@@ -62,4 +62,32 @@ class HttpClient {
       print(e);
     }
   }
+
+  ////
+  ///
+  ///
+  /// Get menus
+  Future<String> getMethods(String url, String token) async {
+    try {
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          {
+            return response.body;
+          }
+
+        default:
+          {
+            throw BadRequestError("");
+          }
+      }
+    } on TimeoutException catch (_) {}
+  }
 }

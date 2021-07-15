@@ -2,6 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
+import 'package:vdl/injection.dart';
+import 'package:vdl/ui/NewsDetails/bloc/news_details_bloc.dart';
+import 'package:vdl/ui/NewsDetails/bloc/news_details_event.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -15,6 +18,8 @@ class NewsPageDetails extends StatefulWidget {
 
 class _NewsPageDetailsState extends State<NewsPageDetails>
     with TickerProviderStateMixin {
+  final _bloc = locator<NewsDetailsBloc>();
+
   AnimationController _animationController;
   bool isPlaying = false;
 
@@ -30,6 +35,9 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void initState() {
     super.initState();
+
+    _bloc.add(FetchNewsDetails(1));
+
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
 

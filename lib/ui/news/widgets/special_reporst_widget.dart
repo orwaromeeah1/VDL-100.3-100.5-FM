@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class SpecialReportsCard extends StatelessWidget {
+  final NewsModel newsModel;
   const SpecialReportsCard({
     Key key,
+    this.newsModel,
   }) : super(key: key);
 
   @override
@@ -24,7 +28,9 @@ class SpecialReportsCard extends StatelessWidget {
                 height: 96,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/Lebanon.jpg'))),
+                        image: CachedNetworkImageProvider(
+                            this.newsModel.image.medium),
+                        fit: BoxFit.cover)),
               ),
             ),
             Expanded(
@@ -36,7 +42,7 @@ class SpecialReportsCard extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
-                        'الخميس ١١ شباط ٢٠٢١ – 07:21',
+                        this.newsModel.humanDate,
                         style: TextStyle(
                             fontSize: 12, color: black.withOpacity(0.41)),
                       ),
@@ -46,7 +52,7 @@ class SpecialReportsCard extends StatelessWidget {
                     ),
                     Container(
                       child: Text(
-                        'الجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنان',
+                        this.newsModel.title,
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

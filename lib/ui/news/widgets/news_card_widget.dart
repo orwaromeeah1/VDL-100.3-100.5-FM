@@ -1,11 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/data/models/news_category.dart';
+import 'package:vdl/data/models/news_model.dart';
+import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsCardWidget extends StatelessWidget {
+  final NewsModel newsModel;
+
   const NewsCardWidget({
     Key key,
+    @required this.newsModel,
   }) : super(key: key);
 
   @override
@@ -32,17 +39,23 @@ class NewsCardWidget extends StatelessWidget {
           child: Stack(
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 230,
                     decoration: BoxDecoration(
-                        borderRadius: new BorderRadius.only(
-                          topRight: const Radius.circular(14.0),
-                          topLeft: const Radius.circular(14.0),
-                        ),
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/Lebanon.jpg"),
-                            fit: BoxFit.fill)),
+                      borderRadius: new BorderRadius.only(
+                        topRight: const Radius.circular(14.0),
+                        topLeft: const Radius.circular(14.0),
+                      ),
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              this.newsModel.image.large),
+                          fit: BoxFit.cover),
+                      //  DecorationImage(
+                      //     image: AssetImage("assets/images/Lebanon.jpg"),
+                      //     fit: BoxFit.fill)
+                    ),
                   ),
                   Container(
                     child: Padding(
@@ -52,7 +65,7 @@ class NewsCardWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'الخميس ١١ شباط ٢٠٢١ – 07:21',
+                            this.newsModel.humanDate,
                             style: TextStyle(
                                 fontSize: 11, color: black.withOpacity(0.41)),
                           ),
@@ -60,7 +73,7 @@ class NewsCardWidget extends StatelessWidget {
                             height: 4,
                           ),
                           Text(
-                            'الجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنان',
+                            this.newsModel.title,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
                             maxLines: 2,
@@ -79,7 +92,10 @@ class NewsCardWidget extends StatelessWidget {
                   width: 50,
                   child: Center(
                     child: Text(
-                      'محلية',
+                      this
+                          .newsModel
+                          .categories[this.newsModel.categories.keys.first]
+                          .name,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 11,
