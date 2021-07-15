@@ -3,6 +3,8 @@ import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/news/bloc/search/search_bloc.dart';
 import 'package:vdl/ui/news/bloc/search/search_state.dart';
+import 'package:vdl/ui/news_broadcasts/bloc/news_cast_bloc.dart';
+import 'package:vdl/ui/news_broadcasts/bloc/news_cast_state.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_state.dart';
 import 'package:vdl/ui/programs/bloc/programs/programs_bloc.dart';
@@ -31,5 +33,9 @@ Future setLocator() async {
   //SearchScreenBloc
   locator.registerFactory(() => SearchBloc(locator(), locator()));
   locator.registerFactory(() => SearchState());
+
+  //NewsCastBloc
+  locator.registerFactory(() => NewsCastBloc (locator(), locator()));
+  locator.registerFactory(() => NewsCastState());
 
 }

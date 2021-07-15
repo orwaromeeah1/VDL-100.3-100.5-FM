@@ -5,7 +5,7 @@ import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class DaysNewsBroadcastsWidget extends StatelessWidget {
-  final List<NewsBroadcast> broadcasts;
+  final List<String> broadcasts;
 
   DaysNewsBroadcastsWidget({
     this.broadcasts,
@@ -37,7 +37,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                     Image.asset(FilePath.PREVIOUS_BROADCAST,height: 25,width: 25,),
                     SizedBox(width: 10,),
                     Text(
-                        '${broadcasts[index].time}',
+                        '${getTimeSlut(broadcasts[index])}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold
                       ),
@@ -66,4 +66,6 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
       }),
     );
   }
+
+  String getTimeSlut(String s)=> s.replaceAll('_', ':');
 }

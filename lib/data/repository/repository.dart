@@ -6,6 +6,7 @@ import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
+import 'package:vdl/data/responses/news_cast_response.dart';
 import 'package:vdl/data/responses/program_categories_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/data/responses/programs_response.dart';
@@ -146,5 +147,18 @@ class Repository{
     return result;
   }
 
+  Future<List<NewsCastResponse>> getNewsCasts()async{
+    dynamic response = await _client.get(
+      Urls.NEWS_CASTS,
+    );
+
+    List<NewsCastResponse> result =[];
+
+    for(int i=0; i<response.length; i++){
+      result.add(NewsCastResponse.fromJson(response[i]));
+    }
+
+    return result;
+  }
 
 }

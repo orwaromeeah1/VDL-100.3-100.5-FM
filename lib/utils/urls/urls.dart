@@ -13,4 +13,7 @@ class Urls {
 
   //SEARCH
   static const String SEARCH = BASE_API +'news/?search=';
+
+  //NEWSCASTS
+  static const String NEWS_CASTS = BASE_API + 'newcast/';
 }
