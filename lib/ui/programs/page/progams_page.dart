@@ -10,6 +10,7 @@ import 'package:vdl/ui/programs/widget/category_widget.dart';
 import 'package:vdl/ui/programs/widget/program_card.dart';
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
+import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
@@ -28,27 +29,17 @@ class _ProgramsPageState extends State<ProgramsPage> {
   final GlobalKey<FormState> _searchFormKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   List<Widget> categoriesWidget = [] ;
-
-  //fake data
-  List<CategoryModel> categories =[
-    new CategoryModel (id: '1',name: 'أرشيف'),
-    new CategoryModel (id: '1',name: 'ثقافة'),
-    new CategoryModel (id: '1',name: 'سياسة'),
-    new CategoryModel (id: '1',name: 'فن'),
-    new CategoryModel (id: '1',name: 'اقتصاد'),
-    new CategoryModel (id: '1',name: 'صحة'),
-    new CategoryModel (id: '1',name: 'شبابي'),
-    new CategoryModel (id: '1',name: 'منوعات'),
-    new CategoryModel (id: '1',name: 'مجتمع'),
-  ];
+  List<CategoryModel> categories = [];
 
   List<ProgramsResponse> programs = [];
   final _bloc = locator<ProgramsBloc>();
+  int selectedCategoryId = -100;
 
 
   @override
   void initState() {
     _bloc.add(FetchPrograms());
+    _bloc.add(FetchCategories());
     super.initState();
   }
 
@@ -79,7 +70,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
           }
 
           return Center(
-            child: LoadingScreen(),
+            child: screenUi(),
           );
         });
 
@@ -198,13 +189,25 @@ class _ProgramsPageState extends State<ProgramsPage> {
                             image: '${programs[index].image.original}',
                             category: 'محلية',
                             name: '${programs[index].title}',
-                            date: 'الخميس 20 تشرين الثاني',
+                            date: '${programs[index].humanDate}',
                           ),
                         ),
                       );
                     }
                 )
-            )
+            ),
+            BlocListener(
+              bloc: _bloc,
+              listener: (context, state) {
+                if (state is CategoriesLoaded) {
+                 setState(() {
+                   categories = state.categories;
+                 });
+                  log('categories fetched successfully');
+                }
+              },
+              child: Container(),
+            ),
           ],
         ),
       ),
@@ -258,8 +261,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
 
                             GestureDetector(
                               onTap: (){
-//                                setState(() {
-//                                });
+                                _bloc.add(FetchPrograms());
                               },
                               child: Text(
                                 'الغاء',
@@ -269,25 +271,42 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                 ),
                               ),
                             ),
+                            GestureDetector(
+                              onTap: (){
+                                _bloc.add(FetchCategoryPrograms(categoryId: selectedCategoryId));
+                              },
+                              child: Text(
+                                'تم',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: ProjectColors.ThemeColor
+                                ),
+                              ),
+                            ),
+
                           ],
                         ),
                         Container(
                           height: 150,
-                          child: GridView.builder(
+                          child:categories.isEmpty
+                              ? VdlProgressIndicator()
+                              : GridView.builder(
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
                                 onTap: () {},
                                 child: Container(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                         categories[index].isSelected = !categories[index].isSelected;
-                                      });
-                                    },
-                                    child: CategoryWidget(
-                                      name: categories[index].name,
-                                      isSelected: categories[index].isSelected,
-                                    )
+                                      onTap: () {
+                                        setState(() {
+//                                          categories[index].isSelected = !categories[index].isSelected;
+                                        selectedCategoryId = categories[index].id;
+                                        });
+                                      },
+                                      child: CategoryWidget(
+                                        name: categories[index].name,
+                                        isSelected:  categories[index].id == selectedCategoryId
+//                                        categories[index].isSelected,
+                                      )
                                   ),
                                 ),
                               );
@@ -301,6 +320,11 @@ class _ProgramsPageState extends State<ProgramsPage> {
                             itemCount: categories.length,
                             shrinkWrap: true,
                           ),
+
+
+
+
+
                         ),
 
                       ],

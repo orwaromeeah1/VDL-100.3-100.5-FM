@@ -1,10 +1,12 @@
 
 import 'dart:developer';
 
+import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
+import 'package:vdl/data/responses/program_categories_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/data/responses/programs_response.dart';
 import 'package:vdl/data/responses/search_response.dart';
@@ -57,6 +59,8 @@ class Repository{
 
   }
 
+
+
   Future<List<ProgramsResponse>> getPrograms(int page,int perPage)async{
 
     dynamic response = await _client.get(
@@ -70,6 +74,37 @@ class Repository{
     }
 
     return result;
+  }
+
+  Future<List<ProgramsResponse>> getCategoryPrograms(int categoryId,int page,int perPage)async{
+
+    dynamic response = await _client.get(
+      Urls.CATEGORY_PROGRAMS+'=$categoryId&page=$page&per_page=$perPage',
+    );
+
+    List<ProgramsResponse> result =[];
+
+    for(int i=0; i<response.length; i++){
+      result.add(ProgramsResponse.fromJson(response[i]));
+    }
+
+    return result;
+  }
+
+  Future<List<CategoryModel>> getProgramsCategories()async{
+
+    dynamic response = await _client.get(
+      Urls.PROGRAM_CATEGORIES,
+    );
+    List<CategoryModel> categories =[];
+    for(int i=0; i<response.length; i++){
+      categories.add(new CategoryModel(
+        id: response[i]["id"],
+        name: response[i]["name"],
+      ));
+    }
+
+    return categories;
   }
 
   Future<ProgramDetailsResponse> getProgramDetails(int programId)async{
@@ -91,4 +126,6 @@ class Repository{
 
     return result;
   }
+
+
 }

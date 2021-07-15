@@ -11,3 +11,20 @@ class FetchPrograms extends ProgramsEvent {
   @override
   List<Object> get props => [];
 }
+
+class FetchCategoryPrograms extends ProgramsEvent{
+  final int categoryId;
+
+  FetchCategoryPrograms({this.categoryId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class FetchCategories extends ProgramsEvent {
+
+  FetchCategories();
+
+  @override
+  List<Object> get props => [];
+}

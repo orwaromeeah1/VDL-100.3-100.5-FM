@@ -8,7 +8,8 @@ class Urls {
   //PROGRAMS
   static const String PROGRAMS = BASE_API + 'program/';
   static const String PROGRAM_DETAILS = BASE_API + 'program/';
-  static const String PROGRAM_SEARCH = BASE_API + 'program/';
+  static const String PROGRAM_CATEGORIES = BASE_API + 'program-category';
+  static const String CATEGORY_PROGRAMS = BASE_API +'program/?program-category';
 
 
   //SEARCH
