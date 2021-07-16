@@ -13,3 +13,9 @@ class FetchCategoryNews extends NewsEvent {
   final int page;
   FetchCategoryNews(this.catId, this.page);
 }
+
+class FetchSpecialReportsPages extends NewsEvent {
+  final int page;
+
+  FetchSpecialReportsPages(this.page);
+}

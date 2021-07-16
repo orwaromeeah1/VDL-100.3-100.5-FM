@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -91,15 +92,19 @@ class NewsCardWidget extends StatelessWidget {
                   height: 25.23,
                   width: 50,
                   child: Center(
-                    child: Text(
-                      this
-                          .newsModel
-                          .categories[this.newsModel.categories.keys.first]
-                          .name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                          color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: AutoSizeText(
+                        this
+                            .newsModel
+                            .categories[this.newsModel.categories.keys.first]
+                            .name,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        presetFontSizes: [11, 8],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
                     ),
                   ),
                   decoration: BoxDecoration(

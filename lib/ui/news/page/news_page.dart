@@ -37,6 +37,10 @@ class _NewsPageState extends State<NewsPage> {
   final _bloc = locator<NewsBloc>();
   int currentCatId = 0;
   int selectedIndex = 0;
+  int page = 1;
+  int specialReportsPage = 1;
+
+  bool isLoadingNextPage = false;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -45,6 +49,13 @@ class _NewsPageState extends State<NewsPage> {
   void initState() {
     super.initState();
     _bloc.add(FetchData());
+  }
+
+  void _getNextPage() {
+    isSpeacialReports ? specialReportsPage++ : page++;
+    isSpeacialReports
+        ? _bloc.add(FetchSpecialReportsPages(specialReportsPage))
+        : _bloc.add(FetchCategoryNews(currentCatId, page));
   }
 
   List<NewsCategoryModel> categories = [
@@ -58,7 +69,9 @@ class _NewsPageState extends State<NewsPage> {
         body: BlocConsumer(
             bloc: _bloc,
             builder: (context, state) {
-              if (state is Loaded || state is FetchingCategoryNews) {
+              if (state is Loaded ||
+                  state is FetchingCategoryNews ||
+                  state is FetchingNextPage) {
                 return newsScreenLoaded(context, state.homeModel, state);
               } else if (state is Loading) {
                 return LoadingScreen();
@@ -74,6 +87,11 @@ class _NewsPageState extends State<NewsPage> {
                 categories = categories + state.homeModel.categories;
                 selectType(categories[0].id, 0, 0);
               }
+              if (state is Loaded) {
+                setState(() {
+                  isLoadingNextPage = false;
+                });
+              }
             }));
   }
 
@@ -84,244 +102,299 @@ class _NewsPageState extends State<NewsPage> {
 
   Widget newsScreenLoaded(
       BuildContext context, HomeModel model, NewsState state) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        Theme(
-          data: ThemeData(primarySwatch: blue),
-          child: SliverAppBar(
-            expandedHeight: isSpeacialReports ? 154 : 180.0,
-            pinned: false,
-            snap: true,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 17.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 40.0, left: 19),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/VDL_LOGO-image.jpg.svg',
-                                      height: 52,
-                                      width: 67,
-                                    ),
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            pushNewScreen(
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (!isLoadingNextPage &&
+            notification.metrics.pixels ==
+                notification.metrics.maxScrollExtent) {
+          setState(() {
+            isLoadingNextPage = true;
+            _getNextPage();
+          });
+        }
+        return true;
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          Theme(
+            data: ThemeData(primarySwatch: blue),
+            child: SliverAppBar(
+              expandedHeight: isSpeacialReports ? 154 : 180.0,
+              pinned: false,
+              snap: true,
+              floating: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  color: Colors.white,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 17.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 40.0, left: 19),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/VDL_LOGO-image.jpg.svg',
+                                        height: 52,
+                                        width: 67,
+                                      ),
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              pushNewScreen(
+                                                context,
+                                                screen: NotificationPage(),
+                                                withNavBar: true,
+                                                pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .cupertino,
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              child: Icon(
+                                                CupertinoIcons.bell,
+                                                color: Colors.black,
+                                              ),
+                                              backgroundColor: backgroundGrey,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () => pushNewScreen(
                                               context,
-                                              screen: NotificationPage(),
+                                              screen: SearchPage(),
                                               withNavBar: true,
                                               pageTransitionAnimation:
                                                   PageTransitionAnimation
                                                       .cupertino,
-                                            );
-                                          },
-                                          child: CircleAvatar(
-                                            radius: 20,
-                                            child: Icon(
-                                              CupertinoIcons.bell,
-                                              color: Colors.black,
                                             ),
-                                            backgroundColor: backgroundGrey,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => pushNewScreen(
-                                            context,
-                                            screen: SearchPage(),
-                                            withNavBar: true,
-                                            pageTransitionAnimation:
-                                                PageTransitionAnimation
-                                                    .cupertino,
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 20,
-                                            child: Icon(
-                                              CupertinoIcons.search,
-                                              color: Colors.black,
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              child: Icon(
+                                                CupertinoIcons.search,
+                                                color: Colors.black,
+                                              ),
+                                              backgroundColor: backgroundGrey,
                                             ),
-                                            backgroundColor: backgroundGrey,
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isSpeacialReports = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        'الاخبار',
+                                        style: TextStyle(
+                                            color: isSpeacialReports
+                                                ? black.withOpacity(0.25)
+                                                : black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 32),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 14,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(
+                                            () => {isSpeacialReports = true});
+                                      },
+                                      child: Text(
+                                        'تقارير خاصة',
+                                        style: TextStyle(
+                                            color: isSpeacialReports
+                                                ? black
+                                                : black.withOpacity(0.25),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 32),
+                                      ),
                                     )
                                   ],
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isSpeacialReports = false;
-                                      });
-                                    },
-                                    child: Text(
-                                      'الاخبار',
-                                      style: TextStyle(
-                                          color: isSpeacialReports
-                                              ? black.withOpacity(0.25)
-                                              : black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 32),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 14,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(
-                                          () => {isSpeacialReports = true});
-                                    },
-                                    child: Text(
-                                      'تقارير خاصة',
-                                      style: TextStyle(
-                                          color: isSpeacialReports
-                                              ? black
-                                              : black.withOpacity(0.25),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 32),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              isSpeacialReports
-                                  ? Container()
-                                  : Container(
-                                      height: 50,
-                                      child: ScrollablePositionedList.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: model.categories.length,
-                                        itemBuilder: (context, index) =>
-                                            InkWell(
-                                                onTap: () => selectType(
-                                                    categories[index].id,
-                                                    index,
-                                                    currentCatId),
-                                                child: tabBarCell(
-                                                  cat: categories[index],
-                                                )),
-                                        itemScrollController:
-                                            itemScrollController,
-                                        itemPositionsListener:
-                                            itemPositionsListener,
+                                isSpeacialReports
+                                    ? Container()
+                                    : Container(
+                                        height: 50,
+                                        child: ScrollablePositionedList.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: model.categories.length,
+                                          itemBuilder: (context, index) =>
+                                              InkWell(
+                                                  onTap: () => selectType(
+                                                      categories[index].id,
+                                                      index,
+                                                      currentCatId),
+                                                  child: tabBarCell(
+                                                    cat: categories[index],
+                                                  )),
+                                          itemScrollController:
+                                              itemScrollController,
+                                          itemPositionsListener:
+                                              itemPositionsListener,
+                                        ),
+                                        //  ListView.builder(
+                                        //     scrollDirection: Axis.horizontal,
+                                        //     itemBuilder: (context, index) =>
+                                        //         InkWell(
+                                        //             onTap: () => selectType(
+                                        //                 categories[index].id,
+                                        //                 index,
+                                        //                 currentCatId),
+                                        //             child: tabBarCell(
+                                        //               cat: categories[index],
+                                        //             )),
+                                        //     itemCount: model.categories.length)
                                       ),
-                                      //  ListView.builder(
-                                      //     scrollDirection: Axis.horizontal,
-                                      //     itemBuilder: (context, index) =>
-                                      //         InkWell(
-                                      //             onTap: () => selectType(
-                                      //                 categories[index].id,
-                                      //                 index,
-                                      //                 currentCatId),
-                                      //             child: tabBarCell(
-                                      //               cat: categories[index],
-                                      //             )),
-                                      //     itemCount: model.categories.length)
-                                    ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        isSpeacialReports
-            ? SliverList(
-                delegate: SliverChildListDelegate([
-                Container(
-                    height: 150 * model.specialReports.length.toDouble(),
-                    child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => SpecialReportsCard(
-                              newsModel: model.specialReports[index],
+          isSpeacialReports
+              ? SliverList(
+                  delegate: SliverChildListDelegate([
+                  Container(
+                      height: 142 * model.specialReports.length.toDouble() + 50,
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => SpecialReportsCard(
+                                newsModel: model.specialReports[index],
+                              ),
+                          itemCount: model.specialReports.length)),
+                  state is FetchingNextPage
+                      ? Container(
+                          color: Colors.transparent,
+                          width: MediaQuery.of(context).size.width,
+                          height: 100,
+                          child: Platform.isIOS
+                              ? CupertinoActivityIndicator()
+                              : CircularProgressIndicator(),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                  )
+                ]))
+              : SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 19.0),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/twitter.svg',
+                              height: 21,
+                              width: 17,
                             ),
-                        itemCount: model.specialReports.length)),
-                SizedBox(
-                  height: 40,
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'أحدث التغريدات',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 19.0),
+                        child: Column(
+                          children: [
+                            Container(
+                                height: 130,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        twitterCard(),
+                                    itemCount: model.specialReports.length)),
+                          ],
+                        ),
+                      ),
+                      state is FetchingCategoryNews
+                          ? Container(
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: Center(
+                                  child: Platform.isIOS
+                                      ? CupertinoActivityIndicator()
+                                      : CircularProgressIndicator(
+                                          color: blue,
+                                        )),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(bottom: 50.0),
+                              child: Container(
+                                  child: Column(
+                                children: [
+                                  Container(
+                                    height:
+                                        354 * model.news.length.toDouble() + 50,
+                                    child: ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) =>
+                                            NewsCardWidget(
+                                              newsModel: model.news[index],
+                                            ),
+                                        itemCount: model.news.length),
+                                  ),
+                                  state is FetchingNextPage
+                                      ? Container(
+                                          color: Colors.transparent,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 50,
+                                          child: Platform.isIOS
+                                              ? CupertinoActivityIndicator()
+                                              : CircularProgressIndicator(),
+                                        )
+                                      : Container()
+                                ],
+                              )),
+                            ),
+                      PodcastsWidet(),
+                    ],
+                  ),
                 )
-              ]))
-            : SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 19.0),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/twitter.svg',
-                            height: 21,
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'أحدث التغريدات',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 19.0),
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 130,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) =>
-                                      twitterCard(),
-                                  itemCount: model.specialReports.length)),
-                        ],
-                      ),
-                    ),
-                    state is FetchingCategoryNews
-                        ? Center(
-                            child: Platform.isIOS
-                                ? CupertinoActivityIndicator()
-                                : CircularProgressIndicator(
-                                    color: blue,
-                                  ))
-                        : newsListWidget(context, model.news),
-                    PodcastsWidet(),
-                  ],
-                ),
-              )
-      ],
+        ],
+      ),
     );
   }
 
@@ -338,13 +411,15 @@ class _NewsPageState extends State<NewsPage> {
       categories[index].selected = true;
       currentCatId = catId;
       selectedIndex = index;
+      page = 1;
+      isLoadingNextPage = false;
     });
 
     ////
     ///
     ///
     if (currentSelected != catId) {
-      _bloc.add(FetchCategoryNews(catId, 1));
+      _bloc.add(FetchCategoryNews(catId, page));
       itemScrollController.jumpTo(index: index);
     }
   }

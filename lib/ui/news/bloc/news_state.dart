@@ -25,3 +25,8 @@ class FetchingCategoryNews extends NewsState {
 
   FetchingCategoryNews(this.homeModel);
 }
+
+class FetchingNextPage extends NewsState {
+  final HomeModel homeModel;
+  FetchingNextPage(this.homeModel);
+}
