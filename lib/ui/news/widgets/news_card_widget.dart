@@ -2,26 +2,31 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:vdl/data/models/news_category.dart';
+import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
-import 'package:vdl/data/repository/repository.dart';
+
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsCardWidget extends StatelessWidget {
   final NewsModel newsModel;
+  String tag;
 
-  const NewsCardWidget({
-    Key key,
-    @required this.newsModel,
-  }) : super(key: key);
+  NewsCardWidget({Key key, @required this.newsModel, this.tag})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => pushNewScreen(
         context,
-        screen: NewsPageDetails(),
+        screen: NewsPageDetails(
+          newsId: this.newsModel.id,
+          tag: this
+              .newsModel
+              .categories[this.newsModel.categories.keys.first]
+              .name,
+        ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       ),
@@ -74,7 +79,7 @@ class NewsCardWidget extends StatelessWidget {
                             height: 4,
                           ),
                           Text(
-                            this.newsModel.title,
+                            Manager.removeAllHtmlTags(this.newsModel.title),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
                             maxLines: 2,
@@ -95,10 +100,13 @@ class NewsCardWidget extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: AutoSizeText(
-                        this
-                            .newsModel
-                            .categories[this.newsModel.categories.keys.first]
-                            .name,
+                        this.newsModel.categories == null
+                            ? tag
+                            : this
+                                .newsModel
+                                .categories[
+                                    this.newsModel.categories.keys.first]
+                                .name,
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         presetFontSizes: [11, 8],

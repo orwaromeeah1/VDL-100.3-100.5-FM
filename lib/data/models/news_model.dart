@@ -292,3 +292,8 @@ class RelatedArticle {
         "image": image.toJson(),
       };
 }
+
+NewsModel newsModelFromRelatedArticle(RelatedArticle r) {
+  return NewsModel(
+      id: r.id, humanDate: r.humanDate, image: r.image, title: r.title);
+}

@@ -14,7 +14,7 @@ class NewsDetailsBloc extends Bloc<NewsDetailsEvent, NewsDetailsState> {
   Stream<NewsDetailsState> mapEventToState(NewsDetailsEvent event) async* {
     if (event is FetchNewsDetails) {
       yield Loading();
-      NewsModel newsModel = await repo.getSingleNewsPage(129299);
+      NewsModel newsModel = await repo.getSingleNewsPage(event.id);
       print(newsModel);
       yield Loaded(newsModel);
     }
