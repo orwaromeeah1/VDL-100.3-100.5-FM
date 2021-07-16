@@ -109,12 +109,12 @@ class Repository{
   }
 
   Future<List<ProgramsResponse>> programsSearch(int categoryId,int page,int perPage,String searchQuery)async{
-    String queryParamerter = categoryId == -100
+    String queryParameter = categoryId == -100
                              ?'?page=$page&per_page=$perPage&s=$searchQuery'
                              :'?program-category=$categoryId&page=$page&per_page=$perPage&s=$searchQuery';
 
     dynamic response = await _client.get(
-      Urls.PROGRAMS+queryParamerter,
+      Urls.PROGRAMS+queryParameter,
     );
 
     List<ProgramsResponse> result =[];

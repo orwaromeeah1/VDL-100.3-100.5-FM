@@ -161,6 +161,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                     child:DaysNewsBroadcastsWidget(
                                       broadcasts: newsCasts[index].timeSlots,
                                       date: newsCasts[index].slug,
+                                      newsCast: newsCasts[index],
                                     )
                                 )
                             ),

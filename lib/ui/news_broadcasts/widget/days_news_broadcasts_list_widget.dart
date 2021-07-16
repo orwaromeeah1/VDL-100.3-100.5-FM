@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vdl/data/responses/news_cast_response.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcast_details/news_broadcast_details_page.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -9,10 +10,12 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class DaysNewsBroadcastsWidget extends StatelessWidget {
   final List<String> broadcasts;
   final String date;
+  final NewsCastResponse newsCast;
 
   DaysNewsBroadcastsWidget({
     this.broadcasts,
-    this.date
+    this.date,
+    this.newsCast,
 });
 
   @override
@@ -29,7 +32,11 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                 ? Navigator.push(
               context,
              MaterialPageRoute(
-                 builder: (context) => NewsBroadcastDeteilsPage()
+                 builder: (context) => NewsBroadcastDetailsPage(
+                   newsCast:newsCast,
+                   timeSlutIndex: index,
+                   broadcasts: getTimesSluts(broadcasts),
+                 )
              )
           )
             :log('');
@@ -110,5 +117,14 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
 
     return((day1<day2)&&(month1<=month2))?true:false;
 
+  }
+
+  List<String> getTimesSluts(List<String> l){
+    List<String> res = [];
+    l.forEach((element) {
+     if(isActive(element)) res.add(getTimeSlut(element));
+    });
+
+    return res;
   }
 }

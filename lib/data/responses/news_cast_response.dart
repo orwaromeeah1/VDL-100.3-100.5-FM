@@ -49,7 +49,7 @@ class NewsCastResponse {
   String audioTitleBlock1915;
   String audioFieldBlock1915;
   String audioDescriptionBlock1915;
-  Image image;
+//  Image image;
   String humanDate;
   String sinceDate;
   List<String> timeSlots;
@@ -57,7 +57,9 @@ class NewsCastResponse {
 
   NewsCastResponse({
     this.isOpened ,
-    this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format, this.releaseDate, this.audioTimeBlock715, this.shortAudioTitleBlock715, this.shortAudioFieldBlock715, this.shortAudioDescriptionBlock715, this.audioTitleBlock715, this.audioFieldBlock715, this.audioDescriptionBlock715, this.audioTimeBlock815, this.shortAudioTitleBlock815, this.shortAudioFieldBlock815, this.shortAudioDescriptionBlock815, this.audioTitleBlock815, this.audioFieldBlock815, this.audioDescriptionBlock815, this.audioTimeBlock1415, this.shortAudioTitleBlock1415, this.shortAudioFieldBlock1415, this.shortAudioDescriptionBlock1415, this.audioTitleBlock1415, this.audioFieldBlock1415, this.audioDescriptionBlock1415, this.audioTimeBlock1715, this.shortAudioTitleBlock1715, this.shortAudioFieldBlock1715, this.shortAudioDescriptionBlock1715, this.audioTitleBlock1715, this.audioFieldBlock1715, this.audioDescriptionBlock1715, this.audioTimeBlock1915, this.shortAudioTitleBlock1915, this.shortAudioFieldBlock1915, this.shortAudioDescriptionBlock1915, this.audioTitleBlock1915, this.audioFieldBlock1915, this.audioDescriptionBlock1915, this.image, this.humanDate, this.sinceDate, this.timeSlots});
+    this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format, this.releaseDate, this.audioTimeBlock715, this.shortAudioTitleBlock715, this.shortAudioFieldBlock715, this.shortAudioDescriptionBlock715, this.audioTitleBlock715, this.audioFieldBlock715, this.audioDescriptionBlock715, this.audioTimeBlock815, this.shortAudioTitleBlock815, this.shortAudioFieldBlock815, this.shortAudioDescriptionBlock815, this.audioTitleBlock815, this.audioFieldBlock815, this.audioDescriptionBlock815, this.audioTimeBlock1415, this.shortAudioTitleBlock1415, this.shortAudioFieldBlock1415, this.shortAudioDescriptionBlock1415, this.audioTitleBlock1415, this.audioFieldBlock1415, this.audioDescriptionBlock1415, this.audioTimeBlock1715, this.shortAudioTitleBlock1715, this.shortAudioFieldBlock1715, this.shortAudioDescriptionBlock1715, this.audioTitleBlock1715, this.audioFieldBlock1715, this.audioDescriptionBlock1715, this.audioTimeBlock1915, this.shortAudioTitleBlock1915, this.shortAudioFieldBlock1915, this.shortAudioDescriptionBlock1915, this.audioTitleBlock1915, this.audioFieldBlock1915, this.audioDescriptionBlock1915,
+//    this.image,
+    this.humanDate, this.sinceDate, this.timeSlots});
 
   NewsCastResponse.fromJson(Map<String, dynamic> json) {
     isOpened = false;
@@ -111,7 +113,7 @@ class NewsCastResponse {
     audioTitleBlock1915 = json['audio_title_block_19_15'];
     audioFieldBlock1915 = json['audio_field_block_19_15'];
     audioDescriptionBlock1915 = json['audio_description_block_19_15'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+//    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
     timeSlots = json['time_slots'].cast<String>();
@@ -169,9 +171,9 @@ class NewsCastResponse {
     data['audio_title_block_19_15'] = this.audioTitleBlock1915;
     data['audio_field_block_19_15'] = this.audioFieldBlock1915;
     data['audio_description_block_19_15'] = this.audioDescriptionBlock1915;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
+//    if (this.image != null) {
+//      data['image'] = this.image.toJson();
+//    }
     data['human_date'] = this.humanDate;
     data['since_date'] = this.sinceDate;
     data['time_slots'] = this.timeSlots;
@@ -179,16 +181,16 @@ class NewsCastResponse {
   }
 }
 
-class Image {
-
-
-  Image();
-
-Image.fromJson(Map<String, dynamic> json) {
-}
-
-Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data = new Map<String, dynamic>();
-  return data;
-}
-}
+//class Image {
+//
+//
+//  Image();
+//
+//Image.fromJson(Map<String, dynamic> json) {
+//}
+//
+//Map<String, dynamic> toJson() {
+//  final Map<String, dynamic> data = new Map<String, dynamic>();
+//  return data;
+//}
+//}
