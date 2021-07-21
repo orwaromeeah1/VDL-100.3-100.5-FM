@@ -141,6 +141,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                   child: ProgramScheduleCard(
                     name: '${programSchedule[index].title}',
                     duration: '${programSchedule[index].time}',
+                    id: programSchedule[index].id ,
                     image: '${programSchedule[index].image}',
                   ),
                 ),
