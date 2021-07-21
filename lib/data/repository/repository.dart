@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/data/models/credintals.dart';
+import 'package:vdl/data/models/programs_schedule.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
@@ -159,6 +160,14 @@ class Repository{
     }
 
     return result;
+  }
+
+  Future<List<ProgramSchedule>> getProgramsSchedule(String day,int dayNum)async{
+    dynamic response = await _client.get(
+      Urls.PROGRAMS_SCHEDULE + '?currentScheduleWeekDay=$day&currentScheduleMonthDay=$dayNum',
+    );
+
+    return ProgramSchedule.fromJson(response);
   }
 
 }

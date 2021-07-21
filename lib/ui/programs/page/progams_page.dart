@@ -204,7 +204,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                       child: Container(
                         child: ProgramCard(
                           image: '${programs[index].image.original}',
-                          category: 'محلية',
+                          category: '${programs[index].categories.category.name}',
                           name: '${programs[index].title}',
                           date: '${programs[index].humanDate}',
                         ),

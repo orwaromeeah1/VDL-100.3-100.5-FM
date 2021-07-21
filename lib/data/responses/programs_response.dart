@@ -53,7 +53,7 @@ class ProgramsResponse {
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
-//    categories = json['categories'] != null ? new Categories.fromJson(json['categories']) : null;
+    categories = json['categories'] != null ? new Categories.fromJson(json['categories']) : null;
 //    featured = json['featured'] != null ? new Featured.fromJson(json['featured']) : null;
   }
 
@@ -147,9 +147,11 @@ class Categories {
 
   Categories.fromJson(Map<String, dynamic> json) {
 //    category = json['categories'] != null ? new 121.fromJson(json['121']) : null;
-  log('kokokoko '+json.toString());
+    json.keys.forEach((key){
+      log('kokokokoko'+key);
+      category = new Category(name: json[key]['name'],programs: json[key]['programs']);
+    });
 
-    log('kokokoko '+category.name);
   }
 
 }

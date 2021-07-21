@@ -9,6 +9,8 @@ import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_state.dart';
 import 'package:vdl/ui/programs/bloc/programs/programs_bloc.dart';
 import 'package:vdl/ui/programs/bloc/programs/programs_state.dart';
+import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_state.dart';
+import 'package:vdl/ui/programs_schedule/bloc/programsschedule_bloc.dart';
 import 'data/shared_preferences/auth_prefes_helper.dart';
 
 final locator = GetIt.instance;
@@ -37,5 +39,9 @@ Future setLocator() async {
   //NewsCastBloc
   locator.registerFactory(() => NewsCastBloc (locator(), locator()));
   locator.registerFactory(() => NewsCastState());
+
+  //NewsCastBloc
+  locator.registerFactory(() => ProgramsScheduleBloc(locator(), locator()));
+  locator.registerFactory(() => ProgramsScheduleState());
 
 }

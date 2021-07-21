@@ -73,6 +73,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
           width: width,
           child: Stack(
             children: <Widget>[
+              //TODO : make this sliver app bar
               // image
               new Column(
                 children: <Widget>[
@@ -133,6 +134,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
 
+                        //TODO : implement sharing
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child:GlowingCircularButton(
@@ -198,7 +200,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                         }
 
                     ),
-
+                    SizedBox(height:50),
                   ],
                 ),
 

@@ -108,7 +108,7 @@ class ProgramCard extends StatelessWidget {
                     offset: Offset(0,-10),
                     child: new Container(
                       height: 30.0,
-                      width: 50,
+                      width: 70,
                       child: new Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),

@@ -29,7 +29,8 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
         return GestureDetector(
           onTap: (){
             isActive(broadcasts[index])
-                ? Navigator.push(
+                ?
+            Navigator.push(
               context,
              MaterialPageRoute(
                  builder: (context) => NewsBroadcastDetailsPage(
@@ -108,6 +109,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
   bool isDayBeforeNow(String date,String now){
     int day1 = int.parse(date.substring(0,date.indexOf('-')));
     int day2 = int.parse(now.substring(0,now.indexOf('-')));
+
 
     date = date.substring(date.indexOf('-')+1);
     now = now.substring(now.indexOf('-')+1);
