@@ -18,7 +18,10 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
   String tag;
-  NewsPageDetails({Key key, @required this.newsId, this.tag}) : super(key: key);
+  final bool isSpecial;
+  NewsPageDetails(
+      {Key key, @required this.newsId, this.tag, @required this.isSpecial})
+      : super(key: key);
 
   @override
   _NewsPageDetailsState createState() => _NewsPageDetailsState();
@@ -44,7 +47,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   void initState() {
     super.initState();
 
-    _bloc.add(FetchNewsDetails(widget.newsId));
+    _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
@@ -200,7 +203,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                       children: [
                                         Container(
                                           child: Text(
-                                            'الجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنانالجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنان',
+                                            Manager.removeAllHtmlTags(
+                                                state.newsModel.title),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -292,42 +296,50 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     ),
                   ],
                 )),
-            Padding(
-              padding: const EdgeInsets.only(
-                  right: 19.0, top: 34, left: 19, bottom: 15),
-              child: Container(
-                child: Center(
-                  child: Text(
-                    'اقرأ ايضا',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 400,
-              child: Swiper(
-                itemHeight: 330,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 24),
-                    child: NewsCardWidget(
-                      newsModel: newsModelFromRelatedArticle(
-                        state.newsModel.relatedArticles[index],
+            state.newsModel.relatedArticles.isEmpty
+                ? Container()
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 19.0, top: 34, left: 19, bottom: 15),
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              'اقرأ ايضا',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                          ),
+                        ),
                       ),
-                      tag: widget.tag,
-                    ),
-                  );
-                },
-                itemCount: state.newsModel.relatedArticles.length,
-                pagination: SwiperPagination(
-                    builder: DotSwiperPaginationBuilder(
-                        color: Colors.grey,
-                        activeColor: Colors.green,
-                        size: 10.0,
-                        activeSize: 10.0)),
-              ),
-            ),
+                      Container(
+                        height: 400,
+                        child: Swiper(
+                          itemHeight: 330,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, bottom: 24),
+                              child: NewsCardWidget(
+                                newsModel: newsModelFromRelatedArticle(
+                                  state.newsModel.relatedArticles[index],
+                                ),
+                                tag: widget.tag,
+                              ),
+                            );
+                          },
+                          itemCount: state.newsModel.relatedArticles.length,
+                          pagination: SwiperPagination(
+                              builder: DotSwiperPaginationBuilder(
+                                  color: Colors.grey,
+                                  activeColor: Colors.green,
+                                  size: 10.0,
+                                  activeSize: 10.0)),
+                        ),
+                      ),
+                    ],
+                  ),
             SizedBox(
               height: 50,
             )

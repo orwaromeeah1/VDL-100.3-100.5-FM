@@ -1,12 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/core/Manager.dart';
+import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/ui/ArticleDetails/page/article_details.dart';
+import 'package:vdl/ui/shared_widget/cached_image.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ArticleCardWidget extends StatelessWidget {
+  final NewsModel model;
   const ArticleCardWidget({
     Key key,
+    this.model,
   }) : super(key: key);
 
   @override
@@ -15,7 +21,9 @@ class ArticleCardWidget extends StatelessWidget {
       onTap: () {
         pushNewScreen(
           context,
-          screen: ArticleDetailsPage(),
+          screen: ArticleDetailsPage(
+            id: this.model.id,
+          ),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
@@ -55,7 +63,7 @@ class ArticleCardWidget extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            'الخميس 20 تشرين الثاني',
+                            this.model.humanDate,
                             style: TextStyle(
                               fontSize: 11,
                               color: Colors.black.withOpacity(0.5),
@@ -67,7 +75,7 @@ class ArticleCardWidget extends StatelessWidget {
                     Container(
                       height: 32,
                       child: Text(
-                        'الجغرافيا تقتل لقمان سليم وتخوّن أسامة سعد',
+                        Manager.removeAllHtmlTags(this.model.title),
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -81,9 +89,15 @@ class ArticleCardWidget extends StatelessWidget {
                       height: 44,
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 22,
-                            child: Image.asset('assets/images/article.png'),
+                          Container(
+                            height: 44,
+                            width: 44,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(22),
+                                image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        this.model.selectAuthor.image.medium),
+                                    fit: BoxFit.fitHeight)),
                           ),
                           SizedBox(
                             width: 10,
@@ -97,7 +111,7 @@ class ArticleCardWidget extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            'جورج يزبك',
+                            this.model.selectAuthor.name,
                             style: TextStyle(
                               color: blue,
                               fontSize: 12,

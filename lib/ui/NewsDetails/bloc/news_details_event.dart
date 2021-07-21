@@ -7,6 +7,6 @@ class NewsDetailsEvent extends Equatable {
 
 class FetchNewsDetails extends NewsDetailsEvent {
   final int id;
-
-  FetchNewsDetails(this.id);
+  final bool isSpecail;
+  FetchNewsDetails(this.id, this.isSpecail);
 }

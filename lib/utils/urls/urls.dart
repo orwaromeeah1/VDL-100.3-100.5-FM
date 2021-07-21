@@ -8,7 +8,10 @@ class Urls {
   static const String News_Categories =
       BASE_API + "wp-json/wp/v2/news-category";
 
-  static const String Single_article_url = BASE_API + "wp-json/wp/v2/news/";
+  static const String Single_news_url = BASE_API + "wp-json/wp/v2/news/";
+
   static const String Special_reports_url =
       BASE_API + "wp-json/wp/v2/special-reports/";
+
+  static const String Articles_Url = BASE_API + 'wp-json/wp/v2/articles';
 }

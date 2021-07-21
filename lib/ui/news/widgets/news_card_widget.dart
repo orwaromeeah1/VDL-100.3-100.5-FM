@@ -10,6 +10,7 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsCardWidget extends StatelessWidget {
   final NewsModel newsModel;
+
   String tag;
 
   NewsCardWidget({Key key, @required this.newsModel, this.tag})
@@ -21,6 +22,7 @@ class NewsCardWidget extends StatelessWidget {
       onTap: () => pushNewScreen(
         context,
         screen: NewsPageDetails(
+          isSpecial: false,
           newsId: this.newsModel.id,
           tag: this
               .newsModel

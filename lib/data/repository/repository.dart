@@ -125,10 +125,23 @@ class Repository {
   ///
   ///
   ///  getSingleNewsPage
+  Future<NewsModel> getSingleSpecialReportPage(int id) async {
+    //  String token = await getToken();
+    String response =
+        await _client.getMethods(Urls.Special_reports_url + '$id', "");
+    return NewsModel.fromJson(convert.jsonDecode(response));
+  }
+
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///  getSingleNewsPage
   Future<NewsModel> getSingleNewsPage(int id) async {
     //  String token = await getToken();
     String response =
-        await _client.getMethods(Urls.Single_article_url + '$id', "");
+        await _client.getMethods(Urls.Single_news_url + '$id', "");
     return NewsModel.fromJson(convert.jsonDecode(response));
   }
 
@@ -147,5 +160,30 @@ class Repository {
       specialReports: special,
       menus: menus,
     );
+  }
+
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///  getArticles
+  Future<List<NewsModel>> getArticles(int page) async {
+    //  String token = await getToken();
+    String response =
+        await _client.getMethods(Urls.Articles_Url + '?page=${page}', '');
+    return allNewsFromJson(response);
+  }
+
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///  getSingleArticle
+  Future<NewsModel> getSingleArticle(int id) async {
+    //  String token = await getToken();
+    String response = await _client.getMethods(Urls.Articles_Url + '/$id', "");
+    return NewsModel.fromJson(convert.jsonDecode(response));
   }
 }

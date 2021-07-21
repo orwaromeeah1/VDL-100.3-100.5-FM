@@ -1,6 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/repository/repository.dart';
+import 'package:vdl/ui/ArticleDetails/bloc/Article_details_bloc.dart';
+import 'package:vdl/ui/ArticleDetails/bloc/article_details_state.dart';
+import 'package:vdl/ui/Articles/bloc/articles_bloc.dart';
+import 'package:vdl/ui/Articles/bloc/articles_state.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_bloc.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
@@ -25,4 +29,12 @@ Future setLocator() async {
   //News Details Bloc
   locator.registerFactory(() => NewsDetailsBloc(locator(), locator()));
   locator.registerFactory(() => NewsDetailsState());
+
+  //Articles  Bloc
+  locator.registerFactory(() => ArticlesBLoc(locator(), locator()));
+  locator.registerFactory(() => ArticlesState());
+
+  //Articles Details  Bloc
+  locator.registerFactory(() => ArticleDetailsBloc(locator(), locator()));
+  locator.registerFactory(() => ArticleDetailsState());
 }

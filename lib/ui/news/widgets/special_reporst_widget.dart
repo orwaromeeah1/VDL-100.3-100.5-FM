@@ -19,6 +19,7 @@ class SpecialReportsCard extends StatelessWidget {
       onTap: () => pushNewScreen(
         context,
         screen: NewsPageDetails(
+          isSpecial: true,
           newsId: this.newsModel.id,
         ),
         withNavBar: true,

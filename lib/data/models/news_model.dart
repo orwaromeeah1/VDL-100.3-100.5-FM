@@ -41,7 +41,8 @@ class NewsModel {
       this.video,
       this.vimeo,
       this.youtube,
-      this.relatedArticles});
+      this.relatedArticles,
+      this.selectAuthor});
 
   int id;
   int date;
@@ -63,7 +64,7 @@ class NewsModel {
   String audiowatEmbedIframe;
   Image image;
   Map<String, Category> categories;
-
+  SelectAuthor selectAuthor;
   String humanDate;
   String sinceDate;
   String source;
@@ -90,6 +91,9 @@ class NewsModel {
         author: json["author"],
         menuOrder: json["menu_order"],
         format: json["format"],
+        selectAuthor: json["select_author"] == null
+            ? null
+            : SelectAuthor.fromJson(json["select_author"]),
         tags: json["tags"] == null
             ? null
             : Map.from(json["tags"]).map(
@@ -296,4 +300,28 @@ class RelatedArticle {
 NewsModel newsModelFromRelatedArticle(RelatedArticle r) {
   return NewsModel(
       id: r.id, humanDate: r.humanDate, image: r.image, title: r.title);
+}
+
+class SelectAuthor {
+  SelectAuthor({
+    this.id,
+    this.name,
+    this.image,
+  });
+
+  int id;
+  String name;
+  Image image;
+
+  factory SelectAuthor.fromJson(Map<String, dynamic> json) => SelectAuthor(
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        image: json["image"] == null ? null : Image.fromJson(json["image"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "image": image == null ? null : image.toJson(),
+      };
 }
