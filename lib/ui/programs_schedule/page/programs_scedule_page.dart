@@ -25,7 +25,6 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   double width;
   List<DayModel> currentMonthDays =[];
   int selectedDay = DateTime.now().day;
-  //TODO : save the already displayed days in cache in order to reduce APIs calls
   List<ProgramSchedule> programSchedule =[];
 
   final _bloc = locator<ProgramsScheduleBloc>();
@@ -180,7 +179,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             ) ,
           ),
         ),
-        //TODO : add animation to this
+
         Container(
           width: 50,
           child: Flex(
@@ -219,7 +218,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                 ),
               ),
               Container(
-                height: 1,
+                height: 2,
                 width: 50,
                 color: ProjectColors.ThemeColor,
               )

@@ -275,33 +275,40 @@ class _ProgramsPageState extends State<ProgramsPage> {
                               ],
                             ),
 
-                            GestureDetector(
-                              onTap: (){
-                                selectedCategoryId = -100;
-                                Navigator.pop(context);
-                                _bloc.add(FetchPrograms());
-                              },
-                              child: Text(
-                                'الغاء',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: ProjectColors.ThemeColor
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                _bloc.add(FetchCategoryPrograms(categoryId: selectedCategoryId));
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'تم',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: ProjectColors.ThemeColor
-                                ),
-                              ),
-                            ),
+                           Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceAround,
+                             children:[
+                               GestureDetector(
+                                 onTap: (){
+                                   selectedCategoryId = -100;
+                                   Navigator.pop(context);
+                                   _bloc.add(FetchPrograms());
+                                 },
+                                 child: Text(
+                                   'الغاء',
+                                   style: TextStyle(
+                                       fontSize: 18,
+                                       color: ProjectColors.ThemeColor
+                                   ),
+                                 ),
+                               ),
+                               SizedBox(width: 20,),
+                               GestureDetector(
+                                 onTap: (){
+                                   _bloc.add(FetchCategoryPrograms(categoryId: selectedCategoryId));
+                                   Navigator.pop(context);
+                                 },
+                                 child: Text(
+                                   'تم',
+                                   style: TextStyle(
+                                       fontSize: 18,
+                                       color: ProjectColors.ThemeColor
+                                   ),
+                                 ),
+                               ),
+                               SizedBox(width: 20,),
+                             ]
+                           )
 
                           ],
                         ),
