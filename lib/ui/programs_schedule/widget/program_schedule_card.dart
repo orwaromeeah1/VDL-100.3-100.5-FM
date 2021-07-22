@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share/share.dart';
 import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -8,6 +9,7 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
   final String duration;
+  String link;
   final int id;
   final String name;
   final bool isDisplayingNow;
@@ -17,6 +19,7 @@ class ProgramScheduleCard extends StatelessWidget {
     this.image,
     this.duration,
     this.id,
+    this.link,
     //TODO : show something if program is displaying now
     this.isDisplayingNow:false,
 });
@@ -85,10 +88,10 @@ class ProgramScheduleCard extends StatelessWidget {
                   ),
                 ],
               ),
-
-              //TODO : implement sharing
               IconButton(
-                onPressed: (){},
+                onPressed: (){
+                  Share.share(link);
+                },
                 icon: Icon(Icons.share),
               )
             ],

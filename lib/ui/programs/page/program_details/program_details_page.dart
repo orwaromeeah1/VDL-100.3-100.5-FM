@@ -13,6 +13,7 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 import '../../../../injection.dart';
 
@@ -66,16 +67,17 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
         });
   }
 
+
   Widget screenUi(){
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: width,
-          child: Stack(
-            children: <Widget>[
-              //TODO : make this sliver app bar
-              // image
-              new Column(
+      body: Container(
+        width: width,
+        child: Stack(
+          children: <Widget>[
+            // image
+            Positioned(
+              top:0,
+              child: new Column(
                 children: <Widget>[
                   new Container(
                       height: 250,
@@ -123,93 +125,107 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                   ),
                 ],
               ),
-              new Container(
-                alignment: Alignment.bottomCenter,
-                padding:
-                new EdgeInsets.only(top: 215, right: 10.0, left: 10.0),
-                child:Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+            ),
 
-                        //TODO : implement sharing
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child:GlowingCircularButton(
-                            size: 50,
-                            color: Colors.white,
-                            onClick: (){},
-                            iconImage: FilePath.SHARE,
-                          ),
+            new Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top:215),
+              padding:
+              new EdgeInsets.only(top: 0, right: 10.0, left: 10.0),
+              child:Flex(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                direction: Axis.vertical,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
 
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child:GlowingCircularButton(
+                          size: 50,
+                          color: Colors.white,
+                          onClick: (){
+                            Share.share(program.link);
+                          },
+                          iconImage: FilePath.SHARE,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20,left: 20),
-                          child: GlowingCircularButton(
-                            size: 50,
-                            color: ProjectColors.ThemeColor,
-                            isGlowing: true,
-                            onClick: (){},
-                            icon: Icon(
-                              Icons.volume_down,
-                              color: Colors.white,
+
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20,left: 20),
+                        child: GlowingCircularButton(
+                          size: 50,
+                          color: ProjectColors.ThemeColor,
+                          isGlowing: true,
+                          onClick: (){},
+                          icon: Icon(
+                            Icons.volume_down,
+                            color: Colors.white,
+                          ),
+                        ),
+
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.6,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '${Bidi.stripHtmlIfNeeded(program.programInfoDescription)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
                             ),
                           ),
+                          SizedBox(height: 10,),
+                          Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              Icon(Icons.watch_later,color: ProjectColors.ThemeColor,),
+                              Text(
+                                  '${program.programTextTime}'
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          Text(
+                            'الحلقات',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: program.episodes.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context,int index){
+                                return EpisodeCard(
+                                  image: '${program.episodes[index].image.original}',
+                                  date: '${program.humanDate}',
+                                  title: '${program.episodes[index].title}',
+                                  episodeNumber: 'الحلقة ${index+1}',
+                                );
+                              }
 
-                        ),
-                      ],
-                    ),
-                    Text(
-                      '${Bidi.stripHtmlIfNeeded(program.programInfoDescription)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                          ),
+                          SizedBox(height:50),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Icon(Icons.watch_later,color: ProjectColors.ThemeColor,),
-                        Text(
-                            '${program.programTextTime}'
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Text(
-                      'الحلقات',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: program.episodes.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context,int index){
-                          return EpisodeCard(
-                            image: '${program.episodes[index].image.original}',
-                            date: '${program.humanDate}',
-                            title: '${program.episodes[index].title}',
-                            episodeNumber: 'الحلقة ${index+1}',
-                          );
-                        }
+                  )
+                ],
+              ),
 
-                    ),
-                    SizedBox(height:50),
-                  ],
-                ),
-
-              )
-            ],
-          ),
-
-
+            )
+          ],
         ),
+
+
       ),
     );
   }

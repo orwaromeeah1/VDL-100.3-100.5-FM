@@ -11,7 +11,6 @@ import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_state.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programsschedule_bloc.dart';
 import 'package:vdl/ui/programs_schedule/widget/program_schedule_card.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
-import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/date_helper/date_hepler.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
@@ -123,7 +122,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   Widget screenUi(){
     return Container(
         width: width,
-        margin: EdgeInsets.only(top: 175),
+        margin: EdgeInsets.only(top: 175,bottom: 50),
         child: ListView.builder(
             itemCount: programSchedule.length,
             shrinkWrap: true,
@@ -142,11 +141,12 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                     name: '${programSchedule[index].title}',
                     duration: '${programSchedule[index].time}',
                     id: programSchedule[index].id ,
+                    link: programSchedule[index].link,
                     image: '${programSchedule[index].image}',
                   ),
                 ),
               );
-            })
+            }),
     );
   }
   Widget daysSlider(){
@@ -180,7 +180,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             ) ,
           ),
         ),
-
+        //TODO : add animation to this
         Container(
           width: 50,
           child: Flex(
@@ -246,6 +246,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             ],
           ),
         ),
+
         GestureDetector(
           onTap: (){
             setState(() {
