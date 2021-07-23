@@ -15,7 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
-<<<<<<< HEAD
   audioplayers:
     dependency: "direct main"
     description:
@@ -30,8 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-=======
->>>>>>> 568ec768b65e80024bf6b2b042531e92a12543f4
   bloc:
     dependency: transitive
     description:
@@ -390,7 +387,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.25.0"
-<<<<<<< HEAD
   scrollable_positioned_list:
     dependency: "direct main"
     description:
@@ -398,7 +394,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.10"
-=======
   share:
     dependency: "direct main"
     description:
@@ -406,7 +401,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
->>>>>>> 568ec768b65e80024bf6b2b042531e92a12543f4
   shared_preferences:
     dependency: "direct main"
     description:
