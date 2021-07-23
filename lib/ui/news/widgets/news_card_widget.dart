@@ -1,19 +1,34 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/core/Manager.dart';
+import 'package:vdl/data/models/news_model.dart';
+
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsCardWidget extends StatelessWidget {
-  const NewsCardWidget({
-    Key key,
-  }) : super(key: key);
+  final NewsModel newsModel;
+
+  String tag;
+
+  NewsCardWidget({Key key, @required this.newsModel, this.tag})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => pushNewScreen(
         context,
-        screen: NewsPageDetails(),
+        screen: NewsPageDetails(
+          isSpecial: false,
+          newsId: this.newsModel.id,
+          tag: this
+              .newsModel
+              .categories[this.newsModel.categories.keys.first]
+              .name,
+        ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       ),
@@ -32,17 +47,23 @@ class NewsCardWidget extends StatelessWidget {
           child: Stack(
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 230,
                     decoration: BoxDecoration(
-                        borderRadius: new BorderRadius.only(
-                          topRight: const Radius.circular(14.0),
-                          topLeft: const Radius.circular(14.0),
-                        ),
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/Lebanon.jpg"),
-                            fit: BoxFit.fill)),
+                      borderRadius: new BorderRadius.only(
+                        topRight: const Radius.circular(14.0),
+                        topLeft: const Radius.circular(14.0),
+                      ),
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              this.newsModel.image.large),
+                          fit: BoxFit.cover),
+                      //  DecorationImage(
+                      //     image: AssetImage("assets/images/Lebanon.jpg"),
+                      //     fit: BoxFit.fill)
+                    ),
                   ),
                   Container(
                     child: Padding(
@@ -52,7 +73,7 @@ class NewsCardWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'الخميس ١١ شباط ٢٠٢١ – 07:21',
+                            this.newsModel.humanDate,
                             style: TextStyle(
                                 fontSize: 11, color: black.withOpacity(0.41)),
                           ),
@@ -60,7 +81,7 @@ class NewsCardWidget extends StatelessWidget {
                             height: 4,
                           ),
                           Text(
-                            'الجبهة المدنيَّة الوطنيَّة في يوم وداع لقمان سليم: ملتزمون معركة تحرير لبنان',
+                            Manager.removeAllHtmlTags(this.newsModel.title),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
                             maxLines: 2,
@@ -78,12 +99,22 @@ class NewsCardWidget extends StatelessWidget {
                   height: 25.23,
                   width: 50,
                   child: Center(
-                    child: Text(
-                      'محلية',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                          color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: AutoSizeText(
+                        this.newsModel.categories == null
+                            ? tag
+                            : this
+                                .newsModel
+                                .categories[
+                                    this.newsModel.categories.keys.first]
+                                .name,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        presetFontSizes: [11, 8],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
                     ),
                   ),
                   decoration: BoxDecoration(

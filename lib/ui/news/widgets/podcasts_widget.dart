@@ -66,7 +66,7 @@ class _PodcastsWidetState extends State<PodcastsWidet> {
                             borderRadius: BorderRadius.circular(34.5),
                             color: Colors.white),
                         child: Padding(
-                          padding: const EdgeInsets.all(11.0),
+                          padding: const EdgeInsets.all(9.0),
                           child: Column(
                             children: [
                               Image.asset(
@@ -235,7 +235,7 @@ class _PodcastsWidetState extends State<PodcastsWidet> {
                       borderRadius: BorderRadius.circular(34.5),
                       color: Colors.white),
                   child: Padding(
-                    padding: const EdgeInsets.all(11.0),
+                    padding: const EdgeInsets.all(9.0),
                     child: Column(
                       children: [
                         SvgPicture.asset(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class tabBarCell extends StatelessWidget {
-  NewsType newsType;
+  NewsCategoryModel cat;
   tabBarCell({
     Key key,
-    this.newsType,
+    this.cat,
   }) : super(key: key);
 
   @override
@@ -17,18 +18,18 @@ class tabBarCell extends StatelessWidget {
         children: [
           Container(
             height: 18,
-            child: Text(newsType.name,
+            child: Text(cat.name,
                 style: TextStyle(
-                    color: newsType.selected ? green : black,
+                    color: cat.selected ? green : black,
                     fontWeight:
-                        newsType.selected ? FontWeight.bold : FontWeight.normal,
+                        cat.selected ? FontWeight.bold : FontWeight.normal,
                     fontSize: 14)),
           ),
           SizedBox(
             height: 8,
           ),
           Container(
-            color: newsType.selected ? green : Colors.white,
+            color: cat.selected ? green : Colors.white,
             height: 3,
             width: 55,
           )
