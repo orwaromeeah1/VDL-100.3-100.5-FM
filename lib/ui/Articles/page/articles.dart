@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +22,18 @@ class ArticlesPage extends StatefulWidget {
 
 class _ArticlesPageState extends State<ArticlesPage> {
   final bloc = locator<ArticlesBLoc>();
+  bool isLoadingNewPage = false;
+  int page = 1;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     bloc.add(FetchArticlesPage(1));
+  }
+
+  void _getNextPage() {
+    page++;
+    bloc.add(FetchArticlesPage(page));
   }
 
   @override
@@ -75,13 +84,71 @@ class _ArticlesPageState extends State<ArticlesPage> {
                       if (state is Loading) {
                         return LoadingScreen();
                       }
-                      if (state is LoadingNextPage) {}
-                      if (state is Loaded) {
-                        return articlesWidgetUi(context, state.articles);
+
+                      if (state is Loaded || state is LoadingNextPage) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 101.0),
+                          child: Container(
+                            child: NotificationListener<ScrollNotification>(
+                              onNotification: (notification) {
+                                if (!isLoadingNewPage &&
+                                    notification.metrics.pixels ==
+                                        notification.metrics.maxScrollExtent) {
+                                  setState(() {
+                                    isLoadingNewPage = true;
+                                    _getNextPage();
+                                  });
+                                }
+                                return true;
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        height:
+                                            (state.articles.length * 145.5 + 50)
+                                                .toDouble(),
+                                        child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) =>
+                                                ArticleCardWidget(
+                                                  model: state.articles[index],
+                                                ),
+                                            itemCount: state.articles.length)),
+                                    state is LoadingNextPage
+                                        ? Container(
+                                            color: Colors.transparent,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 50,
+                                            child: Platform.isIOS
+                                                ? CupertinoActivityIndicator()
+                                                : CircularProgressIndicator(),
+                                          )
+                                        : Container(),
+                                    SizedBox(
+                                      height: 50,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                        ;
                       }
                       return Container();
                     },
-                    listener: (context, state) {})
+                    listener: (context, state) {
+                      if (state is Loaded) {
+                        setState(() {
+                          isLoadingNewPage = false;
+                        });
+                      }
+                    })
               ],
             ),
           ),
@@ -89,30 +156,4 @@ class _ArticlesPageState extends State<ArticlesPage> {
       ),
     );
   }
-}
-
-Widget articlesWidgetUi(BuildContext context, List<NewsModel> articles) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 101.0),
-    child: Container(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                height: (articles.length * 150).toDouble(),
-                child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => ArticleCardWidget(
-                          model: articles[index],
-                        ),
-                    itemCount: articles.length)),
-            SizedBox(
-              height: 50,
-            )
-          ],
-        ),
-      ),
-    ),
-  );
 }

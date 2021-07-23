@@ -74,8 +74,11 @@ class ArticleCardWidget extends StatelessWidget {
                     ),
                     Container(
                       height: 32,
+                      width: MediaQuery.of(context).size.width - 80,
                       child: Text(
                         Manager.removeAllHtmlTags(this.model.title),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -97,7 +100,7 @@ class ArticleCardWidget extends StatelessWidget {
                                 image: DecorationImage(
                                     image: CachedNetworkImageProvider(
                                         this.model.selectAuthor.image.medium),
-                                    fit: BoxFit.fitHeight)),
+                                    fit: BoxFit.cover)),
                           ),
                           SizedBox(
                             width: 10,

@@ -14,7 +14,7 @@ class ArticlesBLoc extends Bloc<ArticlesEvent, ArticlesState> {
       if (event.page == 1) {
         yield Loading();
       } else {
-        yield LoadingNextPage();
+        yield LoadingNextPage(articles);
       }
       try {
         List<NewsModel> data = await repo.getArticles(event.page);
