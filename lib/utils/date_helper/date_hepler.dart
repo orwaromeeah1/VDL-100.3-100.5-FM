@@ -40,10 +40,10 @@ class DateHelper{
   static String getDayNameInArabic(String dayName){
     switch(dayName){
       case 'Saturday': return 'السبت';
-      case 'Sunday': return 'الأحد';
-      case 'Monday': return 'الإثنين';
+      case 'Sunday': return 'الاحد';
+      case 'Monday': return 'الاثنين';
       case 'Tuesday': return 'الثلاثاء';
-      case 'Wednesday': return 'الأربعاء';
+      case 'Wednesday': return 'الاربعاء';
       case 'Thursday': return 'الخميس';
       case 'Friday': return 'الجمعة';
       default : return '';

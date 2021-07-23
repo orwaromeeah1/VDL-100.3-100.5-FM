@@ -53,10 +53,13 @@ class EpisodeCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '$episodeNumber - $date',
-                    style: TextStyle(
-                      color: Colors.grey,
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: Text(
+                      '$episodeNumber - $date',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                   Container(

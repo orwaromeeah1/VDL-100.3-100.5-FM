@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramCard extends StatelessWidget {
@@ -69,7 +70,7 @@ class ProgramCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '$name',
+                            '${Bidi.stripHtmlIfNeeded(name)}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16
@@ -107,7 +108,7 @@ class ProgramCard extends StatelessWidget {
                     offset: Offset(0,-10),
                     child: new Container(
                       height: 30.0,
-                      width: 50,
+                      width: 70,
                       child: new Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 
-void main() {
+import 'injection.dart';
+
+void main() async{
+  await setLocator();
   runApp(MyApp());
 }
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.grey,
         fontFamily: "TheSans",
         secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
