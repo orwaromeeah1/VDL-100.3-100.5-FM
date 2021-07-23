@@ -1,20 +1,15 @@
-import 'package:http/http.dart';
 import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/models/homeModel.dart';
 import 'package:vdl/data/models/menus_model.dart';
 import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/data/models/news_model.dart';
 
-import 'dart:developer';
-
 import 'package:vdl/data/models/category_model.dart';
-import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
-import 'package:vdl/data/responses/program_categories_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/data/responses/programs_response.dart';
 import 'package:vdl/data/responses/search_response.dart';

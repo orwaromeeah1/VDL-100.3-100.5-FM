@@ -93,8 +93,7 @@ class HttpClient {
       switch (response.statusCode) {
         case 200:
           {
-            log('POST :' + response.body);
-            return convert.jsonDecode(response.body);
+            return response.body;
           }
 
         default:
