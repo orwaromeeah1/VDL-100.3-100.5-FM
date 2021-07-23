@@ -47,7 +47,7 @@ dependencies:
 
   flutter_bloc: 7.0.0
 
-  http: 0.13.0
+  http: 0.13.1
 
   shared_preferences: ^0.5.3+5
 
@@ -58,6 +58,9 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^2.1.0
   html: ^0.15.0
+
+  share: ^2.0.4
+  
 
 dev_dependencies:
   flutter_test:

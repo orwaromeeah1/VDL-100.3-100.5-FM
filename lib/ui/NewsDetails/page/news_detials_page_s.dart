@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+=======
+//import 'package:audioplayers/audioplayers.dart';
+>>>>>>> 568ec768b65e80024bf6b2b042531e92a12543f4
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,8 +38,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   AnimationController _animationController;
   bool isPlaying = false;
 
-  AudioPlayer audioPlayer = AudioPlayer();
-  AudioPlayerState audioPlayerState = AudioPlayerState.PAUSED;
+//  AudioPlayer audioPlayer = AudioPlayer();
+//  AudioPlayerState audioPlayerState = AudioPlayerState.PAUSED;
   String url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3';
 
   /// Optional
@@ -51,56 +55,56 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-
+  }
     /// Compulsory
     ///
     ///
-    audioPlayer.onPlayerStateChanged.listen((AudioPlayerState state) {
-      setState(() {
-        audioPlayerState = state;
-      });
-    });
+//    audioPlayer.onPlayerStateChanged.listen((AudioPlayerState state) {
+//      setState(() {
+//        audioPlayerState = state;
+//      });
+//    });
 
     /// Optional
-    audioPlayer.setUrl(
-        url); // Triggers the onDurationChanged listener and sets the max duration string
-    audioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        audioDuration = duration.inSeconds;
-      });
-    });
-    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
-      setState(() {
-        timeProgress = position.inSeconds;
-      });
-    });
-  }
+//    audioPlayer.setUrl(
+//        url); // Triggers the onDurationChanged listener and sets the max duration string
+//    audioPlayer.onDurationChanged.listen((Duration duration) {
+//      setState(() {
+//        audioDuration = duration.inSeconds;
+//      });
+//    });
+//    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+//      setState(() {
+//        timeProgress = position.inSeconds;
+//      });
+//    });
+//  }
 
   /// Compulsory
-  @override
-  void dispose() {
-    audioPlayer.release();
-    audioPlayer.dispose();
-    super.dispose();
-  }
+//  @override
+//  void dispose() {
+////    audioPlayer.release();
+////    audioPlayer.dispose();
+//    super.dispose();
+//  }
 
   /// Compulsory
-  playMusic() async {
-    // Add the parameter "isLocal: true" if you want to access a local file
-    await audioPlayer.play(url);
-  }
+//  playMusic() async {
+//    // Add the parameter "isLocal: true" if you want to access a local file
+//    await audioPlayer.play(url);
+//  }
 
   /// Compulsory
-  pauseMusic() async {
-    await audioPlayer.pause();
-  }
+//  pauseMusic() async {
+//    await audioPlayer.pause();
+//  }
 
-  String getTimeString(int seconds) {
-    String minuteString =
-        '${(seconds / 60).floor() < 10 ? 0 : ''}${(seconds / 60).floor()}';
-    String secondString = '${seconds % 60 < 10 ? 0 : ''}${seconds % 60}';
-    return '$minuteString:$secondString'; // Returns a string with the format mm:ss
-  }
+//  String getTimeString(int seconds) {
+//    String minuteString =
+//        '${(seconds / 60).floor() < 10 ? 0 : ''}${(seconds / 60).floor()}';
+//    String secondString = '${seconds % 60 < 10 ? 0 : ''}${seconds % 60}';
+//    return '$minuteString:$secondString'; // Returns a string with the format mm:ss
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -232,9 +236,37 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                       black.withOpacity(0.41),
                                                   fontSize: 12),
                                             ),
+<<<<<<< HEAD
                                           ],
                                         )
                                       ],
+=======
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                CupertinoIcons.recordingtape,
+                                                color: blue,
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
+                                              Text(
+                                               '' /*getTimeString(audioDuration -
+                                                    timeProgress)*/,
+                                                style: TextStyle(
+                                                    color:
+                                                        black.withOpacity(0.41),
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+>>>>>>> 568ec768b65e80024bf6b2b042531e92a12543f4
                                     ),
                                   ),
                                 )
@@ -366,11 +398,11 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   ///
   void _handleOnPressed() {
     setState(() {
-      isPlaying = !isPlaying;
-      isPlaying
-          ? _animationController.forward()
-          : _animationController.reverse();
-      isPlaying ? playMusic() : pauseMusic();
+//      isPlaying = !isPlaying;
+//      isPlaying
+//          ? _animationController.forward()
+//          : _animationController.reverse();
+//      isPlaying ? playMusic() : pauseMusic();
     });
   }
 }

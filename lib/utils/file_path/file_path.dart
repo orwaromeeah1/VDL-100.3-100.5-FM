@@ -2,6 +2,7 @@
 class FilePath{
   static const SHARE = 'assets/images/share.png';
   static const PREVIOUS_BROADCAST = 'assets/images/l.png';
+  static const COMING_BROADCAST2 = 'assets/images/Group 1996.png';
   static const COMING_BROADCAST = 'assets/images/l2.png';
   static const FILTER = 'assets/images/filter.png';
   static const AUDIO = 'assets/images/Group 4839.png';

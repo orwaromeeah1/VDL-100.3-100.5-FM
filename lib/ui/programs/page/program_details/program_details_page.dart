@@ -1,165 +1,233 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vdl/data/responses/program_details_response.dart';
+import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
+import 'package:vdl/ui/programs/bloc/program_details/program_details_event.dart';
+import 'package:vdl/ui/programs/bloc/program_details/program_details_state.dart';
 import 'package:vdl/ui/programs/widget/episode_card.dart';
+import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
+import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
+
+import '../../../../injection.dart';
 
 class ProgramDetailsPage extends StatefulWidget {
+  final int programId;
+
+  ProgramDetailsPage({this.programId});
+
   @override
   _ProgramDetailsPageState createState() => _ProgramDetailsPageState();
 }
 
 class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   double width;
+  ProgramDetailsResponse program;
+  final _bloc = locator<ProgramDetailsBloc>();
+
+  @override
+  void initState() {
+    _bloc.add(FetchProgramDetails(programId: widget.programId));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
 
+    return BlocBuilder(
+        bloc: _bloc,
+        builder: (context, ProgramDetailsState state) {
+          if (state is ProgramDetailsEmpty) {
+            _bloc.add(FetchProgramDetails());
+          }
+          if (state is ProgramDetailsError) {
+            return ErrorScreen(
+              onRetry: () => _bloc.add(FetchProgramDetails()),
+            );
+          }
+          if (state is ProgramDetailsLoaded) {
+            program = state.program;
+            return screenUi();
+          }
+
+          if (state is ProgramDetailsLoading) {
+            return LoadingScreen();
+          }
+
+          return Center(
+            child: LoadingScreen(),
+          );
+        });
+  }
+
+
+  Widget screenUi(){
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: width,
-          child: Stack(
-            children: <Widget>[
-              // image
-              new Column(
+      body: Container(
+        width: width,
+        child: Stack(
+          children: <Widget>[
+            // image
+            Positioned(
+              top:0,
+              child: new Column(
                 children: <Widget>[
                   new Container(
-                    height: 250,
-                    width: width,
-                    padding: EdgeInsets.only(top: 40),
-                    child: Stack(
-                      children: [
-                                                CachedNetworkImage(
-                          imageUrl: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
-                          imageBuilder: (context, imageProvider) =>
-                              Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
-                                padding: EdgeInsets.symmetric(horizontal: 25),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
+                      height: 250,
+                      width: width,
+                      padding: EdgeInsets.only(top: 37),
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: '${program.image.original}',
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                        ),
-                        Positioned(
-                            top: 10,
-                            left: 10,
-                            child: GlowingCircularButton(
-                              color: Colors.black26,
-                              onClick:(){
-                                Navigator.pop(context);
-                              },
-                              size: 35,
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                              ),
-                            )
+                          ),
+                          Positioned(
+                              top: 10,
+                              left: 10,
+                              child: GlowingCircularButton(
+                                color: Colors.black26,
+                                onClick:(){
+                                  Navigator.pop(context);
+                                },
+                                size: 35,
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              )
 
-                        ),
+                          ),
 
 
-                      ],
-                    )
+                        ],
+                      )
                   ),
                 ],
               ),
-              new Container(
-                  alignment: Alignment.bottomCenter,
-                  padding:
-                      new EdgeInsets.only(top: 215, right: 10.0, left: 10.0),
-                  child:Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+
+            new Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top:215),
+              padding:
+              new EdgeInsets.only(top: 0, right: 10.0, left: 10.0),
+              child:Flex(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                direction: Axis.vertical,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
 
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child:GlowingCircularButton(
-                              size: 50,
-                              color: Colors.white,
-                              onClick: (){},
-                              iconImage: FilePath.SHARE,
-                            ),
 
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20,left: 20),
-                            child: GlowingCircularButton(
-                              size: 50,
-                              color: ProjectColors.ThemeColor,
-                              isGlowing: true,
-                              onClick: (){},
-                              icon: Icon(
-                                  Icons.volume_down,
-                                color: Colors.white,
-                              ),
-                            ),
-
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'برنامج شبابي-حواري بالتعاون مع مكتب اليونيكسو في بيروت',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child:GlowingCircularButton(
+                          size: 50,
+                          color: Colors.white,
+                          onClick: (){
+                            Share.share(program.link);
+                          },
+                          iconImage: FilePath.SHARE,
                         ),
+
                       ),
-                      SizedBox(height: 10,),
-                      Flex(
-                        direction: Axis.horizontal,
-                        children: [
-                          Icon(Icons.watch_later,color: ProjectColors.ThemeColor,),
-                          Text(
-                            'من الاثنين إلى الخميس بعد نشرة الخامسة والربع مساء'
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20,left: 20),
+                        child: GlowingCircularButton(
+                          size: 50,
+                          color: ProjectColors.ThemeColor,
+                          isGlowing: true,
+                          onClick: (){},
+                          icon: Icon(
+                            Icons.volume_down,
+                            color: Colors.white,
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 20,),
-                      Text(
-                          'الحلقات',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
                         ),
-                      ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 10,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context,int index){
-                            return EpisodeCard(
-                              image: 'https://www.vdl.me/wp-content/uploads/2021/05/Sawt-Jdid.jpg',
-                              date: '23 شباط 2020',
-                              title: 'عقد المكتب السياسي اجتماعه الاسبوعي برئاسة رئيس الحزب',
-                              episodeNumber: 'الحلقة الأولى',
-                            );
-                          }
 
                       ),
-
                     ],
                   ),
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.6,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '${Bidi.stripHtmlIfNeeded(program.programInfoDescription)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              Icon(Icons.watch_later,color: ProjectColors.ThemeColor,),
+                              Text(
+                                  '${program.programTextTime}'
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          Text(
+                            'الحلقات',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: program.episodes.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context,int index){
+                                return EpisodeCard(
+                                  image: '${program.episodes[index].image.original}',
+                                  date: '${program.humanDate}',
+                                  title: '${program.episodes[index].title}',
+                                  episodeNumber: 'الحلقة ${index+1}',
+                                );
+                              }
 
-              )
-            ],
-          ),
+                          ),
+                          SizedBox(height:50),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
 
-
+            )
+          ],
         ),
+
+
       ),
     );
   }
+
 }

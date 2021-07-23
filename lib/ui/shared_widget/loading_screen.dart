@@ -14,7 +14,7 @@ class LoadingScreen extends StatelessWidget {
               child: Platform.isIOS
                   ? CupertinoActivityIndicator()
                   : CircularProgressIndicator(
-                      color: blue,
+                      color: ProjectColors.ThemeColor,
                     ))),
     );
   }
