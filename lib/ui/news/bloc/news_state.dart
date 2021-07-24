@@ -30,3 +30,9 @@ class FetchingNextPage extends NewsState {
   final HomeModel homeModel;
   FetchingNextPage(this.homeModel);
 }
+
+class MoveingToTop extends NewsState {
+  final HomeModel homeModel;
+
+  MoveingToTop(this.homeModel);
+}

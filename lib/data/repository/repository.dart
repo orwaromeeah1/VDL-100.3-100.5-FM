@@ -91,13 +91,13 @@ class Repository {
     if (id == 0) {
       String response = await _client.getMethods(
           Urls.All_NEWS + '?page=${page}&per_page=10', "");
+
       news = allNewsFromJson(response);
       return news;
     } else {
       String response = await _client.getMethods(
-          Urls.BASE_API +
-              'wp-json/wp/v2/news/?news-category=$id&per_page=10&page=$page',
-          "");
+          Urls.BASE_API + 'news/?news-category=$id&page=$page&per_page=10', "");
+
       news = allNewsFromJson(response);
       return news;
     }

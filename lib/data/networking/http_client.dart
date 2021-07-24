@@ -82,6 +82,7 @@ class HttpClient {
   /// Get menus
   Future<String> getMethods(String url, String token) async {
     try {
+      log('GET :' + url);
       var response = await http.get(
         Uri.parse(url),
         headers: {

@@ -57,6 +57,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         print(e);
         yield Loaded(homeModel);
       }
+    } else if (event is MoveToTop) {
+      yield MoveingToTop(homeModel);
+      yield Loaded(homeModel);
     }
   }
 }
