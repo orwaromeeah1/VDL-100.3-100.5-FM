@@ -23,6 +23,7 @@ import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
+import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/ui/shared_widget/try_again_widget.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -79,9 +80,9 @@ class _NewsPageState extends State<NewsPage> {
               } else if (state is Startup) {
                 return newsScreenLoaded(context, state.homeModel, state);
               } else
-                return tryAgain(context, () {
-                  _bloc.add(FetchData());
-                });
+                return ErrorScreen(
+                  onRetry: () => _bloc.add(FetchData()),
+                );
             },
             listener: (context, state) {
               if (state is Startup) {
@@ -93,7 +94,6 @@ class _NewsPageState extends State<NewsPage> {
                   isLoadingNextPage = false;
                 });
               } else if (state is MoveingToTop) {
-                print('moving');
                 _scrollController.animateTo(0.0,
                     curve: Curves.easeOut,
                     duration: const Duration(milliseconds: 300));

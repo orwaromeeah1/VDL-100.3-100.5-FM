@@ -23,6 +23,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         yield Startup(homeModel);
       } catch (e) {
         print(e);
+        yield NoInternetConnection();
       }
     }
     if (event is FetchCategoryNews) {
