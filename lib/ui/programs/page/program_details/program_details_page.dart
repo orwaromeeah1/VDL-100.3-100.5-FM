@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_event.dart';
@@ -10,6 +11,7 @@ import 'package:vdl/ui/programs/widget/episode_card.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:intl/intl.dart';
@@ -31,10 +33,30 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   ProgramDetailsResponse program;
   final _bloc = locator<ProgramDetailsBloc>();
 
+  BannerAd banner;
+
   @override
   void initState() {
     _bloc.add(FetchProgramDetails(programId: widget.programId));
     super.initState();
+
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final  adState = locator<AdState>();
+    adState.initialization.then((value) {
+      setState(() {
+        banner = BannerAd(
+          adUnitId: adState.bannerAdUnitId,
+          size: AdSize.banner,
+          request: AdRequest(),
+          listener: adState.adListener
+        )..load();
+      });
+    });
   }
 
   @override
@@ -69,6 +91,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 
 
   Widget screenUi(){
+      banner.load();
     return Scaffold(
       body: Container(
         width: width,
@@ -192,6 +215,15 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                             ],
                           ),
                           SizedBox(height: 20,),
+                          banner == null
+                          ?Container(height: 20)
+                          :Container(
+                            height: 100,
+                            child: AdWidget(
+                              ad: banner,
+                            ),
+                          ),
+
                           Text(
                             'الحلقات',
                             style: TextStyle(

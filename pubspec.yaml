@@ -60,6 +60,7 @@ dependencies:
   html: ^0.15.0
 
   share: ^2.0.4
+  google_mobile_ads: ^0.13.2
   
 
 dev_dependencies:

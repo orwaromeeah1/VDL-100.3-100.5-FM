@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/Article_details_bloc.dart';
@@ -19,11 +20,12 @@ import 'package:vdl/ui/programs/bloc/programs/programs_bloc.dart';
 import 'package:vdl/ui/programs/bloc/programs/programs_state.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_state.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programsschedule_bloc.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'data/shared_preferences/auth_prefes_helper.dart';
 
 final locator = GetIt.instance;
 
-Future setLocator() async {
+Future setLocator(Future<InitializationStatus> initialization) async {
   locator.registerLazySingleton<HttpClient>(() => HttpClient());
   locator.registerLazySingleton<AuthPrefsHelper>(() => AuthPrefsHelper());
 
@@ -66,4 +68,8 @@ Future setLocator() async {
   //NewsCastBloc
   locator.registerFactory(() => ProgramsScheduleBloc(locator(), locator()));
   locator.registerFactory(() => ProgramsScheduleState());
+
+  locator.registerLazySingleton<AdState>(() => AdState(
+    initialization,
+  ));
 }
