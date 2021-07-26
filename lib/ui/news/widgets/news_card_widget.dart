@@ -57,8 +57,10 @@ class NewsCardWidget extends StatelessWidget {
                         topLeft: const Radius.circular(14.0),
                       ),
                       image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              this.newsModel.image.large),
+                          image: this.newsModel.image.large == null
+                              ? AssetImage('assets/images/Lebanon.jpg')
+                              : CachedNetworkImageProvider(
+                                  this.newsModel.image.large),
                           fit: BoxFit.cover),
                       //  DecorationImage(
                       //     image: AssetImage("assets/images/Lebanon.jpg"),

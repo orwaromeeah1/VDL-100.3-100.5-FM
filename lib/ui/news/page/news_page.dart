@@ -39,7 +39,7 @@ class _NewsPageState extends State<NewsPage> {
   int selectedIndex = 0;
   int page = 1;
   int specialReportsPage = 1;
-
+  final _scrollController = ScrollController();
   bool isLoadingNextPage = false;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -71,7 +71,8 @@ class _NewsPageState extends State<NewsPage> {
             builder: (context, state) {
               if (state is Loaded ||
                   state is FetchingCategoryNews ||
-                  state is FetchingNextPage) {
+                  state is FetchingNextPage ||
+                  state is MoveToTop) {
                 return newsScreenLoaded(context, state.homeModel, state);
               } else if (state is Loading) {
                 return LoadingScreen();
@@ -91,6 +92,11 @@ class _NewsPageState extends State<NewsPage> {
                 setState(() {
                   isLoadingNextPage = false;
                 });
+              } else if (state is MoveingToTop) {
+                print('moving');
+                _scrollController.animateTo(0.0,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 300));
               }
             }));
   }
@@ -115,6 +121,7 @@ class _NewsPageState extends State<NewsPage> {
         return true;
       },
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           Theme(
             data: ThemeData(primarySwatch: blue),

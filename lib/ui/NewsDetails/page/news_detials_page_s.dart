@@ -15,9 +15,11 @@ import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
+//
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
   String tag;
+
   final bool isSpecial;
   NewsPageDetails(
       {Key key, @required this.newsId, this.tag, @required this.isSpecial})
@@ -30,13 +32,10 @@ class NewsPageDetails extends StatefulWidget {
 class _NewsPageDetailsState extends State<NewsPageDetails>
     with TickerProviderStateMixin {
   final _bloc = locator<NewsDetailsBloc>();
-
   AnimationController _animationController;
   bool isPlaying = false;
-
+  Duration duration;
   AudioPlayer audioPlayer = AudioPlayer();
-  AudioPlayerState audioPlayerState = AudioPlayerState.PAUSED;
-  String url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3';
 
   /// Optional
   int timeProgress = 0;
@@ -46,56 +45,56 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void initState() {
     super.initState();
-
+    AudioPlayer.logEnabled = true;
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
 
-    audioPlayer.onPlayerStateChanged.listen((AudioPlayerState state) {
+    // Triggers the onDurationChanged listener and sets the max duration string
+    audioPlayer.onDurationChanged.listen((Duration duration) {
       setState(() {
-        audioPlayerState = state;
+        audioDuration = duration.inSeconds;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+      setState(() {
+        timeProgress = position.inSeconds;
       });
     });
   }
 
   /// Compulsory
-  ///
-  ///
-  ///
-
-  /// Optional
-//    audioPlayer.setUrl(
-//        url); // Triggers the onDurationChanged listener and sets the max duration string
-//    audioPlayer.onDurationChanged.listen((Duration duration) {
-//      setState(() {
-//        audioDuration = duration.inSeconds;
-//      });
-//    });
-//    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
-//      setState(() {
-//        timeProgress = position.inSeconds;
-//      });
-//    });
-//  }
-
-  /// Compulsory
-//  @override
-//  void dispose() {
-////    audioPlayer.release();
-////    audioPlayer.dispose();
-//    super.dispose();
-//  }
+  @override
+  void dispose() {
+    audioPlayer.release();
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   /// Compulsory
   playMusic() async {
-    // Add the parameter "isLocal: true" if you want to access a local file
-    await audioPlayer.play(url);
+    await audioPlayer.setUrl(
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3'); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    int result = await audioPlayer
+        .play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3');
+    if (result == 1) {
+      // success
+    }
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      setState(() => {print(d)});
+    });
   }
 
   /// Compulsory
   pauseMusic() async {
-    await audioPlayer.pause();
+    int result = await audioPlayer.pause();
+  }
+
+  stopMusic() async {
+    int result = await audioPlayer.stop();
   }
 
   String getTimeString(int seconds) {
@@ -160,91 +159,99 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 19.0, right: 19, top: 38),
-                          child: Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(14),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.14),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: CircleAvatar(
-                                    radius: 22,
-                                    backgroundColor: blue.withOpacity(0.41),
-                                    child: CircleAvatar(
-                                      backgroundColor: blue,
-                                      radius: 15,
-                                      child: InkWell(
-                                        onTap: () => _handleOnPressed(),
-                                        child: AnimatedIcon(
-                                          icon: AnimatedIcons.play_pause,
-                                          progress: _animationController,
-                                          size: 20,
-                                        ),
+                        state.newsModel.audiowatFile == ""
+                            ? Container()
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 19.0, right: 19, top: 38),
+                                child: Container(
+                                  height: 100,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(14),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.14),
+                                        blurRadius: 10,
+                                        offset: Offset(0, 10),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 16.0, left: 15),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            Manager.removeAllHtmlTags(
-                                                state.newsModel.title),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: CircleAvatar(
+                                          radius: 22,
+                                          backgroundColor:
+                                              blue.withOpacity(0.41),
+                                          child: CircleAvatar(
+                                            backgroundColor: blue,
+                                            radius: 15,
+                                            child: InkWell(
+                                              onTap: () => _handleOnPressed(),
+                                              child: AnimatedIcon(
+                                                icon: AnimatedIcons.play_pause,
+                                                progress: _animationController,
+                                                size: 20,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 5,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 16.0, left: 15),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                child: Text(
+                                                  Manager.removeAllHtmlTags(
+                                                      state.newsModel
+                                                          .audioTitle),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    CupertinoIcons
+                                                        .recordingtape,
+                                                    color: blue,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Text(
+                                                    getTimeString(
+                                                        audioDuration -
+                                                            timeProgress),
+                                                    style: TextStyle(
+                                                        color: black
+                                                            .withOpacity(0.41),
+                                                        fontSize: 12),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.recordingtape,
-                                              color: blue,
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Text(
-                                              getTimeString(
-                                                  audioDuration - timeProgress),
-                                              style: TextStyle(
-                                                  color:
-                                                      black.withOpacity(0.41),
-                                                  fontSize: 12),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                                ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.only(
                               right: 19.0, top: 17, left: 19),
@@ -369,11 +376,11 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   ///
   void _handleOnPressed() {
     setState(() {
-//      isPlaying = !isPlaying;
-//      isPlaying
-//          ? _animationController.forward()
-//          : _animationController.reverse();
-//      isPlaying ? playMusic() : pauseMusic();
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+      isPlaying ? playMusic() : pauseMusic();
     });
   }
 }

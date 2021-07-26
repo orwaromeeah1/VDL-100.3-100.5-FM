@@ -35,7 +35,7 @@ Future setLocator(Future<InitializationStatus> initialization) async {
       ));
 
   //News Bloc
-  locator.registerFactory(() => NewsBloc(locator(), locator()));
+  locator.registerLazySingleton(() => NewsBloc(locator(), locator()));
   locator.registerFactory(() => NewsState());
 
   //News Details Bloc

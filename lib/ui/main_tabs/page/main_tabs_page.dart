@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
 import 'package:vdl/ui/menu/page/menu_page.dart';
+import 'package:vdl/ui/news/bloc/news_bloc.dart';
+import 'package:vdl/ui/news/bloc/news_event.dart';
 import 'package:vdl/ui/news/page/news_page.dart';
 import 'package:vdl/ui/programs/page/progams_page.dart';
 import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
@@ -28,6 +31,9 @@ class _MainTabsPageState extends State<MainTabsPage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
+        onSelectedTabPressWhenNoScreensPushed: () {
+          locator<NewsBloc>().add(MoveToTop());
+        },
         icon: Icon(Icons.home),
         activeColorPrimary: Colors.grey,
         activeColorSecondary: ProjectColors.ThemeColor,
