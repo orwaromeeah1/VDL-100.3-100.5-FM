@@ -36,3 +36,5 @@ class MoveingToTop extends NewsState {
 
   MoveingToTop(this.homeModel);
 }
+
+class NoInternetConnection extends NewsState {}
