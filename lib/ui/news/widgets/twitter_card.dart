@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
@@ -38,7 +39,7 @@ class twitterCard extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
-              )
+              ),
             ],
           ),
         ),

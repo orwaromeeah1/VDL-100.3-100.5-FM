@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:vdl/injection.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'injection.dart';
 
-void main() async{
-  await setLocator();
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final futureInit = MobileAds.instance.initialize();
+
+  await setLocator(futureInit);
+
   runApp(MyApp());
 }
 

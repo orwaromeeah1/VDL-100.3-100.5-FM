@@ -148,7 +148,6 @@ class Categories {
   Categories.fromJson(Map<String, dynamic> json) {
 //    category = json['categories'] != null ? new 121.fromJson(json['121']) : null;
     json.keys.forEach((key){
-      log('kokokokoko'+key);
       category = new Category(name: json[key]['name'],programs: json[key]['programs']);
     });
 
