@@ -104,4 +104,34 @@ class HttpClient {
       }
     } on TimeoutException catch (_) {}
   }
+
+  /// Get menus
+  Future<String> getTweetsMethod(String url, String token) async {
+    try {
+      log('GET :' + url);
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+          "start_time": DateTime.now().toString()
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          {
+            return response.body;
+          }
+
+        default:
+          {
+            throw BadRequestError("");
+          }
+      }
+    } on TimeoutException catch (_) {} catch (e) {
+      print(e);
+      throw BadRequestError("");
+    }
+  }
 }

@@ -50,7 +50,7 @@ dependencies:
   http: 0.13.1
 
   shared_preferences: ^0.5.3+5
-
+  timeago: ^3.1.0
   equatable: ^0.6.1
 
   get_it: ^4.0.2
@@ -58,7 +58,7 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^2.1.0
   html: ^0.15.0
-
+  
   share: ^2.0.4
   google_mobile_ads: ^0.13.2
   

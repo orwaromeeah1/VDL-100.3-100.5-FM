@@ -26,4 +26,7 @@ class Urls {
 
   //NEWSCASTS
   static const String NEWS_CASTS = BASE_API + 'newcast/';
+
+  static const String Latest_tweets_url =
+      "https://api.twitter.com/2/users/523259744/tweets?max_results=30&tweet.fields=created_at";
 }

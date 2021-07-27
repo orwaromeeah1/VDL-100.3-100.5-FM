@@ -317,45 +317,55 @@ class _NewsPageState extends State<NewsPage> {
                       SizedBox(
                         height: 30,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 19.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/images/twitter.svg',
-                              height: 21,
-                              width: 17,
+                      model.timeline == null
+                          ? Container()
+                          : Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 19.0),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/twitter.svg',
+                                        height: 21,
+                                        width: 17,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'أحدث التغريدات',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 19.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          height: 130,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) =>
+                                                  twitterCard(
+                                                    tweet: model
+                                                        .timeline.data[index],
+                                                  ),
+                                              itemCount:
+                                                  model.timeline.data.length)),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              'أحدث التغريدات',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 19.0),
-                        child: Column(
-                          children: [
-                            Container(
-                                height: 130,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        twitterCard(),
-                                    itemCount: model.specialReports.length)),
-                          ],
-                        ),
-                      ),
                       state is FetchingCategoryNews
                           ? Container(
                               height: MediaQuery.of(context).size.height / 3,
@@ -396,7 +406,7 @@ class _NewsPageState extends State<NewsPage> {
                                 ],
                               )),
                             ),
-                      PodcastsWidet(),
+                      // PodcastsWidet(),
                     ],
                   ),
                 )

@@ -6,6 +6,7 @@ import 'package:vdl/data/models/news_model.dart';
 
 import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
+import 'package:vdl/data/models/tweets_model.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/requests/auth_request.dart';
 import 'package:vdl/data/responses/auth_response.dart';
@@ -15,6 +16,7 @@ import 'package:vdl/data/responses/programs_response.dart';
 import 'package:vdl/data/responses/search_response.dart';
 import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/utils/secrets/app_keys.dart';
+import 'package:vdl/utils/secrets/twitterKeys.dart';
 import 'package:vdl/utils/urls/urls.dart';
 import 'dart:convert' as convert;
 
@@ -22,6 +24,7 @@ Menus menus = Menus();
 List<NewsModel> news = [];
 List<NewsModel> special = [];
 List<NewsCategoryModel> categories = [];
+Timeline timeline = Timeline(data: []);
 
 class Repository {
   HttpClient _client;
@@ -157,15 +160,20 @@ class Repository {
 
   ///   Menus+allNews
   Future<HomeModel> getHomeData() async {
-    await Future.wait(
-        [getAllNews(1), getMenus(), getNewsCategories(), getSpecialReports(1)]);
+    await Future.wait([
+      getAllNews(1),
+      getMenus(),
+      getNewsCategories(),
+      getSpecialReports(1),
+      getLatestTweets(),
+    ]);
 
     return new HomeModel(
-      news: news,
-      categories: categories,
-      specialReports: special,
-      menus: menus,
-    );
+        news: news,
+        categories: categories,
+        specialReports: special,
+        menus: menus,
+        timeline: timeline);
   }
 
   ///
@@ -299,5 +307,15 @@ class Repository {
     );
 
     return ProgramSchedule.fromJson(response);
+  }
+
+  ////
+  ///
+  ///
+  ///
+  Future<Timeline> getLatestTweets() async {
+    dynamic response = await _client.getTweetsMethod(
+        Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
+    timeline = tweetsFromJson(response);
   }
 }
