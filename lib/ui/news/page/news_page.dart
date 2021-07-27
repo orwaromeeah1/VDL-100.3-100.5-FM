@@ -309,6 +309,17 @@ class _NewsPageState extends State<NewsPage> {
           isSpeacialReports
               ? SliverList(
                   delegate: SliverChildListDelegate([
+                  banner == null
+                      ? Container(height: 20)
+                      : Container(
+                          height: 120,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: AdWidget(
+                              ad: banner,
+                            ),
+                          ),
+                        ),
                   Container(
                       height: 142 * model.specialReports.length.toDouble() + 50,
                       child: ListView.builder(
@@ -401,40 +412,26 @@ class _NewsPageState extends State<NewsPage> {
                               child: Container(
                                   child: Column(
                                 children: [
+                                  banner == null
+                                      ? Container(height: 20)
+                                      : Container(
+                                          height: 120,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: AdWidget(
+                                              ad: banner,
+                                            ),
+                                          ),
+                                        ),
                                   Container(
                                     height:
-                                        366 * model.news.length.toDouble() + 50,
+                                        354 * model.news.length.toDouble() + 50,
                                     child: ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) =>
-                                            (index % 10 == 0)
-                                                ? Column(
-                                                    children: [
-                                                      NewsCardWidget(
-                                                        newsModel:
-                                                            model.news[index],
-                                                      ),
-                                                      banner == null
-                                                          ? Container(
-                                                              height: 20)
-                                                          : Container(
-                                                              height: 120,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        20.0),
-                                                                child: AdWidget(
-                                                                  ad: banner,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                    ],
-                                                  )
-                                                : NewsCardWidget(
-                                                    newsModel:
-                                                        model.news[index],
-                                                  ),
+                                            NewsCardWidget(
+                                              newsModel: model.news[index],
+                                            ),
                                         itemCount: model.news.length),
                                   ),
                                   state is FetchingNextPage

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
@@ -12,6 +13,7 @@ import 'package:vdl/ui/ArticleDetails/bloc/article_details_event.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_state.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ArticleDetailsPage extends StatefulWidget {
@@ -27,13 +29,29 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   AnimationController _animationController;
   bool isPlaying = false;
   final _bloc = locator<ArticleDetailsBloc>();
-
+  BannerAd banner;
   @override
   void initState() {
     super.initState();
     _bloc.add(FetchArticleDetails(widget.id));
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = locator<AdState>();
+    adState.initialization.then((value) {
+      setState(() {
+        banner = BannerAd(
+            adUnitId: adState.bannerAdUnitId,
+            size: AdSize.mediumRectangle,
+            request: AdRequest(),
+            listener: adState.adListener)
+          ..load();
+      });
+    });
   }
 
   @override
@@ -316,6 +334,17 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                           ),
                         ),
                       ),
+                      banner == null
+                          ? Container(height: 20)
+                          : Container(
+                              height: 120,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: AdWidget(
+                                  ad: banner,
+                                ),
+                              ),
+                            ),
                       Padding(
                         padding: const EdgeInsets.only(
                             right: 19.0, left: 19, bottom: 34),
