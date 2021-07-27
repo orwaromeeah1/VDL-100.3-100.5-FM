@@ -14,6 +14,7 @@ import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 //
 class NewsPageDetails extends StatefulWidget {
@@ -167,91 +168,102 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 child: Container(
                                   height: 100,
                                   width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(14),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.14),
-                                        blurRadius: 10,
-                                        offset: Offset(0, 10),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: CircleAvatar(
-                                          radius: 22,
-                                          backgroundColor:
-                                              blue.withOpacity(0.41),
-                                          child: CircleAvatar(
-                                            backgroundColor: blue,
-                                            radius: 15,
-                                            child: InkWell(
-                                              onTap: () => _handleOnPressed(),
-                                              child: AnimatedIcon(
-                                                icon: AnimatedIcons.play_pause,
-                                                progress: _animationController,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 16.0, left: 15),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                child: Text(
-                                                  Manager.removeAllHtmlTags(
-                                                      state.newsModel
-                                                          .audioTitle),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    CupertinoIcons
-                                                        .recordingtape,
-                                                    color: blue,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 4,
-                                                  ),
-                                                  Text(
-                                                    getTimeString(
-                                                        audioDuration -
-                                                            timeProgress),
-                                                    style: TextStyle(
-                                                        color: black
-                                                            .withOpacity(0.41),
-                                                        fontSize: 12),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                  child: WebView(
+                                    initialUrl: state.newsModel.audiowatFile,
                                   ),
                                 ),
-                              ),
+                              )
+                        //  Padding(
+                        //     padding: const EdgeInsets.only(
+                        //         left: 19.0, right: 19, top: 38),
+                        //     child: Container(
+                        //       height: 100,
+                        //       width: MediaQuery.of(context).size.width,
+                        //       decoration: BoxDecoration(
+                        //         color: Colors.white,
+                        //         borderRadius: BorderRadius.circular(14),
+                        //         boxShadow: [
+                        //           BoxShadow(
+                        //             color: Colors.black.withOpacity(0.14),
+                        //             blurRadius: 10,
+                        //             offset: Offset(0, 10),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       child: Row(
+                        //         children: [
+                        //           Padding(
+                        //             padding: const EdgeInsets.all(16.0),
+                        //             child: CircleAvatar(
+                        //               radius: 22,
+                        //               backgroundColor:
+                        //                   blue.withOpacity(0.41),
+                        //               child: CircleAvatar(
+                        //                 backgroundColor: blue,
+                        //                 radius: 15,
+                        //                 child: InkWell(
+                        //                   onTap: () => _handleOnPressed(),
+                        //                   child: AnimatedIcon(
+                        //                     icon: AnimatedIcons.play_pause,
+                        //                     progress: _animationController,
+                        //                     size: 20,
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //           Expanded(
+                        //             child: Padding(
+                        //               padding: const EdgeInsets.only(
+                        //                   top: 16.0, left: 15),
+                        //               child: Column(
+                        //                 children: [
+                        //                   Container(
+                        //                     child: Text(
+                        //                       Manager.removeAllHtmlTags(
+                        //                           state.newsModel.title),
+                        //                       maxLines: 2,
+                        //                       overflow:
+                        //                           TextOverflow.ellipsis,
+                        //                       style: TextStyle(
+                        //                           fontWeight:
+                        //                               FontWeight.bold,
+                        //                           fontSize: 13),
+                        //                     ),
+                        //                   ),
+                        //                   SizedBox(
+                        //                     height: 5,
+                        //                   ),
+                        //                   Row(
+                        //                     children: [
+                        //                       Icon(
+                        //                         CupertinoIcons
+                        //                             .recordingtape,
+                        //                         color: blue,
+                        //                       ),
+                        //                       SizedBox(
+                        //                         width: 4,
+                        //                       ),
+                        //                       Text(
+                        //                         getTimeString(
+                        //                             audioDuration -
+                        //                                 timeProgress),
+                        //                         style: TextStyle(
+                        //                             color: black
+                        //                                 .withOpacity(0.41),
+                        //                             fontSize: 12),
+                        //                       ),
+                        //                     ],
+                        //                   )
+                        //                 ],
+                        //               ),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        ,
                         Padding(
                           padding: const EdgeInsets.only(
                               right: 19.0, top: 17, left: 19),
@@ -335,7 +347,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 newsModel: newsModelFromRelatedArticle(
                                   state.newsModel.relatedArticles[index],
                                 ),
-                                tag: widget.tag,
                               ),
                             );
                           },

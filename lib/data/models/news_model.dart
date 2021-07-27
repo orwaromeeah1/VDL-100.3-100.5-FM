@@ -108,7 +108,7 @@ class NewsModel {
             : json["audiowat_embed_iframe"],
         image: Image.fromJson(json["image"]),
         categories: json["categories"] == null
-            ? null
+            ? {}
             : Map.from(json["categories"]).map(
                 (k, v) => MapEntry<String, Category>(k, Category.fromJson(v))),
         humanDate: json["human_date"],

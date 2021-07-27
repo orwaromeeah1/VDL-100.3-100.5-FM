@@ -52,5 +52,7 @@
 			<string>cstr6suwn9.skadnetwork</string>
 		</dict>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+<string>YES</string>
 </dict>
 </plist>

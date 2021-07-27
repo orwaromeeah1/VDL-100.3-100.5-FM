@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:vdl/data/models/homeModel.dart';
@@ -26,6 +27,7 @@ import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/ui/shared_widget/try_again_widget.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsPage extends StatefulWidget {
@@ -46,6 +48,8 @@ class _NewsPageState extends State<NewsPage> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
+  BannerAd banner;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +66,22 @@ class _NewsPageState extends State<NewsPage> {
   List<NewsCategoryModel> categories = [
     NewsCategoryModel(name: "كل الاخبار", id: 0)
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = locator<AdState>();
+    adState.initialization.then((value) {
+      setState(() {
+        banner = BannerAd(
+            adUnitId: adState.bannerAdUnitId,
+            size: AdSize.largeBanner,
+            request: AdRequest(),
+            listener: adState.adListener)
+          ..load();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -383,13 +403,38 @@ class _NewsPageState extends State<NewsPage> {
                                 children: [
                                   Container(
                                     height:
-                                        354 * model.news.length.toDouble() + 50,
+                                        366 * model.news.length.toDouble() + 50,
                                     child: ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) =>
-                                            NewsCardWidget(
-                                              newsModel: model.news[index],
-                                            ),
+                                            (index % 10 == 0)
+                                                ? Column(
+                                                    children: [
+                                                      NewsCardWidget(
+                                                        newsModel:
+                                                            model.news[index],
+                                                      ),
+                                                      banner == null
+                                                          ? Container(
+                                                              height: 20)
+                                                          : Container(
+                                                              height: 120,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        20.0),
+                                                                child: AdWidget(
+                                                                  ad: banner,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                    ],
+                                                  )
+                                                : NewsCardWidget(
+                                                    newsModel:
+                                                        model.news[index],
+                                                  ),
                                         itemCount: model.news.length),
                                   ),
                                   state is FetchingNextPage
@@ -400,7 +445,13 @@ class _NewsPageState extends State<NewsPage> {
                                           height: 50,
                                           child: Platform.isIOS
                                               ? CupertinoActivityIndicator()
-                                              : CircularProgressIndicator(),
+                                              : Center(
+                                                  child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
                                         )
                                       : Container()
                                 ],

@@ -12,10 +12,10 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class NewsCardWidget extends StatelessWidget {
   final NewsModel newsModel;
 
-  String tag;
-
-  NewsCardWidget({Key key, @required this.newsModel, this.tag})
-      : super(key: key);
+  NewsCardWidget({
+    Key key,
+    @required this.newsModel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,6 @@ class NewsCardWidget extends StatelessWidget {
         screen: NewsPageDetails(
           isSpecial: false,
           newsId: this.newsModel.id,
-          tag: this
-              .newsModel
-              .categories[this.newsModel.categories.keys.first]
-              .name,
         ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -95,39 +91,39 @@ class NewsCardWidget extends StatelessWidget {
                   )
                 ],
               ),
-              newsModel.categories.isEmpty
+              this.newsModel.categories == null
                   ? Container()
-                  : Positioned(
-                      top: 215,
-                      left: 16,
-                      child: Container(
-                        height: 25.23,
-                        width: 50,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: AutoSizeText(
-                              this.newsModel.categories == null
-                                  ? tag
-                                  : this
+                  : this.newsModel.categories.isEmpty
+                      ? Container()
+                      : Positioned(
+                          top: 215,
+                          left: 16,
+                          child: Container(
+                            height: 25.23,
+                            width: 50,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: AutoSizeText(
+                                  this
                                       .newsModel
                                       .categories[
                                           this.newsModel.categories.keys.first]
                                       .name,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              presetFontSizes: [11, 8],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  presetFontSizes: [11, 8],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
                             ),
+                            decoration: BoxDecoration(
+                                color: brown,
+                                borderRadius: BorderRadius.circular(13)),
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                            color: brown,
-                            borderRadius: BorderRadius.circular(13)),
-                      ),
-                    )
+                        )
             ],
           ),
         ),
