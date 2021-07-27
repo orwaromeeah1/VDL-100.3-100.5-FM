@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
+import 'package:vdl/data/repository/repository.dart';
 
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -11,10 +12,10 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class NewsCardWidget extends StatelessWidget {
   final NewsModel newsModel;
 
-  String tag;
-
-  NewsCardWidget({Key key, @required this.newsModel, this.tag})
-      : super(key: key);
+  NewsCardWidget({
+    Key key,
+    @required this.newsModel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,6 @@ class NewsCardWidget extends StatelessWidget {
         screen: NewsPageDetails(
           isSpecial: false,
           newsId: this.newsModel.id,
-          tag: this
-              .newsModel
-              .categories[this.newsModel.categories.keys.first]
-              .name,
         ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -94,35 +91,39 @@ class NewsCardWidget extends StatelessWidget {
                   )
                 ],
               ),
-              Positioned(
-                top: 215,
-                left: 16,
-                child: Container(
-                  height: 25.23,
-                  width: 50,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: AutoSizeText(
-                        this.newsModel.categories == null
-                            ? tag
-                            : this
-                                .newsModel
-                                .categories[
-                                    this.newsModel.categories.keys.first]
-                                .name,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        presetFontSizes: [11, 8],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: brown, borderRadius: BorderRadius.circular(13)),
-                ),
-              )
+              this.newsModel.categories == null
+                  ? Container()
+                  : this.newsModel.categories.isEmpty
+                      ? Container()
+                      : Positioned(
+                          top: 215,
+                          left: 16,
+                          child: Container(
+                            height: 25.23,
+                            width: 50,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: AutoSizeText(
+                                  this
+                                      .newsModel
+                                      .categories[
+                                          this.newsModel.categories.keys.first]
+                                      .name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  presetFontSizes: [11, 8],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: brown,
+                                borderRadius: BorderRadius.circular(13)),
+                          ),
+                        )
             ],
           ),
         ),

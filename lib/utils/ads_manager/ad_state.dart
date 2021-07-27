@@ -1,18 +1,21 @@
-
-
 import 'dart:developer';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io';
 
-class AdState{
+class AdState {
   Future<InitializationStatus> initialization;
 
   AdState(this.initialization);
 
   String get bannerAdUnitId => Platform.isAndroid
+<<<<<<< HEAD
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+=======
       ?'ca-app-pub-3940256099942544/6300978111'
       :'ca-app-pub-3940256099942544/2934735716';
+>>>>>>> f03f3bdfa1cfd403ed9fd4f72145bf3da2f6397e
 
   BannerAdListener get adListener => _adListener;
 

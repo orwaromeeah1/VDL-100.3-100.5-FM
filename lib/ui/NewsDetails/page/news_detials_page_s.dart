@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
@@ -13,7 +14,9 @@ import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 //
 class NewsPageDetails extends StatefulWidget {
@@ -36,11 +39,27 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   bool isPlaying = false;
   Duration duration;
   AudioPlayer audioPlayer = AudioPlayer();
+  BannerAd banner;
 
   /// Optional
   int timeProgress = 0;
   int audioDuration = 0;
   //
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = locator<AdState>();
+    adState.initialization.then((value) {
+      setState(() {
+        banner = BannerAd(
+            adUnitId: adState.bannerAdUnitId,
+            size: AdSize.mediumRectangle,
+            request: AdRequest(),
+            listener: adState.adListener)
+          ..load();
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -161,6 +180,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                       children: [
                         state.newsModel.audiowatFile == ""
                             ? Container()
+                            // : Padding(
+                            //     padding: const EdgeInsets.only(
+                            //         left: 19.0, right: 19, top: 38),
+                            //     child: Container(
+                            //       height: 100,
+                            //       width: MediaQuery.of(context).size.width,
+                            //       child: WebView(
+                            //         initialUrl: state.newsModel.audiowatFile,
+                            //       ),
+                            //     ),
+                            //   )
                             : Padding(
                                 padding: const EdgeInsets.only(
                                     left: 19.0, right: 19, top: 38),
@@ -205,12 +235,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                           padding: const EdgeInsets.only(
                                               top: 16.0, left: 15),
                                           child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 child: Text(
                                                   Manager.removeAllHtmlTags(
-                                                      state.newsModel
-                                                          .audioTitle),
+                                                      state.newsModel.title),
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -291,6 +322,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             ),
                           ),
                         ),
+                        banner == null
+                            ? Container(height: 20)
+                            : Container(
+                                height: 120,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: AdWidget(
+                                    ad: banner,
+                                  ),
+                                ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.only(
                               right: 19.0, left: 19, bottom: 34),
@@ -335,7 +377,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 newsModel: newsModelFromRelatedArticle(
                                   state.newsModel.relatedArticles[index],
                                 ),
-                                tag: widget.tag,
                               ),
                             );
                           },

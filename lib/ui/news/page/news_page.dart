@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:vdl/data/models/homeModel.dart';
@@ -26,6 +27,7 @@ import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/ui/shared_widget/try_again_widget.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsPage extends StatefulWidget {
@@ -46,6 +48,8 @@ class _NewsPageState extends State<NewsPage> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
+  BannerAd banner;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +66,22 @@ class _NewsPageState extends State<NewsPage> {
   List<NewsCategoryModel> categories = [
     NewsCategoryModel(name: "كل الاخبار", id: 0)
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = locator<AdState>();
+    adState.initialization.then((value) {
+      setState(() {
+        banner = BannerAd(
+            adUnitId: adState.bannerAdUnitId,
+            size: AdSize.largeBanner,
+            request: AdRequest(),
+            listener: adState.adListener)
+          ..load();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +309,17 @@ class _NewsPageState extends State<NewsPage> {
           isSpeacialReports
               ? SliverList(
                   delegate: SliverChildListDelegate([
+                  banner == null
+                      ? Container(height: 20)
+                      : Container(
+                          height: 120,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: AdWidget(
+                              ad: banner,
+                            ),
+                          ),
+                        ),
                   Container(
                       height: 142 * model.specialReports.length.toDouble() + 50,
                       child: ListView.builder(
@@ -317,45 +348,55 @@ class _NewsPageState extends State<NewsPage> {
                       SizedBox(
                         height: 30,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 19.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/images/twitter.svg',
-                              height: 21,
-                              width: 17,
+                      model.timeline == null
+                          ? Container()
+                          : Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 19.0),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/twitter.svg',
+                                        height: 21,
+                                        width: 17,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'أحدث التغريدات',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 19.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          height: 130,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) =>
+                                                  twitterCard(
+                                                    tweet: model
+                                                        .timeline.data[index],
+                                                  ),
+                                              itemCount:
+                                                  model.timeline.data.length)),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              'أحدث التغريدات',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 19.0),
-                        child: Column(
-                          children: [
-                            Container(
-                                height: 130,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        twitterCard(),
-                                    itemCount: model.specialReports.length)),
-                          ],
-                        ),
-                      ),
                       state is FetchingCategoryNews
                           ? Container(
                               height: MediaQuery.of(context).size.height / 3,
@@ -371,6 +412,17 @@ class _NewsPageState extends State<NewsPage> {
                               child: Container(
                                   child: Column(
                                 children: [
+                                  banner == null
+                                      ? Container(height: 20)
+                                      : Container(
+                                          height: 120,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: AdWidget(
+                                              ad: banner,
+                                            ),
+                                          ),
+                                        ),
                                   Container(
                                     height:
                                         354 * model.news.length.toDouble() + 50,
@@ -390,13 +442,19 @@ class _NewsPageState extends State<NewsPage> {
                                           height: 50,
                                           child: Platform.isIOS
                                               ? CupertinoActivityIndicator()
-                                              : CircularProgressIndicator(),
+                                              : Center(
+                                                  child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
                                         )
                                       : Container()
                                 ],
                               )),
                             ),
-                      PodcastsWidet(),
+                      // PodcastsWidet(),
                     ],
                   ),
                 )
