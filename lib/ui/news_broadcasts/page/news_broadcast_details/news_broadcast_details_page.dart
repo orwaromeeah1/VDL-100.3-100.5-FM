@@ -302,7 +302,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage> {
         break;}
     }
 
-    displayedNewsCast.description = Bidi.stripHtmlIfNeeded(displayedNewsCast.description);
+    displayedNewsCast.description = Bidi.stripHtmlIfNeeded('${displayedNewsCast.description}');
 
   }
 }

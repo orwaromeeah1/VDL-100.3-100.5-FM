@@ -51,7 +51,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
       setState(() {
         banner = BannerAd(
           adUnitId: adState.bannerAdUnitId,
-          size: AdSize.banner,
+          size: AdSize.mediumRectangle,
           request: AdRequest(),
           listener: adState.adListener
         )..load();
@@ -218,12 +218,12 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           banner == null
                           ?Container(height: 20)
                           :Container(
-                            height: 100,
+                            height: 250,
                             child: AdWidget(
                               ad: banner,
                             ),
                           ),
-
+                          SizedBox(height: 20,),
                           Text(
                             'الحلقات',
                             style: TextStyle(
