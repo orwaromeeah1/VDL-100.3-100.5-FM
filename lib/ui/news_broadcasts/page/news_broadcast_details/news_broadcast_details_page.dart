@@ -13,6 +13,7 @@ import 'package:vdl/ui/news_broadcasts/widget/broadcast_card.dart';
 import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:share/share.dart';
 
 import '../../../../injection.dart';
 
@@ -277,9 +278,14 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                         )
                                       ],
                                     ),
-                                    Icon(
-                                        Icons.share
-                                    )
+                                    GestureDetector(
+                                      onTap: (){
+                                        Share.share(widget.newsCast.link);
+                                      },
+                                      child: Icon(
+                                          Icons.share
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 Padding(
@@ -356,10 +362,14 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                         )
                                       ],
                                     ),
-                                    //TODO : implement sharing
-                                    Icon(
-                                        Icons.share
-                                    )
+                                    GestureDetector(
+                                      onTap: (){
+                                        Share.share(widget.newsCast.link);
+                                      },
+                                      child: Icon(
+                                          Icons.share
+                                      ),
+                                    ),
                                   ],
                                 ),
 
