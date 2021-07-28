@@ -17,6 +17,7 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 //
 class NewsPageDetails extends StatefulWidget {
@@ -40,8 +41,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   Duration duration;
   AudioPlayer audioPlayer = AudioPlayer();
   bool audioLoaded = false;
+  bool viewYoutube = false;
   String audioUrl = "";
   BannerAd banner;
+  String youtubeUrl = "";
+
+////YoutubePlayer
+  YoutubePlayerController _youtubeController;
 
   /// Optional
   int timeProgress = 0;
@@ -142,7 +148,24 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
               if (!audioLoaded && state is Loaded) {
                 if (state.newsModel.audio != "") {
                   audioLoaded = true;
+
                   _bloc.add(FetchAudio(state.newsModel.audio));
+                }
+
+                if (state.newsModel.youtube != null) {
+                  setState(() {
+                    viewYoutube = true;
+
+                    _youtubeController = YoutubePlayerController(
+                      initialVideoId:
+                          state.newsModel.youtube.substring(17).trim(),
+                      params: YoutubePlayerParams(
+                        startAt: Duration(seconds: 30),
+                        showControls: true,
+                        showFullscreenButton: true,
+                      ),
+                    );
+                  });
                 }
               } else if (state is AudioLoaded) {
                 audioUrl = state.audio.file.url;
@@ -214,7 +237,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.14),
                                         blurRadius: 10,
-                                        offset: Offset(0, 10),
+                                        offset: Offset(0, 0),
                                       ),
                                     ],
                                   ),
@@ -283,8 +306,35 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                             .withOpacity(0.41),
                                                         fontSize: 12),
                                                   ),
+                                                  Container(
+                                                    height: 20,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.2,
+                                                    child: Directionality(
+                                                      textDirection:
+                                                          TextDirection.ltr,
+                                                      child: Slider(
+                                                          value: timeProgress
+                                                              .toDouble(),
+                                                          min: 0.0,
+                                                          activeColor: green,
+                                                          max: audioDuration
+                                                              .toDouble(),
+                                                          onChanged:
+                                                              (double value) {
+                                                            setState(() {
+                                                              // seekToSecond(
+                                                              //     value.toInt());
+                                                              // value = value;
+                                                            });
+                                                          }),
+                                                    ),
+                                                  ),
                                                 ],
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -318,6 +368,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             ),
                           ),
                         ),
+                        viewYoutube
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 19.0, top: 9, left: 19, bottom: 10),
+                                child: YoutubePlayerIFrame(
+                                  controller: _youtubeController,
+                                  aspectRatio: 16 / 9,
+                                ),
+                              )
+                            : Container(),
                         Padding(
                           padding: const EdgeInsets.only(
                             right: 19.0,
