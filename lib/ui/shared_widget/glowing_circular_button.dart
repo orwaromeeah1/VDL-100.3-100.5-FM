@@ -5,7 +5,7 @@ class GlowingCircularButton extends StatelessWidget {
   final OnClickCallBack onClick;
   final double size;
   final Color color;
-  final Icon icon;
+  final Widget icon;
   final bool isGlowing;
   final String iconImage;
 
@@ -42,9 +42,11 @@ class GlowingCircularButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
 
             ),
-            child:iconImage != ''
+            child:Center(
+              child: iconImage != ''
                   ?Image.asset(iconImage,height: size,width: size,)
-                  :icon
+                  :icon,
+            )
           ),
         ),
       ),

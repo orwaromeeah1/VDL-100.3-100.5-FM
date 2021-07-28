@@ -10,3 +10,9 @@ class FetchNewsDetails extends NewsDetailsEvent {
   final bool isSpecail;
   FetchNewsDetails(this.id, this.isSpecail);
 }
+
+class FetchAudio extends NewsDetailsEvent {
+  final String id;
+
+  FetchAudio(this.id);
+}

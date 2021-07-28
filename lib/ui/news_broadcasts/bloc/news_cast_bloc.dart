@@ -35,6 +35,7 @@ class NewsCastBloc extends Bloc<NewsCastEvent, NewsCastState> {
         yield NewsCastError();
       }
     }
+
   }
 
 }

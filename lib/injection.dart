@@ -12,6 +12,8 @@ import 'package:vdl/ui/news/bloc/news_bloc.dart';
 import 'package:vdl/ui/news/bloc/news_state.dart';
 import 'package:vdl/ui/news/bloc/search/search_bloc.dart';
 import 'package:vdl/ui/news/bloc/search/search_state.dart';
+import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_bloc.dart';
+import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_state.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_bloc.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_state.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
@@ -65,11 +67,17 @@ Future setLocator(Future<InitializationStatus> initialization) async {
   locator.registerFactory(() => NewsCastBloc(locator(), locator()));
   locator.registerFactory(() => NewsCastState());
 
-  //NewsCastBloc
+  //ProgramsScheduleBloc
   locator.registerFactory(() => ProgramsScheduleBloc(locator(), locator()));
   locator.registerFactory(() => ProgramsScheduleState());
 
   locator.registerLazySingleton<AdState>(() => AdState(
     initialization,
   ));
+
+
+  //NewsCastDetailsBloc
+  locator.registerFactory(() => NewsCastDetailsBloc(locator(), locator()));
+  locator.registerFactory(() => NewsCastDetailsState());
+
 }

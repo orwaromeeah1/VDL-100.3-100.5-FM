@@ -1,3 +1,4 @@
+import 'package:vdl/data/models/aduio_response_model.dart';
 import 'package:vdl/data/models/credintals.dart';
 import 'package:vdl/data/models/homeModel.dart';
 import 'package:vdl/data/models/menus_model.dart';
@@ -25,6 +26,7 @@ List<NewsModel> news = [];
 List<NewsModel> special = [];
 List<NewsCategoryModel> categories = [];
 Timeline timeline = Timeline(data: []);
+
 
 class Repository {
   HttpClient _client;
@@ -317,5 +319,21 @@ class Repository {
     dynamic response = await _client.getTweetsMethod(
         Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
     timeline = tweetsFromJson(response);
+  }
+
+  ////
+  ///
+  ///
+  ///
+  Future<AudioResponseModel> getAudioModel(String id) async {
+    dynamic response = await _client.getMethods(Urls.AudioUrl + id, "");
+    return audioResponseFromJson(response);
+  }
+
+  Future<List<AudioResponseModel>> getBroadcastsAudios(String intoId,String fullAudioId) async {
+    dynamic intro = await _client.getMethods(Urls.AudioUrl + intoId, "");
+    dynamic fullAudio = await _client.getMethods(Urls.AudioUrl + fullAudioId, "");
+
+    return [audioResponseFromJson(intro),audioResponseFromJson(fullAudio)];
   }
 }
