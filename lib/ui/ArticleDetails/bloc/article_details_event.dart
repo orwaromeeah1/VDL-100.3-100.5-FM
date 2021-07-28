@@ -12,3 +12,9 @@ class FetchArticleDetails extends ArticleDetailsEvent {
     this.id,
   );
 }
+
+class FetchAudio extends ArticleDetailsEvent {
+  final String id;
+
+  FetchAudio(this.id);
+}

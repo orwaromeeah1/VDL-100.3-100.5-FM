@@ -39,6 +39,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   bool isPlaying = false;
   Duration duration;
   AudioPlayer audioPlayer = AudioPlayer();
+  bool audioLoaded = false;
+  String audioUrl = "";
   BannerAd banner;
 
   /// Optional
@@ -64,7 +66,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void initState() {
     super.initState();
-    AudioPlayer.logEnabled = true;
+
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
 
     _animationController =
@@ -94,10 +96,9 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3'); // prepare the player with this audio but do not start playing
+        audioUrl); // prepare the player with this audio but do not start playing
     await audioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result = await audioPlayer
-        .play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3');
+    int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
     }
@@ -137,7 +138,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
               }
               return Container();
             },
-            listener: (context, state) {}));
+            listener: (context, state) {
+              if (!audioLoaded && state is Loaded) {
+                if (state.newsModel.audio != "") {
+                  audioLoaded = true;
+                  _bloc.add(FetchAudio(state.newsModel.audio));
+                }
+              } else if (state is AudioLoaded) {
+                audioUrl = state.audio.file.url;
+              }
+            }));
   }
 
   ///////
@@ -178,7 +188,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        state.newsModel.audiowatFile == ""
+                        !audioLoaded
                             ? Container()
                             // : Padding(
                             //     padding: const EdgeInsets.only(
@@ -325,7 +335,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                         banner == null
                             ? Container(height: 20)
                             : Container(
-                                height: 120,
+                                height: 240,
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: AdWidget(
