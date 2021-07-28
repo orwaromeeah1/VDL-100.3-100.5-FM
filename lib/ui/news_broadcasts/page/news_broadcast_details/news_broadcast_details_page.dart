@@ -193,6 +193,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                 selectedIndex = index;
                                 _animateToIndex(index);
                                 _getContent();
+                                _animationController.reverse();
+                                _fullAudioAnimationController.reverse();
                                 _fetchAudios();
                               });
                             },
@@ -351,7 +353,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                   color: ProjectColors.ThemeColor,
                                                 ),
                                                 Text(
-                                                  '01:55',
+                                                  getTimeString(fullAudioDuration -
+                                                      fullTimeProgress),
                                                   style: TextStyle(
                                                       color: Colors.grey
                                                   ),
@@ -532,8 +535,6 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     audiosLoaded = false;
     stopFullAudio();
     stopIntroduction();
-    _animationController.reverse();
-    _fullAudioAnimationController.reverse();
     _bloc.add(FetchAudios(introductionId: introductionId,fullAudioId: fullAudioId));
   }
 }
