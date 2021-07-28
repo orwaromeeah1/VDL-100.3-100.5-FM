@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:share/share.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
@@ -190,25 +191,31 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
-                                      Container(
-                                        height: 48,
-                                        width: 48,
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.14),
-                                                blurRadius: 10,
-                                                offset: Offset(0, 10),
-                                              ),
-                                            ],
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(48 / 2)),
-                                        child: Icon(
-                                          Icons.reply,
-                                          color: green,
-                                          size: 25,
+                                      InkWell(
+                                        onTap: () {
+                                          Share.share(article.link);
+                                        },
+                                        child: Container(
+                                          height: 48,
+                                          width: 48,
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.14),
+                                                  blurRadius: 10,
+                                                  offset: Offset(0, 10),
+                                                ),
+                                              ],
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      48 / 2)),
+                                          child: Icon(
+                                            Icons.reply,
+                                            color: green,
+                                            size: 25,
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
