@@ -325,7 +325,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                         banner == null
                             ? Container(height: 20)
                             : Container(
-                                height: 120,
+                                height: 320,
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: AdWidget(

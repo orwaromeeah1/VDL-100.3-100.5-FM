@@ -312,7 +312,7 @@ class _NewsPageState extends State<NewsPage> {
                   banner == null
                       ? Container(height: 20)
                       : Container(
-                          height: 120,
+                          height: 150,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: AdWidget(
@@ -415,7 +415,7 @@ class _NewsPageState extends State<NewsPage> {
                                   banner == null
                                       ? Container(height: 20)
                                       : Container(
-                                          height: 120,
+                                          height: 150,
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: AdWidget(
