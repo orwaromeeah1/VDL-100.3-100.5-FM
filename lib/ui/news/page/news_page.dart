@@ -75,7 +75,7 @@ class _NewsPageState extends State<NewsPage> {
       setState(() {
         banner = BannerAd(
             adUnitId: adState.bannerAdUnitId,
-            size: AdSize.largeBanner,
+            size: AdSize.mediumRectangle,
             request: AdRequest(),
             listener: adState.adListener)
           ..load();
@@ -309,17 +309,17 @@ class _NewsPageState extends State<NewsPage> {
           isSpeacialReports
               ? SliverList(
                   delegate: SliverChildListDelegate([
-                  banner == null
-                      ? Container(height: 20)
-                      : Container(
-                          height: 120,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: AdWidget(
-                              ad: banner,
-                            ),
-                          ),
-                        ),
+                  // banner == null
+                  //     ? Container(height: 20)
+                  //     : Container(
+                  //         height: 240,
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(20.0),
+                  //           child: AdWidget(
+                  //             ad: banner,
+                  //           ),
+                  //         ),
+                  //       ),
                   Container(
                       height: 142 * model.specialReports.length.toDouble() + 50,
                       child: ListView.builder(
@@ -415,7 +415,7 @@ class _NewsPageState extends State<NewsPage> {
                                   banner == null
                                       ? Container(height: 20)
                                       : Container(
-                                          height: 120,
+                                          height: 240,
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: AdWidget(

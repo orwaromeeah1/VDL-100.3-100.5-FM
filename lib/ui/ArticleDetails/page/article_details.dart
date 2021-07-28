@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,71 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   bool isPlaying = false;
   final _bloc = locator<ArticleDetailsBloc>();
   BannerAd banner;
+  Duration duration;
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool audioLoaded = false;
+  String audioUrl = "";
+
+  /// Optional
+  int timeProgress = 0;
+  int audioDuration = 0;
+  //
   @override
   void initState() {
     super.initState();
     _bloc.add(FetchArticleDetails(widget.id));
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    // Triggers the onDurationChanged listener and sets the max duration string
+    audioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        audioDuration = duration.inSeconds;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+      setState(() {
+        timeProgress = position.inSeconds;
+      });
+    });
+  }
+
+  /// Compulsory
+  playMusic() async {
+    await audioPlayer.setUrl(
+        audioUrl); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    int result = await audioPlayer.play(audioUrl);
+    if (result == 1) {
+      // success
+    }
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      setState(() => {print(d)});
+    });
+  }
+
+  /// Compulsory
+  pauseMusic() async {
+    int result = await audioPlayer.pause();
+  }
+
+  stopMusic() async {
+    int result = await audioPlayer.stop();
+  }
+
+  String getTimeString(int seconds) {
+    String minuteString =
+        '${(seconds / 60).floor() < 10 ? 0 : ''}${(seconds / 60).floor()}';
+    String secondString = '${seconds % 60 < 10 ? 0 : ''}${seconds % 60}';
+    return '$minuteString:$secondString'; // Returns a string with the format mm:ss
+  }
+
+  /// Compulsory
+  @override
+  void dispose() {
+    audioPlayer.release();
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +127,16 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
         }
         return Container();
       },
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (!audioLoaded && state is Loaded) {
+          if (state.article.audio != "") {
+            audioLoaded = true;
+            _bloc.add(FetchAudio(state.article.audio));
+          }
+        } else if (state is AudioLoaded) {
+          audioUrl = state.audio.file.url;
+        }
+      },
     ));
   }
 
@@ -209,97 +278,102 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 19.0,
-                          right: 19,
-                        ),
-                        child: Container(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.14),
-                                blurRadius: 10,
-                                offset: Offset(0, 0),
+                      !audioLoaded
+                          ? Container()
+                          : Padding(
+                              padding: const EdgeInsets.only(
+                                left: 19.0,
+                                right: 19,
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: CircleAvatar(
-                                  radius: 22,
-                                  backgroundColor: blue.withOpacity(0.41),
-                                  child: CircleAvatar(
-                                    backgroundColor: blue,
-                                    radius: 15,
-                                    child: InkWell(
-                                      onTap: () => _handleOnPressed(),
-                                      child: AnimatedIcon(
-                                        icon: AnimatedIcons.play_pause,
-                                        progress: _animationController,
-                                        size: 20,
-                                      ),
+                              child: Container(
+                                height: 100,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.14),
+                                      blurRadius: 10,
+                                      offset: Offset(0, 0),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 16.0,
-                                    left: 15,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          Manager.removeAllHtmlTags(
-                                              article.title),
-                                          maxLines: 2,
-                                          textAlign: TextAlign.right,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: CircleAvatar(
+                                        radius: 22,
+                                        backgroundColor: blue.withOpacity(0.41),
+                                        child: CircleAvatar(
+                                          backgroundColor: blue,
+                                          radius: 15,
+                                          child: InkWell(
+                                            onTap: () => _handleOnPressed(),
+                                            child: AnimatedIcon(
+                                              icon: AnimatedIcons.play_pause,
+                                              progress: _animationController,
+                                              size: 20,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 5,
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 16.0,
+                                          left: 15,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              child: Text(
+                                                Manager.removeAllHtmlTags(
+                                                    article.title),
+                                                maxLines: 2,
+                                                textAlign: TextAlign.right,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  CupertinoIcons.recordingtape,
+                                                  color: blue,
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  getTimeString(audioDuration -
+                                                      timeProgress),
+                                                  style: TextStyle(
+                                                      color: black
+                                                          .withOpacity(0.41),
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.recordingtape,
-                                            color: blue,
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            '20:22',
-                                            style: TextStyle(
-                                                color: black.withOpacity(0.41),
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                              ),
+                            ),
                       Padding(
                         padding: const EdgeInsets.only(
                             right: 19.0, top: 17, left: 19),
@@ -337,7 +411,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                       banner == null
                           ? Container(height: 20)
                           : Container(
-                              height: 120,
+                              height: 240,
                               child: Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: AdWidget(
@@ -404,6 +478,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       isPlaying
           ? _animationController.forward()
           : _animationController.reverse();
+      isPlaying ? playMusic() : pauseMusic();
     });
   }
 }
