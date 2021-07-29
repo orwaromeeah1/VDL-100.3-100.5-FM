@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
+import 'package:vdl/data/models/aduio_response_model.dart';
 
 
  class NewsCastState extends Equatable {
@@ -25,4 +26,6 @@ class NewsCastLoaded extends NewsCastState {
   List<Object> get props => [newsCasts];
 }
 class NewsCastError extends NewsCastState {}
+
+
 

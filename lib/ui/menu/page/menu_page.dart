@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/ui/Aboutus/pages/about_us_page.dart';
 import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
@@ -18,6 +19,12 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   double width;
+
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
+
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -64,17 +71,17 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 },
               ),
-              MenuItem(
-                title: 'برامج تاريخية',
-                onClick: () {
-                  pushNewScreen(
-                    context,
-                    screen: HistoricalPrograms(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
-                },
-              ),
+//              MenuItem(
+//                title: 'برامج تاريخية',
+//                onClick: () {
+//                  pushNewScreen(
+//                    context,
+//                    screen: HistoricalPrograms(),
+//                    withNavBar: true,
+//                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+//                  );
+//                },
+//              ),
               MenuItem(
                 title: 'من نحن',
                 onClick: () {
@@ -137,21 +144,32 @@ class _MenuPageState extends State<MenuPage> {
                 padding: const EdgeInsets.only(right: 23.0, bottom: 99),
                 child: Row(
                   children: [
-                    SocialButton(
-                      tag: 3,
+                    GestureDetector(
+                      onTap: ()=> _launchURL('https://twitter.com/sawtlebnan?lang=en'),
+                      child: SocialButton(
+                        tag: 3,
+                      ),
                     ),
                     SizedBox(
                       width: 13,
                     ),
-                    SocialButton(
-                      tag: 2,
+                    GestureDetector(
+                      onTap: ()=> _launchURL('https://www.instagram.com/voice_of_lebanon/'),
+                      child: SocialButton(
+                        tag: 2,
+                      ),
                     ),
                     SizedBox(
                       width: 13,
                     ),
-                    SocialButton(
-                      tag: 1,
-                    )
+
+                    GestureDetector(
+                      onTap: ()=> _launchURL('https://www.facebook.com/sawtlebnan/'),
+                      child:SocialButton(
+                        tag: 1,
+                      )
+                    ),
+
                   ],
                 ),
               )

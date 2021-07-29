@@ -5,6 +5,8 @@ import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_event.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_state.dart';
 
+
+
 class ArticleDetailsBloc
     extends Bloc<ArticleDetailsEvent, ArticleDetailsState> {
   final Repository repo;

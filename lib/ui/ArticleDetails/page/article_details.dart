@@ -137,7 +137,8 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
           audioUrl = state.audio.file.url;
         }
       },
-    ));
+    )
+    );
   }
 
   Widget loadedStateUI(BuildContext context, NewsModel article) {
