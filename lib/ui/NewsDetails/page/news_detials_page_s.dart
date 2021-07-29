@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -297,23 +298,32 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                 height: 5,
                                               ),
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
-                                                  Icon(
-                                                    CupertinoIcons
-                                                        .recordingtape,
-                                                    color: blue,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 4,
-                                                  ),
-                                                  Text(
-                                                    getTimeString(
-                                                        audioDuration -
-                                                            timeProgress),
-                                                    style: TextStyle(
-                                                        color: black
-                                                            .withOpacity(0.41),
-                                                        fontSize: 12),
+                                                  Expanded(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          CupertinoIcons
+                                                              .recordingtape,
+                                                          color: blue,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                          getTimeString(
+                                                              audioDuration -
+                                                                  timeProgress),
+                                                          style: TextStyle(
+                                                              color: black
+                                                                  .withOpacity(
+                                                                      0.41),
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                   Container(
                                                     height: 20,
@@ -322,24 +332,36 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                                 .size
                                                                 .width /
                                                             2.2,
-                                                    child: Directionality(
-                                                      textDirection:
-                                                          TextDirection.ltr,
-                                                      child: Slider(
-                                                          value: timeProgress
-                                                              .toDouble(),
-                                                          min: 0.0,
-                                                          activeColor: green,
-                                                          max: audioDuration
-                                                              .toDouble(),
-                                                          onChanged:
-                                                              (double value) {
-                                                            setState(() {
-                                                              // seekToSecond(
-                                                              //     value.toInt());
-                                                              // value = value;
-                                                            });
-                                                          }),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: IgnorePointer(
+                                                        ignoring:
+                                                            audioDuration == 0,
+                                                        child: ProgressBar(
+                                                          progress: Duration(
+                                                              seconds:
+                                                                  timeProgress),
+                                                          buffered: Duration(
+                                                              seconds:
+                                                                  timeProgress),
+                                                          total: Duration(
+                                                              seconds:
+                                                                  audioDuration),
+                                                          timeLabelTextStyle:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                          onSeek: (duration) {
+                                                            if (audioDuration !=
+                                                                0) {
+                                                              audioPlayer.seek(
+                                                                  duration);
+                                                            }
+                                                          },
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],

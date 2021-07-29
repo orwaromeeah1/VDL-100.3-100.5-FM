@@ -44,7 +44,7 @@ dependencies:
   cached_network_image: ^2.4.1
   audioplayers: 0.19.1
   flutter_launcher_icons: any
-
+  audio_video_progress_bar: ^0.6.1
   flutter_bloc: 7.0.0
 
   http: 0.13.1
