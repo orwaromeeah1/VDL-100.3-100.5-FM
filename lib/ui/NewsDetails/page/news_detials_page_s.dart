@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
@@ -17,6 +20,7 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 //
 class NewsPageDetails extends StatefulWidget {
@@ -40,13 +44,24 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   Duration duration;
   AudioPlayer audioPlayer = AudioPlayer();
   bool audioLoaded = false;
+  bool viewYoutube = false;
   String audioUrl = "";
   BannerAd banner;
+  String youtubeUrl = "";
+
+////YoutubePlayer
+  YoutubePlayerController _youtubeController;
 
   /// Optional
   int timeProgress = 0;
   int audioDuration = 0;
   //
+
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
+
+  //////
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -90,6 +105,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   void dispose() {
     audioPlayer.release();
     audioPlayer.dispose();
+    _bloc.close();
     super.dispose();
   }
 
@@ -142,7 +158,24 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
               if (!audioLoaded && state is Loaded) {
                 if (state.newsModel.audio != "") {
                   audioLoaded = true;
+
                   _bloc.add(FetchAudio(state.newsModel.audio));
+                }
+
+                if (state.newsModel.youtube != null) {
+                  setState(() {
+                    viewYoutube = true;
+
+                    _youtubeController = YoutubePlayerController(
+                      initialVideoId:
+                          state.newsModel.youtube.substring(17).trim(),
+                      params: YoutubePlayerParams(
+                        startAt: Duration(seconds: 30),
+                        showControls: true,
+                        showFullscreenButton: true,
+                      ),
+                    );
+                  });
                 }
               } else if (state is AudioLoaded) {
                 audioUrl = state.audio.file.url;
@@ -214,7 +247,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.14),
                                         blurRadius: 10,
-                                        offset: Offset(0, 10),
+                                        offset: Offset(0, 0),
                                       ),
                                     ],
                                   ),
@@ -265,26 +298,78 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                 height: 5,
                                               ),
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
-                                                  Icon(
-                                                    CupertinoIcons
-                                                        .recordingtape,
-                                                    color: blue,
+                                                  Expanded(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          CupertinoIcons
+                                                              .recordingtape,
+                                                          color: blue,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                          getTimeString(
+                                                              audioDuration -
+                                                                  timeProgress),
+                                                          style: TextStyle(
+                                                              color: black
+                                                                  .withOpacity(
+                                                                      0.41),
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  SizedBox(
-                                                    width: 4,
-                                                  ),
-                                                  Text(
-                                                    getTimeString(
-                                                        audioDuration -
-                                                            timeProgress),
-                                                    style: TextStyle(
-                                                        color: black
-                                                            .withOpacity(0.41),
-                                                        fontSize: 12),
+                                                  Container(
+                                                    height: 20,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.2,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: IgnorePointer(
+                                                        ignoring:
+                                                            audioDuration == 0,
+                                                        child: ProgressBar(
+                                                          thumbColor: green,
+                                                          progressBarColor:
+                                                              green,
+                                                          thumbRadius: 5,
+                                                          progress: Duration(
+                                                              seconds:
+                                                                  timeProgress),
+                                                          buffered: Duration(
+                                                              seconds:
+                                                                  timeProgress),
+                                                          total: Duration(
+                                                              seconds:
+                                                                  audioDuration),
+                                                          timeLabelTextStyle:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                          onSeek: (duration) {
+                                                            if (audioDuration !=
+                                                                0) {
+                                                              audioPlayer.seek(
+                                                                  duration);
+                                                            }
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ],
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -318,6 +403,33 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             ),
                           ),
                         ),
+                        viewYoutube
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 19.0, top: 9, left: 19, bottom: 10),
+                                child: Column(
+                                  children: [
+                                    YoutubePlayerIFrame(
+                                      controller: _youtubeController,
+                                      aspectRatio: 16 / 9,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    InkWell(
+                                        onTap: () {
+                                          _launchURL(
+                                              state.newsModel.youtube.trim());
+                                        },
+                                        child: Text(
+                                          'View in Youtube',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ))
+                                  ],
+                                ),
+                              )
+                            : Container(),
                         Padding(
                           padding: const EdgeInsets.only(
                             right: 19.0,
@@ -513,23 +625,28 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Container(
-                  height: 48,
-                  width: 48,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.14),
-                          blurRadius: 10,
-                          offset: Offset(0, 10),
-                        ),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(48 / 2)),
-                  child: Icon(
-                    Icons.reply,
-                    color: green,
-                    size: 25,
+                InkWell(
+                  onTap: () {
+                    Share.share(state.newsModel.link);
+                  },
+                  child: Container(
+                    height: 48,
+                    width: 48,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.14),
+                            blurRadius: 10,
+                            offset: Offset(0, 10),
+                          ),
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(48 / 2)),
+                    child: Icon(
+                      Icons.reply,
+                      color: green,
+                      size: 25,
+                    ),
                   ),
                 ),
                 SizedBox(

@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:share/share.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
@@ -137,8 +139,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
           audioUrl = state.audio.file.url;
         }
       },
-    )
-    );
+    ));
   }
 
   Widget loadedStateUI(BuildContext context, NewsModel article) {
@@ -191,25 +192,31 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
-                                      Container(
-                                        height: 48,
-                                        width: 48,
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.14),
-                                                blurRadius: 10,
-                                                offset: Offset(0, 10),
-                                              ),
-                                            ],
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(48 / 2)),
-                                        child: Icon(
-                                          Icons.reply,
-                                          color: green,
-                                          size: 25,
+                                      InkWell(
+                                        onTap: () {
+                                          Share.share(article.link);
+                                        },
+                                        child: Container(
+                                          height: 48,
+                                          width: 48,
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.14),
+                                                  blurRadius: 10,
+                                                  offset: Offset(0, 10),
+                                                ),
+                                              ],
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      48 / 2)),
+                                          child: Icon(
+                                            Icons.reply,
+                                            color: green,
+                                            size: 25,
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
@@ -350,20 +357,70 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                             ),
                                             Row(
                                               children: [
-                                                Icon(
-                                                  CupertinoIcons.recordingtape,
-                                                  color: blue,
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        CupertinoIcons
+                                                            .recordingtape,
+                                                        color: blue,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 4,
+                                                      ),
+                                                      Text(
+                                                        getTimeString(
+                                                            audioDuration -
+                                                                timeProgress),
+                                                        style: TextStyle(
+                                                            color: black
+                                                                .withOpacity(
+                                                                    0.41),
+                                                            fontSize: 12),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  getTimeString(audioDuration -
-                                                      timeProgress),
-                                                  style: TextStyle(
-                                                      color: black
-                                                          .withOpacity(0.41),
-                                                      fontSize: 12),
+                                                Container(
+                                                  height: 20,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.2,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20),
+                                                    child: IgnorePointer(
+                                                      ignoring:
+                                                          audioDuration == 0,
+                                                      child: ProgressBar(
+                                                        thumbColor: green,
+                                                        progressBarColor: green,
+                                                        thumbRadius: 5,
+                                                        progress: Duration(
+                                                            seconds:
+                                                                timeProgress),
+                                                        buffered: Duration(
+                                                            seconds:
+                                                                timeProgress),
+                                                        total: Duration(
+                                                            seconds:
+                                                                audioDuration),
+                                                        timeLabelTextStyle:
+                                                            TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                        onSeek: (duration) {
+                                                          if (audioDuration !=
+                                                              0) {
+                                                            audioPlayer
+                                                                .seek(duration);
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             )
