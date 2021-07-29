@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vdl/ui/programs/page/episode/episode_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class EpisodeCard extends StatelessWidget {
@@ -9,6 +10,7 @@ class EpisodeCard extends StatelessWidget {
   final String title;
   final String audioLink;
   final String videoLink;
+  final int id;
 
   EpisodeCard({
     this.date,
@@ -17,6 +19,7 @@ class EpisodeCard extends StatelessWidget {
     this.title,
     this.image,
     this.videoLink,
+    this.id,
 });
 
   @override
@@ -71,37 +74,45 @@ class EpisodeCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                      MaterialPageRoute(builder: (context)=>EpisodePage(episodeId: id))
+                      );
+                    },
+                    child: Container(
 
-                    width: MediaQuery.of(context).size.width*0.5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                           Icon(Icons.headset,color: ProjectColors.BLUE,),
-                            Text(
-                              'استمع الآن',
-                              style: TextStyle(
-                                color: ProjectColors.BLUE,
+                      width: MediaQuery.of(context).size.width*0.5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                             Icon(Icons.headset,color: ProjectColors.BLUE,),
+                              Text(
+                                'استمع الآن',
+                                style: TextStyle(
+                                  color: ProjectColors.BLUE,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
-                            Text(
-                              'شاهد الآن',
-                              style: TextStyle(
-                                color: ProjectColors.ThemeColor,
+                            ],
+                          ),
+                          Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
+                              Text(
+                                'شاهد الآن',
+                                style: TextStyle(
+                                  color: ProjectColors.ThemeColor,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

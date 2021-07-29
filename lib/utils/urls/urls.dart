@@ -17,6 +17,7 @@ class Urls {
   static const String PROGRAMS = BASE_API + 'program/';
   static const String PROGRAM_DETAILS = BASE_API + 'program/';
   static const String PROGRAM_CATEGORIES = BASE_API + 'program-category';
+  static const String EPISODE = BASE_API + 'episode-program/';
 
   //PROGRAMS SCHEDULE
   static const String PROGRAMS_SCHEDULE = BASE_API + 'schedule/';

@@ -230,6 +230,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                   date: '${program.humanDate}',
                                   title: '${program.episodes[index].title}',
                                   episodeNumber: 'الحلقة ${index + 1}',
+                                  id:program.episodes[index].id ,
                                 );
                               }),
                           SizedBox(height: 50),
