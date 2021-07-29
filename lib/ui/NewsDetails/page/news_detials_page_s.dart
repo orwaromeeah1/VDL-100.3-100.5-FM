@@ -340,6 +340,10 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                         ignoring:
                                                             audioDuration == 0,
                                                         child: ProgressBar(
+                                                          thumbColor: green,
+                                                          progressBarColor:
+                                                              green,
+                                                          thumbRadius: 5,
                                                           progress: Duration(
                                                               seconds:
                                                                   timeProgress),
