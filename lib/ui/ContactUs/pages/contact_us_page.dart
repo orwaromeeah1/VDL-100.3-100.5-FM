@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:sendgrid_mailer/sendgrid_mailer.dart';
+import 'package:vdl/core/Manager.dart';
+import 'package:vdl/ui/Articles/bloc/articles_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ContactUsPage extends StatefulWidget {
@@ -12,6 +16,34 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+
+  final _country = TextEditingController();
+  final _message = TextEditingController();
+  String name, email, country, message;
+  final formKey = GlobalKey<FormState>();
+
+  final username = "";
+  Personalization personalization;
+
+  final mailer = Mailer(
+      'YOUR_SENDGRID_API_KEY');
+
+  final toAddress = Address('orwaromeeah@gmail.com');
+  final fromAddress = Address('apps2@dlimits.com');
+
+  Content content;
+  String subject;
+  bool loading = false;
+  String type = 'General inquiry';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    personalization = Personalization([toAddress]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,260 +216,311 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 17.0, right: 21.4),
-                      child: Container(
-                        height: 1,
-                        color: green,
-                        width: 32,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 30.0,
-                        right: 21,
-                        bottom: 5.0,
-                      ),
-                      child: Container(
-                        child: Text(
-                          '*الاسم',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: black.withOpacity(0.38),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 19.0, right: 21),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            style: TextStyle(color: Colors.black54),
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onSaved: (String value) {},
-                            validator: (String value) {
-                              if (value.length == 0) {
-                                return "Required Field";
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 29,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0, right: 21),
-                      child: Container(
-                        child: Text(
-                          '*البريد الإلكتروني',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: black.withOpacity(0.38),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 19.0, right: 21),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            style: TextStyle(color: Colors.black54),
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onSaved: (String value) {},
-                            validator: (String value) {
-                              if (value.length == 0) {
-                                return "Required Field";
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 29,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0, right: 21),
-                      child: Container(
-                        child: Text(
-                          '*نوع الطلب',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: black.withOpacity(0.38),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 19.0, right: 21),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            style: TextStyle(color: Colors.black54),
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onSaved: (String value) {},
-                            validator: (String value) {
-                              if (value.length == 0) {
-                                return "Required Field";
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 29,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0, right: 21),
-                      child: Container(
-                        child: Text(
-                          '*البلد',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: black.withOpacity(0.38),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 19.0, right: 21),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            style: TextStyle(color: Colors.black54),
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onSaved: (String value) {},
-                            validator: (String value) {
-                              if (value.length == 0) {
-                                return "Required Field";
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 29,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0, right: 21),
-                      child: Container(
-                        child: Text(
-                          '*البلد',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: black.withOpacity(0.38),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 19.0, right: 21),
-                      child: Container(
-                        height: 296,
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 100,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            focusColor: Colors.white,
-                            filled: true,
-                          ),
-                          onChanged: (value) {},
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 26,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 21.0),
-                      child: Container(
-                        width: 145,
-                        height: 56,
-                        child: Stack(
+                    Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 7.0, left: 7, top: 7),
+                              padding:
+                                  const EdgeInsets.only(top: 17.0, right: 21.4),
                               child: Container(
-                                height: 42,
-                                width: 138,
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, right: 53.0),
-                                    child: Text(
-                                      'أرسل رسالتك',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: green,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(26)),
+                                height: 1,
+                                color: green,
+                                width: 32,
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 28,
-                              backgroundColor: green.withOpacity(0.41),
-                              child: CircleAvatar(
-                                backgroundColor: green,
-                                radius: 21,
-                                child: Icon(
-                                  Icons.email,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 30.0,
+                                right: 21,
+                                bottom: 5.0,
+                              ),
+                              child: Container(
+                                child: Text(
+                                  '*الاسم',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: black.withOpacity(0.38),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 19.0, right: 21),
+                              child: Container(
+                                decoration: BoxDecoration(
                                   color: Colors.white,
-                                  size: 20,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: TextFormField(
+                                    controller: _name,
+                                    style: TextStyle(color: Colors.black54),
+                                    decoration: InputDecoration(
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                    ),
+                                    onSaved: (String value) {
+                                      name = _name.text.trim();
+                                    },
+                                    validator: (String value) {
+                                      if (value.length == 0) {
+                                        return "Required Field";
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 29,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 5.0, right: 21),
+                              child: Container(
+                                child: Text(
+                                  '*البريد الإلكتروني',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: black.withOpacity(0.38),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 19.0, right: 21),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: TextFormField(
+                                    controller: _email,
+                                    style: TextStyle(color: Colors.black54),
+                                    decoration: InputDecoration(
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                    ),
+                                    onSaved: (String value) {
+                                      email = _email.text.trim();
+                                    },
+                                    validator: (String value) {
+                                      return EmailValidator.validate(
+                                              value ?? "")
+                                          ? null
+                                          : "   email not valid";
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 29,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 5.0, right: 21),
+                              child: Container(
+                                child: Text(
+                                  '*نوع الطلب',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: black.withOpacity(0.38),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 19.0, right: 21),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: DropdownButton(
+                                      hint: Text('نوع الطلب'),
+                                      isExpanded: true,
+                                      underline: Container(),
+                                      value: type,
+                                      items: types,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          type = value;
+                                        });
+                                      },
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 29,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 5.0, right: 21),
+                              child: Container(
+                                child: Text(
+                                  '*البلد',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: black.withOpacity(0.38),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 19.0, right: 21),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: TextFormField(
+                                    controller: _country,
+                                    style: TextStyle(color: Colors.black54),
+                                    decoration: InputDecoration(
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                    ),
+                                    onSaved: (String value) {
+                                      country = _country.text.trim();
+                                    },
+                                    validator: (String value) {
+                                      if (value.length == 0) {
+                                        return "Required Field";
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 29,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 5.0, right: 21),
+                              child: Container(
+                                child: Text(
+                                  '*رسالتك',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: black.withOpacity(0.38),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 19.0, right: 21),
+                              child: Container(
+                                height: 296,
+                                child: TextFormField(
+                                  controller: _message,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 100,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    fillColor: Colors.white,
+                                    focusColor: Colors.white,
+                                    filled: true,
+                                  ),
+                                  onChanged: (value) {
+                                    message = _message.text.trim();
+                                  },
+                                  onSaved: (value) {
+                                    message = _message.text.trim();
+                                  },
+                                  validator: (String value) {
+                                    if (value.length == 0) {
+                                      return "Required Field";
+                                    }
+                                  },
                                 ),
                               ),
                             ),
                           ],
-                        ),
-                      ),
+                        )),
+                    SizedBox(
+                      height: 26,
                     ),
+                    loading
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 21.0),
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () {
+                              _submit();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 21.0),
+                              child: Container(
+                                width: 145,
+                                height: 56,
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 7.0, left: 7, top: 7),
+                                      child: Container(
+                                        height: 42,
+                                        width: 138,
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15, right: 53.0),
+                                            child: Text(
+                                              'أرسل رسالتك',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: green,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(26)),
+                                      ),
+                                    ),
+                                    CircleAvatar(
+                                      radius: 28,
+                                      backgroundColor: green.withOpacity(0.41),
+                                      child: CircleAvatar(
+                                        backgroundColor: green,
+                                        radius: 21,
+                                        child: Icon(
+                                          Icons.email,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                     SizedBox(
                       height: 120,
                     )
@@ -465,4 +548,41 @@ class _ContactUsPageState extends State<ContactUsPage> {
       ),
     );
   }
+
+  void _submit() {
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
+      setState(() {
+        loading = true;
+      });
+      subject = type;
+
+      content = Content(
+          'text/plain', '$name\n$type \nCountry: $country\nContent:\n$message');
+      /////
+      ///
+      final sendingEmail =
+          Email([personalization], fromAddress, subject, content: [content]);
+      mailer.send(sendingEmail).then((result) {
+        setState(() {
+          loading = false;
+        });
+        result.isError
+            ? print(result.asError.error)
+            : Manager.toastMessage(
+                'Message sent Thank your for contacting us', green);
+      });
+    }
+  }
+
+  List<DropdownMenuItem> types = [
+    DropdownMenuItem(
+      child: Text('General inquiry'),
+      value: 'General inquiry',
+    ),
+    DropdownMenuItem(
+      child: Text('Advertising'),
+      value: 'Advertising',
+    ),
+  ];
 }
