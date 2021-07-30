@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/page/episode/episode_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
@@ -11,6 +12,7 @@ class EpisodeCard extends StatelessWidget {
   final String audioLink;
   final String videoLink;
   final int id;
+  final ProgramDetailsResponse program;
 
   EpisodeCard({
     this.date,
@@ -20,6 +22,7 @@ class EpisodeCard extends StatelessWidget {
     this.image,
     this.videoLink,
     this.id,
+    this.program,
 });
 
   @override
@@ -78,7 +81,10 @@ class EpisodeCard extends StatelessWidget {
                     onTap: (){
                       Navigator.push(
                         context,
-                      MaterialPageRoute(builder: (context)=>EpisodePage(episodeId: id))
+                      MaterialPageRoute(builder: (context)=>EpisodePage(
+                          episodeId: id,
+                        program: program,
+                      ))
                       );
                     },
                     child: Container(

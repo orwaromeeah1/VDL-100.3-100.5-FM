@@ -432,6 +432,8 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                 ),
                               ),
                             ),
+
+
                       Padding(
                         padding: const EdgeInsets.only(
                             right: 19.0, top: 17, left: 19),
