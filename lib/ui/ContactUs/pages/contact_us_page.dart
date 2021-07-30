@@ -30,7 +30,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
   final mailer = Mailer(
       'YOUR_SENDGRID_API_KEY');
 
-  final toAddress = Address('orwaromeeah@gmail.com');
+  final toAddress = Address('info@vdl.me');
   final fromAddress = Address('apps2@dlimits.com');
 
   Content content;
