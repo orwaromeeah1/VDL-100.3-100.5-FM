@@ -152,7 +152,8 @@ class _SearchPageState extends State<SearchPage> {
                     title: searchResult[index].title,
                     image: searchResult[index].image.original,
                     date: searchResult[index].humanDate,
-                    category: 'محلية',
+                    category: searchResult[index].categories.category.name,
+                    id: searchResult[index].id
                   ),
                   itemCount: searchResult.length
               )

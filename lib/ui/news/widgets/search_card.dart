@@ -9,12 +9,14 @@ class SearchCardWidget extends StatelessWidget {
   final String title;
   final String date;
   final String category;
+  final int id;
 
  SearchCardWidget({
     this.image,
    this.category,
    this.date,
    this.title,
+   this.id,
 });
 
   @override
@@ -22,7 +24,7 @@ class SearchCardWidget extends StatelessWidget {
     return InkWell(
       onTap: () => pushNewScreen(
         context,
-        screen: NewsPageDetails(),
+        screen: NewsPageDetails(newsId:id ,isSpecial: false,),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       ),

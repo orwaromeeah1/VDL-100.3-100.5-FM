@@ -1,0 +1,445 @@
+import 'dart:developer';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vdl/data/responses/episode_response.dart';
+import 'package:vdl/data/responses/program_details_response.dart';
+import 'package:vdl/ui/programs/bloc/episode/episode_bloc.dart';
+import 'package:vdl/ui/programs/bloc/episode/episode_event.dart';
+import 'package:vdl/ui/programs/bloc/episode/episode_state.dart';
+import 'package:vdl/ui/programs/widget/episode_card.dart';
+import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
+import 'package:vdl/ui/shared_widget/error_screen.dart';
+import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
+import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/file_path/file_path.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+
+import '../../../../injection.dart';
+
+class EpisodePage extends StatefulWidget {
+  final int episodeId;
+  final ProgramDetailsResponse program;
+
+  EpisodePage({@required this.episodeId,@required this.program})
+      :assert(episodeId != null && program != null );
+
+  @override
+  _EpisodePageState createState() => _EpisodePageState();
+}
+
+class _EpisodePageState extends State<EpisodePage>
+    with TickerProviderStateMixin {
+  double width;
+  final _bloc = locator<EpisodeBloc>();
+  EpisodeResponse episode = new EpisodeResponse();
+  AnimationController _animationController;
+  bool isPlaying = false;
+  Duration duration;
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool audioLoaded = false;
+  String audioUrl = "";
+  List<Episodes> episodes = [];
+
+  /// Optional
+  int timeProgress = 0;
+  int audioDuration = 0;
+
+
+  @override
+  void initState() {
+    _bloc.add(FetchEpisode(episodeId: widget.episodeId));
+    super.initState();
+    episodes = widget.program.episodes;
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    // Triggers the onDurationChanged listener and sets the max duration string
+    audioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        audioDuration = duration.inSeconds;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+      setState(() {
+        timeProgress = position.inSeconds;
+      });
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+
+    return BlocBuilder(
+        bloc: _bloc,
+        builder: (context, EpisodeState state) {
+          if (state is EpisodeEmpty) {
+            _bloc.add(FetchEpisode(episodeId:widget.episodeId));
+          }
+          if (state is EpisodeError) {
+            return ErrorScreen(
+              onRetry: () => _bloc.add(FetchEpisode(episodeId:widget.episodeId)),
+            );
+          }
+          if (state is EpisodeLoaded) {
+            episode = state.episode;
+            _bloc.add(FetchAudio(audioKey:episode.audio));
+            return screenUi();
+          }
+
+          if(state is AudioLoaded){
+            return screenUi();
+          }
+          if (state is EpisodeLoading) {
+            return LoadingScreen();
+          }
+
+          return Center(
+            child: LoadingScreen(),
+          );
+        });
+  }
+
+  Widget screenUi() {
+    return Scaffold(
+      body: Container(
+        width: width,
+        child: Stack(
+          children: <Widget>[
+            // image
+            Positioned(
+              top: 0,
+              child: new Column(
+                children: <Widget>[
+                  new Container(
+                      height: 250,
+                      width: width,
+                      padding: EdgeInsets.only(top: 37),
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: '${episode.image.original}',
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.symmetric(horizontal: 25),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              top: 10,
+                              left: 10,
+                              child: GlowingCircularButton(
+                                color: Colors.black26,
+                                onClick: () {
+                                  Navigator.pop(context);
+                                },
+                                size: 35,
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              )),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+
+            new Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top: 215),
+              padding: new EdgeInsets.only(top: 0, right: 10.0, left: 10.0),
+              child: Flex(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                direction: Axis.vertical,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: GlowingCircularButton(
+                          size: 50,
+                          color: Colors.white,
+                          onClick: () {
+                            Share.share(episode.link);
+                          },
+                          iconImage: FilePath.SHARE,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20, left: 20),
+                        child: GlowingCircularButton(
+                          size: 50,
+                          color: ProjectColors.ThemeColor,
+                          isGlowing: true,
+                          onClick: () {},
+                          icon: Icon(
+                            Icons.volume_down,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '${Bidi.stripHtmlIfNeeded(widget.program.title)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                          ),
+                          Text(
+                            '${Bidi.stripHtmlIfNeeded(episode.title)}',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              Icon(
+                                Icons.watch_later,
+                                color: ProjectColors.ThemeColor,
+                              ),
+                              Text('${episode.time}'),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                    BlocListener(
+                      bloc: _bloc,
+                      listener: (context, state) {
+                        if (state is AudioLoaded) {
+                          setState(() {
+                            log('audios fully loaded');
+                            isPlaying= false;
+                            isPlaying = false;
+                            audioLoaded = true;
+                            audioUrl = state.audio.file.url;
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: 100,
+                        width:  width*0.9,
+                        padding: EdgeInsets.only(top: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.14),
+                              blurRadius: 10,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                GlowingCircularButton(
+
+                                  size: 25,
+                                  color: ProjectColors.ThemeColor,
+                                  icon:audioLoaded
+                                      ? AnimatedIcon(
+                                    icon: AnimatedIcons.play_pause,
+                                    progress: _animationController,
+                                    size: 15,
+                                    color: Colors.white,
+                                  )
+                                      :VdlProgressIndicator(size: 5,color: Colors.white,),
+
+                                  onClick: (){
+                                    _handleOnPressed();
+                                  },
+                                  isGlowing: true,
+                                ),
+                                SizedBox(width: 20,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'استمع للحلقة',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.keyboard_voice,
+                                          color: ProjectColors.ThemeColor,
+                                        ),
+                                        Text(
+                                          getTimeString(audioDuration -
+                                              timeProgress),
+                                          style: TextStyle(
+                                              color: Colors.grey
+                                          ),
+                                        ),
+                                        SizedBox(width: 20,),
+                                        Container(
+                                          height: 10,
+                                          width: width*0.3,
+                                          child: IgnorePointer(
+                                            ignoring:
+                                            audioDuration == 0,
+                                            child: ProgressBar(
+                                              thumbColor: green,
+                                              progressBarColor: green,
+                                              thumbRadius: 5,
+                                              progress: Duration(
+                                                  seconds:
+                                                  timeProgress),
+                                              buffered: Duration(
+                                                  seconds:
+                                                  timeProgress),
+                                              total: Duration(
+                                                  seconds:
+                                                  audioDuration),
+                                              timeLabelTextStyle:
+                                              TextStyle(
+                                                  color: Colors
+                                                      .white),
+                                              onSeek: (duration) {
+                                                if (audioDuration !=
+                                                    0) {
+                                                  audioPlayer
+                                                      .seek(duration);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      ) ,
+                    ),
+                          SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'باقي الحلقات',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: episodes.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return widget.episodeId == episodes[index].id
+                                ?Container()
+                                :EpisodeCard(
+                                  image:
+                                  '${episodes[index].image.original}',
+                                  date: '${episodes[index].humanDate}' ,
+                                  title: '${episodes[index].title}',
+                                  episodeNumber: 'الحلقة ${index + 1}',
+                                  id:widget.program.episodes[index].id ,
+                                  program:widget.program,
+                                );
+                              }),
+                          SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Compulsory
+  playMusic() async {
+    await audioPlayer.setUrl(
+        audioUrl); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    int result = await audioPlayer.play(audioUrl);
+    if (result == 1) {
+      // success
+    }
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      setState(() => {print(d)});
+    });
+  }
+
+  /// Compulsory
+  pauseMusic() async {
+    int result = await audioPlayer.pause();
+  }
+
+  stopMusic() async {
+    int result = await audioPlayer.stop();
+  }
+
+  String getTimeString(int seconds) {
+    String minuteString =
+        '${(seconds / 60).floor() < 10 ? 0 : ''}${(seconds / 60).floor()}';
+    String secondString = '${seconds % 60 < 10 ? 0 : ''}${seconds % 60}';
+    return '$minuteString:$secondString'; // Returns a string with the format mm:ss
+  }
+
+  /// Compulsory
+  @override
+  void dispose() {
+    audioPlayer.release();
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+      isPlaying ? playMusic() : pauseMusic();
+    });
+  }
+}

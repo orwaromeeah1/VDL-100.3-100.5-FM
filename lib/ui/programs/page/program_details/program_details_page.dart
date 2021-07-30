@@ -227,9 +227,11 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                 return EpisodeCard(
                                   image:
                                       '${program.episodes[index].image.original}',
-                                  date: '${program.humanDate}',
+                                  date: '${program.episodes[index].humanDate}',
                                   title: '${program.episodes[index].title}',
                                   episodeNumber: 'الحلقة ${index + 1}',
+                                  id:program.episodes[index].id ,
+                                  program:program,
                                 );
                               }),
                           SizedBox(height: 50),

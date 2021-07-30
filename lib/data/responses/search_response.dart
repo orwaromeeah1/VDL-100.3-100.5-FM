@@ -18,7 +18,7 @@ class SearchResponse {
   String audiowatFile;
   String audiowatEmbedIframe;
   Image image;
-//  Categories categories;
+  Categories categories;
 //  Exclusive exclusive;
   String humanDate;
   String sinceDate;
@@ -33,7 +33,8 @@ class SearchResponse {
   SearchResponse({this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format,
 //    this.tags,
     this.sliderDescriptionText, this.audiowatFile, this.audiowatEmbedIframe, this.image,
-//    this.categories, this.exclusive,
+    this.categories,
+//    this.exclusive,
     this.humanDate, this.sinceDate, this.source, this.time, this.audioTitle, this.audio, this.video,
 //    this.vimeo,
     this.youtube});
@@ -58,7 +59,7 @@ class SearchResponse {
     audiowatFile = json['audiowat_file'];
     audiowatEmbedIframe = json['audiowat_embed_iframe'];
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
-//    categories = json['categories'] != null ? new Categories.fromJson(json['categories']) : null;
+    categories = json['categories'] != null ? new Categories.fromJson(json['categories']) : null;
 //    exclusive = json['exclusive'] != null ? new Exclusive.fromJson(json['exclusive']) : null;
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
@@ -207,6 +208,38 @@ return data;
 }
 }
 
+class Categories {
+  Category category;
+
+  Categories({this.category});
+
+  Categories.fromJson(Map<String, dynamic> json) {
+//    category = json['categories'] != null ? new 121.fromJson(json['121']) : null;
+    json.keys.forEach((key){
+      category = new Category(name: json[key]['name'],programs: json[key]['programs']);
+    });
+
+  }
+
+}
+class Category {
+  String name;
+  String programs;
+
+  Category({this.name, this.programs});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    programs = json['programs'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['programs'] = this.programs;
+    return data;
+  }
+}
 //class Categories {
 //50 562;
 //

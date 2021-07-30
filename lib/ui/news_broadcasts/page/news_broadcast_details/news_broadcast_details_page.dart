@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -274,6 +275,40 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                       color: Colors.grey
                                                   ),
                                                 ),
+                                                SizedBox(width: 20,),
+                                                Container(
+                                                  height: 10,
+                                                  width: width*0.3,
+                                                  child: IgnorePointer(
+                                                    ignoring:
+                                                    introductionAudioDuration == 0,
+                                                    child: ProgressBar(
+                                                      thumbColor: green,
+                                                      progressBarColor: green,
+                                                      thumbRadius: 5,
+                                                      progress: Duration(
+                                                          seconds:
+                                                          introductionTimeProgress),
+                                                      buffered: Duration(
+                                                          seconds:
+                                                          introductionTimeProgress),
+                                                      total: Duration(
+                                                          seconds:
+                                                          introductionAudioDuration),
+                                                      timeLabelTextStyle:
+                                                      TextStyle(
+                                                          color: Colors
+                                                              .white),
+                                                      onSeek: (duration) {
+                                                        if (introductionAudioDuration !=
+                                                            0) {
+                                                          introductionAudioPlayer
+                                                              .seek(duration);
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ],
@@ -357,6 +392,40 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                       fullTimeProgress),
                                                   style: TextStyle(
                                                       color: Colors.grey
+                                                  ),
+                                                ),
+                                                SizedBox(width: 20,),
+                                                Container(
+                                                  height: 10,
+                                                  width: width*0.3,
+                                                  child: IgnorePointer(
+                                                    ignoring:
+                                                    fullAudioDuration == 0,
+                                                    child: ProgressBar(
+                                                      thumbColor: green,
+                                                      progressBarColor: green,
+                                                      thumbRadius: 5,
+                                                      progress: Duration(
+                                                          seconds:
+                                                          fullTimeProgress),
+                                                      buffered: Duration(
+                                                          seconds:
+                                                          fullTimeProgress),
+                                                      total: Duration(
+                                                          seconds:
+                                                          fullAudioDuration),
+                                                      timeLabelTextStyle:
+                                                      TextStyle(
+                                                          color: Colors
+                                                              .white),
+                                                      onSeek: (duration) {
+                                                        if (fullAudioDuration !=
+                                                            0) {
+                                                          fullAudioPlayer
+                                                              .seek(duration);
+                                                        }
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
                                               ],
