@@ -172,7 +172,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             height: 35,
             width: 35,
             margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.only(right: 7),
+            padding: EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
               color: Colors.white12,
               borderRadius: BorderRadius.circular(50),
@@ -187,7 +187,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
         ),
 
         Container(
-          width: 50,
+          width: 60,
           child: Flex(
             direction: Axis.vertical,
             children: [
@@ -207,7 +207,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           ),
         ),
         Container(
-          width: 50,
+          width: 60,
           child: Flex(
             direction: Axis.vertical,
             children: [
@@ -232,7 +232,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           ),
         ),
         Container(
-          width: 50,
+          width: 60,
           child: Flex(
             direction: Axis.vertical,
             children: [
@@ -264,7 +264,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.only(right: 7),
+            padding: EdgeInsets.only(right: 3),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               color: Colors.white12,
