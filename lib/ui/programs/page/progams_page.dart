@@ -44,6 +44,12 @@ class _ProgramsPageState extends State<ProgramsPage> {
   }
 
   @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     _getCategoriesWidget();

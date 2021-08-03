@@ -1,3 +1,6 @@
+
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 
 class Manager {

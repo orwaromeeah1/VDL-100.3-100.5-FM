@@ -33,6 +33,12 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
   }
 
   @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return BlocBuilder(
