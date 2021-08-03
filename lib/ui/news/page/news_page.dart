@@ -56,6 +56,12 @@ class _NewsPageState extends State<NewsPage> {
     _bloc.add(FetchData());
   }
 
+  @override
+  void dispose() {
+    banner?.dispose();
+    super.dispose();
+  }
+
   void _getNextPage() {
     isSpeacialReports ? specialReportsPage++ : page++;
     isSpeacialReports

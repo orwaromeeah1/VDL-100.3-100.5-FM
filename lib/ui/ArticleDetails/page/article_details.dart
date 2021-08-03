@@ -95,10 +95,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   /// Compulsory
   @override
   void dispose() {
+    banner?.dispose();
     audioPlayer.release();
     audioPlayer.dispose();
     super.dispose();
   }
+
 
   @override
   void didChangeDependencies() {

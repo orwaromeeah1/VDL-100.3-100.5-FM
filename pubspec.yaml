@@ -61,6 +61,7 @@ dependencies:
   webview_flutter: ^2.0.10
   share: ^2.0.4
   google_mobile_ads: ^0.13.2
+  native_admob_flutter: ^1.5.0
   
 
 dev_dependencies:
