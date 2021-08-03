@@ -27,7 +27,7 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
                 image: AssetImage(
                   FilePath.LIVE_BACKGROUND,
                 ),
-                fit: BoxFit.fitWidth)),
+                fit: BoxFit.cover)),
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: Container(
@@ -35,7 +35,7 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(FilePath.MASK), fit: BoxFit.fitWidth)),
+                      image: AssetImage(FilePath.MASK), fit: BoxFit.cover)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
