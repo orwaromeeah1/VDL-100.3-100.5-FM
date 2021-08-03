@@ -636,8 +636,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.14),
-                            blurRadius: 10,
-                            offset: Offset(0, 10),
+                            blurRadius: 7,
+                            offset: Offset(0, 0),
                           ),
                         ],
                         color: Colors.white,

@@ -126,7 +126,19 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                             height: 50,
                                             child: Platform.isIOS
                                                 ? CupertinoActivityIndicator()
-                                                : CircularProgressIndicator(),
+                                                : Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Center(
+                                                        child: Container(
+                                                            height: 40,
+                                                            width: 40,
+                                                            child:
+                                                                CircularProgressIndicator()),
+                                                      ),
+                                                    ],
+                                                  ),
                                           )
                                         : Container(),
                                     SizedBox(

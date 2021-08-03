@@ -28,7 +28,6 @@ List<NewsModel> special = [];
 List<NewsCategoryModel> categories = [];
 Timeline timeline = Timeline(data: []);
 
-
 class Repository {
   HttpClient _client;
   AuthPrefsHelper _authPrefsHelper;
@@ -331,15 +330,16 @@ class Repository {
     return audioResponseFromJson(response);
   }
 
-  Future<List<AudioResponseModel>> getBroadcastsAudios(String intoId,String fullAudioId) async {
+  Future<List<AudioResponseModel>> getBroadcastsAudios(
+      String intoId, String fullAudioId) async {
     dynamic intro = await _client.getMethods(Urls.AudioUrl + intoId, "");
-    dynamic fullAudio = await _client.getMethods(Urls.AudioUrl + fullAudioId, "");
+    dynamic fullAudio =
+        await _client.getMethods(Urls.AudioUrl + fullAudioId, "");
 
-    return [audioResponseFromJson(intro),audioResponseFromJson(fullAudio)];
+    return [audioResponseFromJson(intro), audioResponseFromJson(fullAudio)];
   }
 
   Future<EpisodeResponse> getEpisodeDetails(int episodeId) async {
-
     dynamic response = await _client.get(
       Urls.EPISODE + '$episodeId',
     );

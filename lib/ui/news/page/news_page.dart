@@ -71,11 +71,12 @@ class _NewsPageState extends State<NewsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final adState = locator<AdState>();
+
     adState.initialization.then((value) {
       setState(() {
         banner = BannerAd(
             adUnitId: adState.bannerAdUnitId,
-            size: AdSize.largeBanner,
+            size: AdSize.mediumRectangle,
             request: AdRequest(),
             listener: adState.adListener)
           ..load();
@@ -239,6 +240,7 @@ class _NewsPageState extends State<NewsPage> {
                                         child: Text(
                                           'الاخبار',
                                           style: TextStyle(
+                                              fontFamily: "TheSans",
                                               color: isSpeacialReports
                                                   ? black.withOpacity(0.25)
                                                   : black,
@@ -257,6 +259,7 @@ class _NewsPageState extends State<NewsPage> {
                                         child: Text(
                                           'تقارير خاصة',
                                           style: TextStyle(
+                                              fontFamily: "TheSans",
                                               color: isSpeacialReports
                                                   ? black
                                                   : black.withOpacity(0.25),
@@ -342,7 +345,12 @@ class _NewsPageState extends State<NewsPage> {
                             height: 100,
                             child: Platform.isIOS
                                 ? CupertinoActivityIndicator()
-                                : CircularProgressIndicator(),
+                                : Center(
+                                    child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        child: CircularProgressIndicator()),
+                                  ),
                           )
                         : Container(),
                     SizedBox(
@@ -423,7 +431,7 @@ class _NewsPageState extends State<NewsPage> {
                                     banner == null
                                         ? Container(height: 20)
                                         : Container(
-                                            height: 240,
+                                            height: 320,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(20.0),
