@@ -430,8 +430,10 @@ class _EpisodePageState extends State<EpisodePage>
   void dispose() {
     audioPlayer.release();
     audioPlayer.dispose();
+    _bloc.close();
     super.dispose();
   }
+
 
   void _handleOnPressed() {
     setState(() {

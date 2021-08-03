@@ -38,6 +38,12 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   }
 
   @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(

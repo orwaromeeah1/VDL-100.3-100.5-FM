@@ -105,9 +105,12 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   void dispose() {
     audioPlayer.release();
     audioPlayer.dispose();
+    banner?.dispose();
     _bloc.close();
     super.dispose();
   }
+
+
 
   /// Compulsory
   playMusic() async {

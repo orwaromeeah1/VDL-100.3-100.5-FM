@@ -563,6 +563,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   void dispose() {
     introductionAudioPlayer.release();
     introductionAudioPlayer.dispose();
+    _bloc.close();
     super.dispose();
   }
 

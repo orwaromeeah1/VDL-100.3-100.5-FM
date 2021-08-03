@@ -56,6 +56,13 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
       });
     });
   }
+  @override
+  void dispose() {
+    banner?.dispose();
+    _bloc.close();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
