@@ -17,9 +17,10 @@ class tabBarCell extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            height: 18,
+            height: 25,
             child: Text(cat.name,
                 style: TextStyle(
+                    fontFamily: "TheSans",
                     color: cat.selected ? green : black,
                     fontWeight:
                         cat.selected ? FontWeight.bold : FontWeight.normal,

@@ -434,8 +434,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                 ),
                               ),
                             ),
-
-
                       Padding(
                         padding: const EdgeInsets.only(
                             right: 19.0, top: 17, left: 19),
@@ -473,7 +471,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                       banner == null
                           ? Container(height: 20)
                           : Container(
-                              height: 240,
+                              height: 320,
                               child: Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: AdWidget(

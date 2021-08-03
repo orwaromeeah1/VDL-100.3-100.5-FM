@@ -158,25 +158,47 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 10),
-                        child: GlowingCircularButton(
-                          size: 50,
-                          color: Colors.white,
-                          onClick: () {
+                        child: InkWell(
+                          onTap: () {
                             Share.share(program.link);
                           },
-                          iconImage: FilePath.SHARE,
+                          child: Container(
+                            height: 48,
+                            width: 48,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.14),
+                                    blurRadius: 7,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(48 / 2)),
+                            child: Icon(
+                              Icons.reply,
+                              color: green,
+                              size: 25,
+                            ),
+                          ),
                         ),
                       ),
+                      SizedBox(
+                        width: 9,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 20, left: 20),
-                        child: GlowingCircularButton(
-                          size: 50,
-                          color: ProjectColors.ThemeColor,
-                          isGlowing: true,
-                          onClick: () {},
-                          icon: Icon(
-                            Icons.volume_down,
-                            color: Colors.white,
+                        padding: const EdgeInsets.only(left: 20),
+                        child: CircleAvatar(
+                          radius: 32,
+                          backgroundColor: green.withOpacity(0.41),
+                          child: CircleAvatar(
+                            backgroundColor: green,
+                            radius: 25,
+                            child: Icon(
+                              CupertinoIcons.speaker_2_fill,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -237,8 +259,8 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                   date: '${program.episodes[index].humanDate}',
                                   title: '${program.episodes[index].title}',
                                   episodeNumber: 'الحلقة ${index + 1}',
-                                  id:program.episodes[index].id ,
-                                  program:program,
+                                  id: program.episodes[index].id,
+                                  program: program,
                                 );
                               }),
                           SizedBox(height: 50),
