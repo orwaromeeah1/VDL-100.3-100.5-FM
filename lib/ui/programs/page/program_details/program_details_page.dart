@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_event.dart';
@@ -33,7 +35,8 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   ProgramDetailsResponse program;
   final _bloc = locator<ProgramDetailsBloc>();
 
-  BannerAd banner;
+//  BannerAd banner;
+  final _adController = NativeAdmobController();
 
   @override
   void initState() {
@@ -44,21 +47,21 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final adState = locator<AdState>();
-    adState.initialization.then((value) {
-      setState(() {
-        banner = BannerAd(
-            adUnitId: adState.bannerAdUnitId,
-            size: AdSize.mediumRectangle,
-            request: AdRequest(),
-            listener: adState.adListener)
-          ..load();
-      });
-    });
+//    final adState = locator<AdState>();
+//    adState.initialization.then((value) {
+//      setState(() {
+//        banner = BannerAd(
+//            adUnitId: adState.bannerAdUnitId,
+//            size: AdSize.mediumRectangle,
+//            request: AdRequest(),
+//            listener: adState.adListener)
+//          ..load();
+//      });
+//    });
   }
   @override
   void dispose() {
-    banner?.dispose();
+//    banner?.dispose();
     _bloc.close();
     super.dispose();
   }
@@ -95,7 +98,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   }
 
   Widget screenUi() {
-    banner.load();
     return Scaffold(
       body: Container(
         width: width,
@@ -232,14 +234,26 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           SizedBox(
                             height: 20,
                           ),
-                          banner == null
-                              ? Container(height: 20)
-                              : Container(
-                                  height: 250,
-                                  child: AdWidget(
-                                    ad: banner,
-                                  ),
-                                ),
+                          Container(
+                            height: 330,
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 20.0),
+                            child: NativeAdmob(
+                              // Your ad unit id
+                              adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                              numberAds: 3,
+                              controller: _adController,
+                              type: NativeAdmobType.full,
+                            ),
+                          ),
+//                          banner == null
+//                              ? Container(height: 20)
+//                              : Container(
+//                                  height: 250,
+//                                  child: AdWidget(
+//                                    ad: banner,
+//                                  ),
+//                                ),
                           SizedBox(
                             height: 20,
                           ),

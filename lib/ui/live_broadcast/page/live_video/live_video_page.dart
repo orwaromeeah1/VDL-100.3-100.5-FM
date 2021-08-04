@@ -60,7 +60,7 @@ class _LiveVideoPageState extends State<LiveVideoPage> {
                               child: Container(
                                 height: 35,
                                 width: 35,
-                                padding: EdgeInsets.only(right: 0),
+                                padding: EdgeInsets.only(right: 3),
                                 margin: EdgeInsets.only(bottom: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.white12,

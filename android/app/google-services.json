@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "444593454318",
+    "project_id": "vdlapp-6f149",
+    "storage_bucket": "vdlapp-6f149.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444593454318:android:c4d1b06205c482e07587ff",
+        "android_client_info": {
+          "package_name": "com.dlimits.vdl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444593454318-satr7ham10jf4ge17hmmj4vku0ndgiqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq1WtBRBIOhMI6mNQ5L4v9MfEXX-UpXcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444593454318-satr7ham10jf4ge17hmmj4vku0ndgiqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
