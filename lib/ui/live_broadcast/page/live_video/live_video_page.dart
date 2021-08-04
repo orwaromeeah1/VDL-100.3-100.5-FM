@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -83,7 +84,12 @@ class _LiveVideoPageState extends State<LiveVideoPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
 
-                        Image.asset(FilePath.LOGO,height: 150,width: 150,),
+                        SvgPicture.asset(
+                          FilePath.LOGO,
+                          height: 150,
+                          width: 150,
+
+                        ),
                         Container(
                              height: 175,
                              width: 300,
@@ -106,7 +112,7 @@ class _LiveVideoPageState extends State<LiveVideoPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(FilePath.VIDEO_LOGO),
+                              SvgPicture.asset(FilePath.VIDEO_LOGO),
                               SizedBox(width: 10,),
                               Text(
                                 'بث بصري',

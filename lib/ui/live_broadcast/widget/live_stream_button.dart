@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
+import 'package:flutter_svg/svg.dart';
 
 typedef OnClickCallBack = Function();
 class LiveStreamButton extends StatelessWidget {
@@ -26,7 +26,7 @@ class LiveStreamButton extends StatelessWidget {
           child: Row(
            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             Image.asset(image),
+              SvgPicture.asset(image),
              SizedBox(width: 10,),
              Text(
                '$text',
