@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/core/Manager.dart';
@@ -46,7 +48,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
-  BannerAd banner;
+//  BannerAd banner;
   String youtubeUrl = "";
 
 ////YoutubePlayer
@@ -57,6 +59,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   int audioDuration = 0;
   //
 
+  final _adController = NativeAdmobController();
+
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
@@ -65,17 +69,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final adState = locator<AdState>();
-    adState.initialization.then((value) {
-      setState(() {
-        banner = BannerAd(
-            adUnitId: adState.bannerAdUnitId,
-            size: AdSize.mediumRectangle,
-            request: AdRequest(),
-            listener: adState.adListener)
-          ..load();
-      });
-    });
+//    final adState = locator<AdState>();
+//    adState.initialization.then((value) {
+//      setState(() {
+//        banner = BannerAd(
+//            adUnitId: adState.bannerAdUnitId,
+//            size: AdSize.mediumRectangle,
+//            request: AdRequest(),
+//            listener: adState.adListener)
+//          ..load();
+//      });
+//    });
   }
 
   @override
@@ -105,7 +109,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   void dispose() {
     audioPlayer.release();
     audioPlayer.dispose();
-    banner?.dispose();
+//    banner?.dispose();
     _bloc.close();
     super.dispose();
   }
@@ -447,17 +451,31 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             ),
                           ),
                         ),
-                        banner == null
-                            ? Container(height: 20)
-                            : Container(
-                                height: 240,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: AdWidget(
-                                    ad: banner,
-                                  ),
-                                ),
-                              ),
+
+                        Container(
+                          height: 330,
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(bottom: 20.0),
+                          child: NativeAdmob(
+                            // Your ad unit id
+                            adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                            numberAds: 3,
+                            controller: _adController,
+                            type: NativeAdmobType.full,
+                          ),
+                        ),
+
+//                        banner == null
+//                            ? Container(height: 20)
+//                            : Container(
+//                                height: 240,
+//                                child: Padding(
+//                                  padding: const EdgeInsets.all(20.0),
+//                                  child: AdWidget(
+//                                    ad: banner,
+//                                  ),
+//                                ),
+//                              ),
                         Padding(
                           padding: const EdgeInsets.only(
                               right: 19.0, left: 19, bottom: 34),

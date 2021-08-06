@@ -202,6 +202,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0"
+  flutter_native_admob:
+    dependency: "direct main"
+    description:
+      name: flutter_native_admob
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0+3"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -247,13 +254,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.4"
-  google_mobile_ads:
-    dependency: "direct main"
-    description:
-      name: google_mobile_ads
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.2"
   html:
     dependency: "direct main"
     description:
@@ -317,13 +317,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  native_admob_flutter:
-    dependency: "direct main"
-    description:
-      name: native_admob_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.0"
   nested:
     dependency: transitive
     description:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
 import 'package:vdl/ui/live_broadcast/widget/logo_widget.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
@@ -59,7 +60,7 @@ class _LiveAudioPageState extends State<LiveAudioPage> {
                               child: Container(
                                 height: 35,
                                 width: 35,
-                                padding: EdgeInsets.only(right: 0),
+                                padding: EdgeInsets.only(right: 3),
                                 margin: EdgeInsets.only(bottom: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.white12,
@@ -94,7 +95,7 @@ class _LiveAudioPageState extends State<LiveAudioPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(FilePath.AUDIO_LOGO),
+                              SvgPicture.asset(FilePath.AUDIO_LOGO),
                               SizedBox(width: 10,),
                               Text(
                                 'بث سمعي',

@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/data/networking/http_client.dart';
 import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/Article_details_bloc.dart';
@@ -29,7 +29,7 @@ import 'data/shared_preferences/auth_prefes_helper.dart';
 
 final locator = GetIt.instance;
 
-Future setLocator(Future<InitializationStatus> initialization) async {
+Future setLocator(/*Future<InitializationStatus> initialization*/) async {
   locator.registerLazySingleton<HttpClient>(() => HttpClient());
   locator.registerLazySingleton<AuthPrefsHelper>(() => AuthPrefsHelper());
 
@@ -73,9 +73,9 @@ Future setLocator(Future<InitializationStatus> initialization) async {
   locator.registerFactory(() => ProgramsScheduleBloc(locator(), locator()));
   locator.registerFactory(() => ProgramsScheduleState());
 
-  locator.registerLazySingleton<AdState>(() => AdState(
-    initialization,
-  ));
+//  locator.registerLazySingleton<AdState>(() => AdState(
+//    initialization,
+//  ));
 
 
   //NewsCastDetailsBloc

@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:vdl/data/models/homeModel.dart';
@@ -48,7 +50,9 @@ class _NewsPageState extends State<NewsPage> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  BannerAd banner;
+//  BannerAd banner;
+
+  final _adController = NativeAdmobController();
 
   @override
   void initState() {
@@ -58,7 +62,7 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   void dispose() {
-    banner?.dispose();
+//    banner?.dispose();
     super.dispose();
   }
 
@@ -76,18 +80,18 @@ class _NewsPageState extends State<NewsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final adState = locator<AdState>();
-
-    adState.initialization.then((value) {
-      setState(() {
-        banner = BannerAd(
-            adUnitId: adState.bannerAdUnitId,
-            size: AdSize.mediumRectangle,
-            request: AdRequest(),
-            listener: adState.adListener)
-          ..load();
-      });
-    });
+//    final adState = locator<AdState>();
+//
+//    adState.initialization.then((value) {
+//      setState(() {
+//        banner = BannerAd(
+//            adUnitId: adState.bannerAdUnitId,
+//            size: AdSize.mediumRectangle,
+//            request: AdRequest(),
+//            listener: adState.adListener)
+//          ..load();
+//      });
+//    });
   }
 
   @override
@@ -434,18 +438,32 @@ class _NewsPageState extends State<NewsPage> {
                                 child: Container(
                                     child: Column(
                                   children: [
-                                    banner == null
-                                        ? Container(height: 20)
-                                        : Container(
-                                            height: 320,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(20.0),
-                                              child: AdWidget(
-                                                ad: banner,
-                                              ),
-                                            ),
-                                          ),
+                                    Container(
+                                      height: 330,
+                                      padding: EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(bottom: 20.0),
+                                      child: NativeAdmob(
+                                        // Your ad unit id
+                                        adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                                        numberAds: 3,
+                                        controller: _adController,
+                                        type: NativeAdmobType.full,
+                                      ),
+                                    ),
+//                                    banner == null
+//                                        ? Container(height: 20)
+//                                        : Container(
+//                                            height: 320,
+//                                            child: Padding(
+//                                              padding:
+//                                                  const EdgeInsets.all(20.0),
+//                                              child: AdWidget(
+//                                                ad: banner,
+//                                              ),
+//                                            ),
+//                                          ),
+
+
                                     Container(
                                       height:
                                           354 * model.news.length.toDouble() +
