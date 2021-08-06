@@ -498,7 +498,7 @@ class _NewsPageState extends State<NewsPage> {
                                   ],
                                 )),
                               ),
-                        // PodcastsWidet(),
+                         PodcastsWidet(),
                       ],
                     ),
                   )

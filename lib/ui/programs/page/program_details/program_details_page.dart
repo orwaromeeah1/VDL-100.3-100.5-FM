@@ -268,6 +268,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 return EpisodeCard(
+
                                   image:
                                       '${program.episodes[index].image.original}',
                                   date: '${program.episodes[index].humanDate}',

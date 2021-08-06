@@ -8,7 +8,7 @@ class FilePath{
   static const AUDIO = 'assets/images/Group 4839.png';
   static const CURRENT_BROADCAST = 'assets/images/Path 3370@2x.png';
   static const OTHER_BROADCAST = 'assets/images/Path 3800@2x.png';
-  static const LOGO = 'assets/images/VDL LOGO@2x.svg';
+  static const LOGO = 'assets/images/vdl white logo .png';
   static const SURROUNDING_LOGO = 'assets/images/Group 4828@2x.png';
   static const LIVE_BACKGROUND = 'assets/images/Mask Group 69.png';
   static const MASK = 'assets/images/Rectangle 249.png';
