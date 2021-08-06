@@ -6,7 +6,6 @@ import 'package:vdl/ui/onBoarding/onBoarding.dart';
 import 'injection.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 //  final futureInit = MobileAds.instance.initialize();
 
@@ -21,6 +20,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       locale: Locale('ar'),
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: 1.0,
+          ), //set desired text scale factor here
+          child: child,
+        );
+      },
       title: 'VDL',
       theme: ThemeData(
         pageTransitionsTheme: PageTransitionsTheme(builders: {
