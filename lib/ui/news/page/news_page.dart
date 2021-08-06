@@ -444,7 +444,8 @@ class _NewsPageState extends State<NewsPage> {
                                       margin: EdgeInsets.only(bottom: 20.0),
                                       child: NativeAdmob(
                                         // Your ad unit id
-                                        adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                                        adUnitID:
+                                            'ca-app-pub-3940256099942544/8135179316',
                                         numberAds: 3,
                                         controller: _adController,
                                         type: NativeAdmobType.full,
@@ -462,7 +463,6 @@ class _NewsPageState extends State<NewsPage> {
 //                                              ),
 //                                            ),
 //                                          ),
-
 
                                     Container(
                                       height:
