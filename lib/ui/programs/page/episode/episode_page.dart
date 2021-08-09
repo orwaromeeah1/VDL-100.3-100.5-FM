@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/data/responses/episode_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_bloc.dart';
@@ -20,6 +21,7 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 import '../../../../injection.dart';
 
@@ -46,6 +48,12 @@ class _EpisodePageState extends State<EpisodePage>
   bool audioLoaded = false;
   String audioUrl = "";
   List<Episodes> episodes = [];
+
+  bool containsVideo = false;
+  String youtubeUrl = "";
+
+////YoutubePlayer
+  YoutubePlayerController _youtubeController;
 
   /// Optional
   int timeProgress = 0;
@@ -91,6 +99,18 @@ class _EpisodePageState extends State<EpisodePage>
           }
           if (state is EpisodeLoaded) {
             episode = state.episode;
+            containsVideo = (episode.video != "");
+            if(containsVideo){
+
+              _youtubeController = YoutubePlayerController(
+                initialVideoId:_getYoutubeId(episode.video),
+                params: YoutubePlayerParams(
+                  startAt: Duration(seconds: 30),
+                  showControls: true,
+                  showFullscreenButton: true,
+                ),
+              );
+            }
             _bloc.add(FetchAudio(audioKey:episode.audio));
             return screenUi();
           }
@@ -355,6 +375,35 @@ class _EpisodePageState extends State<EpisodePage>
                       ) ,
                     ),
                           SizedBox(height: 20),
+
+                          // youtube vedio
+                          containsVideo
+                              ? Padding(
+                            padding: const EdgeInsets.only(
+                                right: 19.0, top: 9, left: 19, bottom: 10),
+                            child: Column(
+                              children: [
+                                YoutubePlayerIFrame(
+                                  controller: _youtubeController,
+                                  aspectRatio: 16 / 9,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                InkWell(
+                                    onTap: () {
+                                      _launchURL(
+                                          episode.video.trim());
+                                    },
+                                    child: Text(
+                                      'View in Youtube',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                              ],
+                            ),
+                          )
+                              : Container(),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
@@ -430,9 +479,14 @@ class _EpisodePageState extends State<EpisodePage>
   void dispose() {
     audioPlayer.release();
     audioPlayer.dispose();
+    _youtubeController.close();
     _bloc.close();
     super.dispose();
   }
+
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
 
   void _handleOnPressed() {
@@ -443,5 +497,9 @@ class _EpisodePageState extends State<EpisodePage>
           : _animationController.reverse();
       isPlaying ? playMusic() : pauseMusic();
     });
+  }
+
+  String _getYoutubeId(String link){
+    return link.substring(link.indexOf('=') + 1).trim();
   }
 }

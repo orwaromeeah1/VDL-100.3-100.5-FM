@@ -175,7 +175,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
 
                     _youtubeController = YoutubePlayerController(
                       initialVideoId:
-                          state.newsModel.youtube.substring(17).trim(),
+                          state.newsModel.youtube.substring(state.newsModel.youtube.indexOf('=') + 1).trim(),
                       params: YoutubePlayerParams(
                         startAt: Duration(seconds: 30),
                         showControls: true,

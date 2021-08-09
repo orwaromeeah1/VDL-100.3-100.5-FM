@@ -16,11 +16,31 @@ class LogoWidget extends StatelessWidget {
       width: size,
       decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(FilePath.SURROUNDING_LOGO))),
+      child: Stack(
+        children: [
+      Center(
       child: SvgPicture.asset(
-        FilePath.LOGO ,
-        height: size * 0.75,
-        width: size * 0.75,
+      'assets/images/illustration.svg',
+        height: 173,
+        width: 216,
       ),
+    ),
+          Center(
+            heightFactor: size*0.4,
+            widthFactor: size*0.4,
+            child: Image.asset(
+              FilePath.LOGO ,
+              height: size*0.4,
+              width: size*0.4,
+            ),
+          ),
+    ]),
+
+
+
+
+
+
     );
   }
 }
