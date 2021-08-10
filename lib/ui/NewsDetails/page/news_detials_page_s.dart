@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,13 +40,14 @@ class NewsPageDetails extends StatefulWidget {
   _NewsPageDetailsState createState() => _NewsPageDetailsState();
 }
 
-class _NewsPageDetailsState extends State<NewsPageDetails>
-    with TickerProviderStateMixin {
+class _NewsPageDetailsState extends  State<NewsPageDetails>
+    with TickerProviderStateMixin  ,WidgetsBindingObserver {
+
   final _bloc = locator<NewsDetailsBloc>();
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  AudioPlayer audioPlayer = AudioPlayer();
+  Player.AudioPlayer audioPlayer = Player.AudioPlayer();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -85,6 +88,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.removeObserver(this);
 
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
 
@@ -102,25 +106,56 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         timeProgress = position.inSeconds;
       });
     });
+
+    audioPlayer.onPlayerStateChanged.listen(( Player.PlayerState state) async {
+      if(state == Player.PlayerState.values[0]){
+         setState(() {
+
+         });
+      }
+    });
   }
 
   /// Compulsory
   @override
   void dispose() {
+
     audioPlayer.release();
     audioPlayer.dispose();
 //    banner?.dispose();
     _bloc.close();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    log('yyyyyy');
+    switch (state) {
+      case AppLifecycleState.resumed:
+       {log('ggggggg'); audioPlayer.resume();}
+        break;
+      case AppLifecycleState.paused:
+        audioPlayer.pause();
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
+  Future<bool> didPopRoute() async {
+    audioPlayer.release();
+    audioPlayer.dispose();
+    return false;
+  }
 
 
   /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
