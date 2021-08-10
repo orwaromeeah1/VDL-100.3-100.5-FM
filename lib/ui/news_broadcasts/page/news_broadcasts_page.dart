@@ -74,13 +74,13 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
           Positioned(
             top: 0,
             child: new Container(
-              height: 230,
+              height: 217,
               width: width,
               color: ProjectColors.BLACK,
-              padding: EdgeInsets.only(right: 30),
+              padding: EdgeInsets.only(right: 30,top: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
@@ -96,14 +96,15 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                     'نشرات الأخبار',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 32,
                         fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 5,),
                   Text(
                     'إضغط على النشرة التي تريد الإستماع إليها',
                     style: TextStyle(
                         color: Colors.white70,
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -111,7 +112,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
             ),
           ),
           new Container(
-              margin: EdgeInsets.only(top: 200),
+              margin: EdgeInsets.only(top: 186),
               alignment: Alignment.bottomCenter,
               padding: new EdgeInsets.only(top: 0, right: 20.0, left: 20.0,bottom: 50),
               child:ListView.builder(
@@ -134,7 +135,8 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                 },
                                 child: Container(
                                   width: width,
-                                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+                                  height: 55,
+                                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                                   color: newsCasts[index].isOpened ? ProjectColors.ThemeColor : Colors.white,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,6 +144,8 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                       Text(
                                         '${newsCasts[index].slug}',
                                         style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
                                           color: newsCasts[index].isOpened ? Colors.white : Colors.black,
                                         ),
                                       ),
@@ -151,7 +155,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                             : Icons.keyboard_arrow_down,
                                         color:newsCasts[index].isOpened
                                             ? Colors.white
-                                            : Colors.black ,
+                                            : ProjectColors.ThemeColor,
                                       )
                                     ],
                                   ),

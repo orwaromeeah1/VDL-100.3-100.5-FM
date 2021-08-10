@@ -16,7 +16,7 @@ class BroadcastCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 75,
+      height: 68,
       width: 100,
       margin: EdgeInsets.symmetric(horizontal: 5),
       child:Column(
@@ -24,7 +24,7 @@ class BroadcastCard extends StatelessWidget {
           Container(
             color: Colors.white,
             width: 100,
-            height: 75,
+            height: 68,
             child: Column(
 
               mainAxisAlignment: MainAxisAlignment.center,
@@ -32,13 +32,15 @@ class BroadcastCard extends StatelessWidget {
                 Text(
                   'نشرة الساعة',
                   style: TextStyle(
-                      color: Colors.black26
+                      color: Colors.black26,
+                    fontSize: 12,
                   ),
                 ),
                 Text(
                   '$time',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
                 ),
               ],

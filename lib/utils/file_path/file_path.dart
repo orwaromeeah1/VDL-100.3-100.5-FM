@@ -16,4 +16,5 @@ class FilePath{
   static const VIDEO_LOGO = 'assets/images/video-camera.svg';
   static const VOICE = 'assets/images/Mask Group 70.png';
   static const VIDEO_IMAGE_BACKGROUND = 'assets/images/c447b93b09f54418f4716b9b4c77ab6f.png';
+  static const AUDIO_WAVE ='assets/images/Group 4839.svg';
 }

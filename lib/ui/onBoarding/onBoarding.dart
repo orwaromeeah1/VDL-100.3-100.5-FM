@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vdl/ui/main_tabs/page/main_tabs_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-import '';
+
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({Key key}) : super(key: key);

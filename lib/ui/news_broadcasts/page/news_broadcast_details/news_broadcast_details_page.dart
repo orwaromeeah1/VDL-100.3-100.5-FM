@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -138,12 +139,13 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           Positioned(
             top: 0,
             child: new Container(
-              height: 250,
+              height: 216,
               width: width,
               color: ProjectColors.BLACK,
+              padding: EdgeInsets.only(top:25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
@@ -159,15 +161,20 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                     'نشرة الأخبار',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '${widget.newsCast.slug}',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 32,
                         fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    height: 3,
+                    width: 30,
+                    color: ProjectColors.ThemeColor,
                   ),
 
                 ],
@@ -176,12 +183,12 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           ),
           new Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(top: 210),
+              margin: EdgeInsets.only(top: 175),
               padding: new EdgeInsets.only(top: 0, right: 20.0, left: 20.0,bottom: 50),
               child: Column(
                 children: [
                   Container(
-                    height: 120,
+                    height: 100,
                     child: ListView.builder(
                         controller: _controller,
                         scrollDirection: Axis.horizontal,
@@ -209,7 +216,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height*0.495,
+                    height: MediaQuery.of(context).size.height*0.563,
                     child: ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: 0),
