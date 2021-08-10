@@ -34,9 +34,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
     super.initState();
     currentMonthDays = DateHelper.getDays();
     _bloc.add(FetchProgramsSchedule(
-        dayNum:selectedDay,
-        day: currentMonthDays[selectedDay].name));
-
+        dayNum: selectedDay, day: currentMonthDays[selectedDay].name));
   }
 
   @override
@@ -49,6 +47,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.2),
       body: Stack(
         children: <Widget>[
           Positioned(
@@ -74,101 +73,90 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                   daysSlider(),
                 ],
               ),
-            ),),
+            ),
+          ),
+          BlocBuilder(
+              bloc: _bloc,
+              builder: (context, ProgramsScheduleState state) {
+                if (state is ProgramsScheduleEmpty) {
+                  _bloc.add(FetchProgramsSchedule());
+                }
+                if (state is ProgramsScheduleError) {
+                  return ErrorScreen(
+                    onRetry: () => _bloc.add(FetchProgramsSchedule()),
+                  );
+                }
+                if (state is ProgramsScheduleLoaded) {
+                  programSchedule = state.programsSchedule;
+                  return screenUi();
+                }
 
+                if (state is ProgramsScheduleLoading) {
+                  return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Center(
+                          child: Platform.isIOS
+                              ? CupertinoActivityIndicator()
+                              : CircularProgressIndicator(
+                                  color: ProjectColors.ThemeColor,
+                                )));
+                }
 
-        BlocBuilder(
-            bloc: _bloc,
-            builder: (context, ProgramsScheduleState state) {
-              if (state is ProgramsScheduleEmpty) {
-                _bloc.add(FetchProgramsSchedule());
-              }
-              if (state is ProgramsScheduleError) {
-                return ErrorScreen(
-                  onRetry: () => _bloc.add(FetchProgramsSchedule()),
-                );
-              }
-              if (state is ProgramsScheduleLoaded) {
-                programSchedule = state.programsSchedule;
-                return screenUi();
-              }
-
-              if (state is ProgramsScheduleLoading) {
-                return  Padding(
+                return Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Center(
                         child: Platform.isIOS
                             ? CupertinoActivityIndicator()
                             : CircularProgressIndicator(
-                          color: ProjectColors.ThemeColor,
-                        )));
-              }
-
-              return Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Center(
-                      child: Platform.isIOS
-                          ? CupertinoActivityIndicator()
-                          : CircularProgressIndicator(
-                        color: ProjectColors.ThemeColor,
-                      )));
-            }),
-
-
+                                color: ProjectColors.ThemeColor,
+                              )));
+              }),
         ],
       ),
-
-
     );
-
-
-
-
   }
 
-  Widget screenUi(){
+  Widget screenUi() {
     return Container(
-        width: width,
-        margin: EdgeInsets.only(top: 175,bottom: 50),
-        child: ListView.builder(
-            itemCount: programSchedule.length,
-            shrinkWrap: true,
-
-            itemBuilder: (BuildContext context,int index){
-              return GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context)=>ProgramDetailsPage())
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: ProgramScheduleCard(
-                    name: '${programSchedule[index].title}',
-                    duration: '${programSchedule[index].time}',
-                    id: programSchedule[index].id ,
-                    link: programSchedule[index].link,
-                    image: '${programSchedule[index].image}',
-                  ),
+      width: width,
+      margin: EdgeInsets.only(top: 175, bottom: 50),
+      child: ListView.builder(
+          itemCount: programSchedule.length,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProgramDetailsPage()));
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: ProgramScheduleCard(
+                  name: '${programSchedule[index].title}',
+                  duration: '${programSchedule[index].time}',
+                  id: programSchedule[index].id,
+                  link: programSchedule[index].link,
+                  image: '${programSchedule[index].image}',
                 ),
-              );
-            }),
+              ),
+            );
+          }),
     );
   }
-  Widget daysSlider(){
+
+  Widget daysSlider() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
       children: [
         GestureDetector(
-          onTap: (){
+          onTap: () {
             setState(() {
               selectedDay--;
             });
             _bloc.add(FetchProgramsSchedule(
-                dayNum:selectedDay,
-                day: currentMonthDays[selectedDay].name));
+                dayNum: selectedDay, day: currentMonthDays[selectedDay].name));
           },
           child: Container(
             height: 35,
@@ -179,29 +167,28 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
               color: Colors.white12,
               borderRadius: BorderRadius.circular(50),
             ),
-            child:Center(
+            child: Center(
               child: Icon(
                 Icons.arrow_back_ios,
                 color: ProjectColors.ThemeColor,
               ),
-            ) ,
+            ),
           ),
         ),
-
         Container(
           width: 80,
           child: Flex(
             direction: Axis.vertical,
             children: [
               Text(
-                '${currentMonthDays[(selectedDay-2)%currentMonthDays.length].number}',
+                '${currentMonthDays[(selectedDay - 2) % currentMonthDays.length].number}',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                 ),
               ),
               Text(
-                '${currentMonthDays[(selectedDay-2)%currentMonthDays.length].name}',
+                '${currentMonthDays[(selectedDay - 2) % currentMonthDays.length].name}',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,

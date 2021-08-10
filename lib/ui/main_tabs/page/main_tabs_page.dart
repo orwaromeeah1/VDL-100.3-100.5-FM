@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:fluttericon/brandico_icons.dart';
+import 'package:fluttericon/elusive_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
@@ -34,34 +38,44 @@ class _MainTabsPageState extends State<MainTabsPage> {
         onSelectedTabPressWhenNoScreensPushed: () {
           locator<NewsBloc>().add(MoveToTop());
         },
-        icon: Icon(Icons.home),
-        activeColorPrimary: Colors.grey,
+        icon: Icon(Icons.home_rounded),
+        iconSize: 27,
+        textStyle: TextStyle(fontSize: 10),
+        activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.grid_view),
-        activeColorPrimary: Colors.grey,
+        iconSize: 27,
+        textStyle: TextStyle(fontSize: 10),
+        icon: Icon(Icons.grid_view_rounded),
+        activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.wifi_tethering),
-        activeColorPrimary: Colors.grey,
+        iconSize: 27,
+        textStyle: TextStyle(fontSize: 10),
+        icon: Icon(Icons.podcasts),
+        activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
+        iconSize: 27,
+        textStyle: TextStyle(fontSize: 10),
         icon: Icon(
-          Icons.calendar_today,
+          FlutterIcons.calendar_alt_faw5,
         ),
-        activeColorPrimary: Colors.grey,
+        activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.menu),
-        activeColorPrimary: Colors.grey,
+        iconSize: 27,
+        textStyle: TextStyle(fontSize: 10),
+        icon: Icon(Ionicons.md_menu),
+        activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'قائمة',
       ),

@@ -51,7 +51,7 @@ class ArticleCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 14,
+                      height: 20,
                       child: Row(
                         children: [
                           Icon(

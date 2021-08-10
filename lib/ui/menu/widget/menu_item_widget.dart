@@ -48,7 +48,7 @@ class MenuItem extends StatelessWidget {
                 ),
                 Divider(
                   height: 1,
-                  color: black.withOpacity(0.07),
+                  color: black.withOpacity(0.2),
                 )
               ],
             )),

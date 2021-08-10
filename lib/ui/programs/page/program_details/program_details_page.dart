@@ -59,13 +59,13 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 //      });
 //    });
   }
+
   @override
   void dispose() {
 //    banner?.dispose();
     _bloc.close();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +109,8 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
               child: new Column(
                 children: <Widget>[
                   new Container(
-                      height: 250,
+                      height: 211,
                       width: width,
-                      padding: EdgeInsets.only(top: 37),
                       child: Stack(
                         children: [
                           CachedNetworkImage(
@@ -122,14 +121,14 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imageProvider,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fitHeight,
                                 ),
                               ),
                             ),
                           ),
                           Positioned(
-                              top: 10,
-                              left: 10,
+                              left: 19,
+                              top: 40,
                               child: GlowingCircularButton(
                                 color: Colors.black26,
                                 onClick: () {
@@ -149,7 +148,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 
             new Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(top: 215),
+              margin: EdgeInsets.only(top: 178),
               padding: new EdgeInsets.only(top: 0, right: 10.0, left: 10.0),
               child: Flex(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +211,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                       child: Column(
                         children: [
                           Text(
-                            '${Bidi.stripHtmlIfNeeded(program.programInfoDescription)}',
+                            '${Bidi.stripHtmlIfNeeded(program.programInfoDescription.trim())}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
@@ -221,15 +220,30 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Icon(
-                                Icons.watch_later,
-                                color: ProjectColors.ThemeColor,
+                          Container(
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(17.5)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Icon(
+                                    Icons.watch_later,
+                                    color: ProjectColors.ThemeColor,
+                                  ),
+                                  Text(
+                                    '${program.programTextTime}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text('${program.programTextTime}'),
-                            ],
+                            ),
                           ),
                           SizedBox(
                             height: 20,
@@ -240,7 +254,8 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                             margin: EdgeInsets.only(bottom: 20.0),
                             child: NativeAdmob(
                               // Your ad unit id
-                              adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                              adUnitID:
+                                  'ca-app-pub-3940256099942544/8135179316',
                               numberAds: 3,
                               controller: _adController,
                               type: NativeAdmobType.full,
@@ -268,7 +283,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 return EpisodeCard(
-
                                   image:
                                       '${program.episodes[index].image.original}',
                                   date: '${program.episodes[index].humanDate}',
