@@ -100,11 +100,7 @@ class ProgramCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-<<<<<<< HEAD
                         color: brown,
-=======
-                        color: ProjectColors.ORANGE,
->>>>>>> 409af56d7aea7479026d2a09114bea9dfdd8163a
                         elevation: 2.5,
                         child: Text(
                           '$category',

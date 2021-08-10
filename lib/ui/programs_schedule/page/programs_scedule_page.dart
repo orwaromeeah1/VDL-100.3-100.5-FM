@@ -47,7 +47,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.2),
+      backgroundColor: Colors.grey.withOpacity(0.1),
       body: Stack(
         children: <Widget>[
           Positioned(
