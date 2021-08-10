@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_svg/svg.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,9 +20,7 @@ import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
-import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 //
@@ -114,8 +113,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     super.dispose();
   }
 
-
-
   /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
@@ -174,8 +171,9 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     viewYoutube = true;
 
                     _youtubeController = YoutubePlayerController(
-                      initialVideoId:
-                          state.newsModel.youtube.substring(state.newsModel.youtube.indexOf('=') + 1).trim(),
+                      initialVideoId: state.newsModel.youtube
+                          .substring(state.newsModel.youtube.indexOf('=') + 1)
+                          .trim(),
                       params: YoutubePlayerParams(
                         startAt: Duration(seconds: 30),
                         showControls: true,
@@ -213,16 +211,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
           SliverList(
               delegate: SliverChildListDelegate([
             Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.14),
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ]),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.14),
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
+                  ),
+                ]),
                 child: Stack(
                   children: [
                     Column(
@@ -311,11 +306,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                   Expanded(
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          CupertinoIcons
-                                                              .recordingtape,
-                                                          color: blue,
-                                                        ),
+                                                        SvgPicture.asset(
+                                                            'assets/icons/recording.svg'),
                                                         SizedBox(
                                                           width: 4,
                                                         ),
@@ -333,7 +325,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                                     ),
                                                   ),
                                                   Container(
-                                                    height: 20,
+                                                    height: 10,
                                                     width:
                                                         MediaQuery.of(context)
                                                                 .size
@@ -392,9 +384,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             child: Text(
                               state.newsModel.humanDate,
                               style: TextStyle(
-                                  color: black.withOpacity(0.41),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13),
+                                  color: black.withOpacity(0.41), fontSize: 13),
                             ),
                           ),
                         ),
@@ -638,8 +628,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
         ),
         Positioned(
           top: shrinkOffset < minExtent
-              ? expandedHeight - (height / 18) - shrinkOffset
-              : expandedHeight - (height / 18) - minExtent,
+              ? expandedHeight - (height / 22) - shrinkOffset
+              : expandedHeight - (height / 22) - minExtent,
           left: 0,
           child: Padding(
             padding: const EdgeInsets.only(left: 19.0),

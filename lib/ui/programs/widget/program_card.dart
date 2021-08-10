@@ -11,12 +11,7 @@ class ProgramCard extends StatelessWidget {
   final String category;
   final String date;
 
-  ProgramCard({
-    this.name,
-    this.date,
-    this.image,
-    this.category
-});
+  ProgramCard({this.name, this.date, this.image, this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +24,25 @@ class ProgramCard extends StatelessWidget {
             children: <Widget>[
               new Container(
                 height: 200,
-
-                 child:  CachedNetworkImage(
-                   imageUrl:  '$image',
-                   imageBuilder: (context, imageProvider) => Container(
-                       width: MediaQuery.of(context).size.width,
-                       padding: EdgeInsets.symmetric(horizontal: 25),
-                       decoration: BoxDecoration(
-                         image: DecorationImage(
-                           image: imageProvider,
-                           fit: BoxFit.cover,
-                         ),
-                       ),
-              ),
-                 ),
+                child: CachedNetworkImage(
+                  imageUrl: '$image',
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
           new Container(
             alignment: Alignment.bottomCenter,
-            padding: new EdgeInsets.only(
-                top: 150,
-                right: 20.0,
-                left: 20.0),
+            padding: new EdgeInsets.only(top: 150, right: 20.0, left: 20.0),
             child: Stack(
               children: <Widget>[
                 Container(
@@ -65,19 +56,18 @@ class ProgramCard extends StatelessWidget {
                     color: Colors.white,
                     elevation: 2.5,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '${Bidi.stripHtmlIfNeeded(name)}',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16
-                            ),
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           Flex(
-                              direction: Axis.horizontal,
+                            direction: Axis.horizontal,
                             children: [
                               Icon(
                                 Icons.watch_later,
@@ -86,9 +76,8 @@ class ProgramCard extends StatelessWidget {
                               ),
                               Text(
                                 '$date',
-                                style: TextStyle(
-                                    color: Colors.grey
-                                ),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 11),
                               )
                             ],
                           )
@@ -100,12 +89,10 @@ class ProgramCard extends StatelessWidget {
                 //category card
                 new Container(
                   alignment: Alignment.topLeft,
-                  padding: new EdgeInsets.only(
-                      bottom: 30,
-                      right: 20.0,
-                      left: 20.0),
+                  padding:
+                      new EdgeInsets.only(bottom: 30, right: 20.0, left: 20.0),
                   child: Transform.translate(
-                    offset: Offset(0,-10),
+                    offset: Offset(0, -10),
                     child: new Container(
                       height: 30.0,
                       width: 70,
@@ -113,21 +100,17 @@ class ProgramCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        color: ProjectColors.ORANGE,
+                        color: brown,
                         elevation: 2.5,
                         child: Text(
                           '$category',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white
-                          ),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
                   ),
                 ),
-
-
               ],
             ),
           )

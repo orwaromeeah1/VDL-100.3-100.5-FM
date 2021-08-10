@@ -8,6 +8,7 @@ import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_svg/svg.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
 import 'package:vdl/core/Manager.dart';
@@ -39,7 +40,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   AudioPlayer audioPlayer = AudioPlayer();
   bool audioLoaded = false;
   String audioUrl = "";
-
 
   /// Optional
   int timeProgress = 0;
@@ -106,7 +106,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     audioPlayer.dispose();
     super.dispose();
   }
-
 
   @override
   void didChangeDependencies() {
@@ -368,11 +367,8 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                                 Expanded(
                                                   child: Row(
                                                     children: [
-                                                      Icon(
-                                                        CupertinoIcons
-                                                            .recordingtape,
-                                                        color: blue,
-                                                      ),
+                                                      SvgPicture.asset(
+                                                          'assets/icons/recording.svg'),
                                                       SizedBox(
                                                         width: 4,
                                                       ),
@@ -390,7 +386,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                                   ),
                                                 ),
                                                 Container(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width /

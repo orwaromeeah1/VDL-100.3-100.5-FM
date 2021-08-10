@@ -30,8 +30,13 @@ class SpecialReportsCard extends StatelessWidget {
         child: Container(
           height: 123,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(14)),
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.14),
+              blurRadius: 10,
+              offset: Offset(0, 1),
+            ),
+          ], color: Colors.white, borderRadius: BorderRadius.circular(14)),
           child: Row(
             children: [
               Padding(

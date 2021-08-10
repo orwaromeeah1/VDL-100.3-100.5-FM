@@ -46,12 +46,12 @@ class ArticleCardWidget extends StatelessWidget {
                 color: green,
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 13.0, top: 18),
+                padding: const EdgeInsets.only(right: 13.0, top: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 14,
+                      height: 25,
                       child: Row(
                         children: [
                           Icon(
@@ -103,7 +103,7 @@ class ArticleCardWidget extends StatelessWidget {
                                     fit: BoxFit.cover)),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 2,
                           ),
                           Icon(
                             MaterialIcons.format_quote,
@@ -111,7 +111,7 @@ class ArticleCardWidget extends StatelessWidget {
                             size: 30,
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 2,
                           ),
                           Text(
                             this.model.selectAuthor.name,

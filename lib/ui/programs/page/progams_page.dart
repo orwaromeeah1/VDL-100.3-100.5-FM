@@ -92,7 +92,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                 height: 216,
                 width: width,
                 color: ProjectColors.BLACK,
-                padding: EdgeInsets.all(30),
+                padding: EdgeInsets.all(19),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -111,8 +111,8 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            height: 65,
-                            width: width * 0.7,
+                            height: 60,
+                            width: width * 0.70,
                             child: Card(
                               elevation: 10,
                               color: Colors.white12,
@@ -126,6 +126,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                 ),
                                 child: TextFormField(
                                   controller: _searchController,
+
                                   style: TextStyle(
                                       color: ProjectColors.ThemeColor),
                                   onFieldSubmitted: (value) {
@@ -135,6 +136,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                             _searchController.text.trim()));
                                   },
                                   decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.zero,
                                       prefixIcon: GestureDetector(
                                         onTap: () {
                                           _bloc.add(SearchPrograms(
@@ -148,12 +150,14 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                           color: Colors.white,
                                         ),
                                       ),
+                                      hintText: 'إضغط هنا للبحث',
+                                      hintStyle: TextStyle(
+                                        color: Colors.white.withOpacity(0.8),
+                                      ),
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      labelText: 'إضغط للبحث هنا',
-                                      floatingLabelBehavior: FloatingLabelBehavior.never,
                                       labelStyle:
                                           TextStyle(color: Colors.white70)),
 //                                 textInputAction: TextInputAction.next,
@@ -176,7 +180,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                 _modalBottomSheetMenu();
                               },
                               child: CircleAvatar(
-                                radius: 22,
+                                radius: 21,
                                 backgroundColor: green,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -204,7 +208,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(top: 180),
               padding: new EdgeInsets.only(
-                  top: 0, right: 20.0, left: 20.0, bottom: 50),
+                  top: 0, right: 10.0, left: 10.0, bottom: 50),
               child: ListView.builder(
                   itemCount: programs.length,
                   padding: EdgeInsets.only(top: 0),

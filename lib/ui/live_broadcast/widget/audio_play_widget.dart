@@ -10,17 +10,15 @@ class AudioPlayWidget extends StatelessWidget {
       width: 300,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image:AssetImage(
-                  FilePath.VOICE
-              ),
-              fit: BoxFit.fitWidth
-          )
-      ),
+              image: AssetImage(FilePath.VOICE), fit: BoxFit.fitWidth)),
       child: Center(
         child: GlowingCircularButton(
           isGlowing: true,
-          icon: Icon(Icons.play_arrow,color: Colors.white,),
-          onClick: (){},
+          icon: Icon(
+            Icons.play_arrow,
+            color: Colors.white,
+          ),
+          onClick: () {},
           color: ProjectColors.ThemeColor,
           size: 50,
         ),
