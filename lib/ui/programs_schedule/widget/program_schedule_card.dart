@@ -5,7 +5,6 @@ import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
-
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
   final String duration;
@@ -21,31 +20,31 @@ class ProgramScheduleCard extends StatelessWidget {
     this.id,
     this.link,
     //TODO : show something if program is displaying now
-    this.isDisplayingNow:false,
-});
+    this.isDisplayingNow: false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         id != 0
             ? Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => ProgramDetailsPage(programId: id,)
-            )
-        )
-             :null;
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => ProgramDetailsPage(
+                          programId: id,
+                        )))
+            : null;
       },
       child: Container(
         height: 175,
-        width: MediaQuery.of(context).size.width*0.8,
+        width: MediaQuery.of(context).size.width * 0.8,
         padding: EdgeInsets.only(bottom: 15),
         child: Card(
           elevation: 0.5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
-                    ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -53,35 +52,35 @@ class ProgramScheduleCard extends StatelessWidget {
                 direction: Axis.horizontal,
                 children: [
                   CachedNetworkImage(
-                    width:MediaQuery.of(context).size.width*0.4 ,
-                     height: 100,
-                     imageUrl:  '$image',
-                     imageBuilder: (context, imageProvider) => Container(
-                         width: MediaQuery.of(context).size.width,
-                         padding: EdgeInsets.symmetric(horizontal: 25),
-                         decoration: BoxDecoration(
-                           image: DecorationImage(
-                             image: imageProvider,
-                             fit: BoxFit.cover,
-                           ),
-                         ),
-                ),
-                   ),
-                  SizedBox(width: 10,),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 100,
+                    imageUrl: '$image',
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '$duration',
-                        style: TextStyle(
-                            color: ProjectColors.ThemeColor
-                        ),
+                        style: TextStyle(color: ProjectColors.ThemeColor),
                       ),
                       Text(
                         '$name',
                         style: TextStyle(
-                           fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -89,7 +88,7 @@ class ProgramScheduleCard extends StatelessWidget {
                 ],
               ),
               IconButton(
-                onPressed: (){
+                onPressed: () {
                   Share.share(link);
                 },
                 icon: Icon(Icons.share),
