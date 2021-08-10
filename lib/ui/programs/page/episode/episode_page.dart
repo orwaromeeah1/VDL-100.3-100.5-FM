@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/data/responses/episode_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
@@ -29,8 +30,8 @@ class EpisodePage extends StatefulWidget {
   final int episodeId;
   final ProgramDetailsResponse program;
 
-  EpisodePage({@required this.episodeId,@required this.program})
-      :assert(episodeId != null && program != null );
+  EpisodePage({@required this.episodeId, @required this.program})
+      : assert(episodeId != null && program != null);
 
   @override
   _EpisodePageState createState() => _EpisodePageState();
@@ -59,7 +60,6 @@ class _EpisodePageState extends State<EpisodePage>
   int timeProgress = 0;
   int audioDuration = 0;
 
-
   @override
   void initState() {
     _bloc.add(FetchEpisode(episodeId: widget.episodeId));
@@ -81,7 +81,6 @@ class _EpisodePageState extends State<EpisodePage>
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -90,20 +89,20 @@ class _EpisodePageState extends State<EpisodePage>
         bloc: _bloc,
         builder: (context, EpisodeState state) {
           if (state is EpisodeEmpty) {
-            _bloc.add(FetchEpisode(episodeId:widget.episodeId));
+            _bloc.add(FetchEpisode(episodeId: widget.episodeId));
           }
           if (state is EpisodeError) {
             return ErrorScreen(
-              onRetry: () => _bloc.add(FetchEpisode(episodeId:widget.episodeId)),
+              onRetry: () =>
+                  _bloc.add(FetchEpisode(episodeId: widget.episodeId)),
             );
           }
           if (state is EpisodeLoaded) {
             episode = state.episode;
             containsVideo = (episode.video != "");
-            if(containsVideo){
-
+            if (containsVideo) {
               _youtubeController = YoutubePlayerController(
-                initialVideoId:_getYoutubeId(episode.video),
+                initialVideoId: _getYoutubeId(episode.video),
                 params: YoutubePlayerParams(
                   startAt: Duration(seconds: 30),
                   showControls: true,
@@ -111,11 +110,11 @@ class _EpisodePageState extends State<EpisodePage>
                 ),
               );
             }
-            _bloc.add(FetchAudio(audioKey:episode.audio));
+            _bloc.add(FetchAudio(audioKey: episode.audio));
             return screenUi();
           }
 
-          if(state is AudioLoaded){
+          if (state is AudioLoaded) {
             return screenUi();
           }
           if (state is EpisodeLoading) {
@@ -140,9 +139,8 @@ class _EpisodePageState extends State<EpisodePage>
               child: new Column(
                 children: <Widget>[
                   new Container(
-                      height: 250,
+                      height: 211,
                       width: width,
-                      padding: EdgeInsets.only(top: 37),
                       child: Stack(
                         children: [
                           CachedNetworkImage(
@@ -180,7 +178,7 @@ class _EpisodePageState extends State<EpisodePage>
 
             new Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(top: 215),
+              margin: EdgeInsets.only(top: 180),
               padding: new EdgeInsets.only(top: 0, right: 10.0, left: 10.0),
               child: Flex(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +199,7 @@ class _EpisodePageState extends State<EpisodePage>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 20, left: 20),
+                        padding: const EdgeInsets.only(right: 5, left: 20),
                         child: GlowingCircularButton(
                           size: 50,
                           color: ProjectColors.ThemeColor,
@@ -251,158 +249,165 @@ class _EpisodePageState extends State<EpisodePage>
                             height: 20,
                           ),
 
-                    BlocListener(
-                      bloc: _bloc,
-                      listener: (context, state) {
-                        if (state is AudioLoaded) {
-                          setState(() {
-                            log('audios fully loaded');
-                            isPlaying= false;
-                            isPlaying = false;
-                            audioLoaded = true;
-                            audioUrl = state.audio.file.url;
-                          });
-                        }
-                      },
-                      child: Container(
-                        height: 100,
-                        width:  width*0.9,
-                        padding: EdgeInsets.only(top: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.14),
-                              blurRadius: 10,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                                GlowingCircularButton(
-
-                                  size: 25,
-                                  color: ProjectColors.ThemeColor,
-                                  icon:audioLoaded
-                                      ? AnimatedIcon(
-                                    icon: AnimatedIcons.play_pause,
-                                    progress: _animationController,
-                                    size: 15,
-                                    color: Colors.white,
-                                  )
-                                      :VdlProgressIndicator(size: 5,color: Colors.white,),
-
-                                  onClick: (){
-                                    _handleOnPressed();
-                                  },
-                                  isGlowing: true,
-                                ),
-                                SizedBox(width: 20,),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'استمع للحلقة',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          Icons.keyboard_voice,
+                          BlocListener(
+                            bloc: _bloc,
+                            listener: (context, state) {
+                              if (state is AudioLoaded) {
+                                setState(() {
+                                  log('audios fully loaded');
+                                  isPlaying = false;
+                                  isPlaying = false;
+                                  audioLoaded = true;
+                                  audioUrl = state.audio.file.url;
+                                });
+                              }
+                            },
+                            child: Container(
+                              height: 100,
+                              width: width * 0.9,
+                              padding: EdgeInsets.only(top: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.14),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flex(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 20.0, bottom: 20),
+                                        child: GlowingCircularButton(
+                                          size: 30,
                                           color: ProjectColors.ThemeColor,
+                                          icon: audioLoaded
+                                              ? AnimatedIcon(
+                                                  icon:
+                                                      AnimatedIcons.play_pause,
+                                                  progress:
+                                                      _animationController,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                )
+                                              : VdlProgressIndicator(
+                                                  size: 5,
+                                                  color: Colors.white,
+                                                ),
+                                          onClick: () {
+                                            _handleOnPressed();
+                                          },
+                                          isGlowing: true,
                                         ),
-                                        Text(
-                                          getTimeString(audioDuration -
-                                              timeProgress),
-                                          style: TextStyle(
-                                              color: Colors.grey
-                                          ),
-                                        ),
-                                        SizedBox(width: 20,),
-                                        Container(
-                                          height: 10,
-                                          width: width*0.3,
-                                          child: IgnorePointer(
-                                            ignoring:
-                                            audioDuration == 0,
-                                            child: ProgressBar(
-                                              thumbColor: green,
-                                              progressBarColor: green,
-                                              thumbRadius: 5,
-                                              progress: Duration(
-                                                  seconds:
-                                                  timeProgress),
-                                              buffered: Duration(
-                                                  seconds:
-                                                  timeProgress),
-                                              total: Duration(
-                                                  seconds:
-                                                  audioDuration),
-                                              timeLabelTextStyle:
-                                              TextStyle(
-                                                  color: Colors
-                                                      .white),
-                                              onSeek: (duration) {
-                                                if (audioDuration !=
-                                                    0) {
-                                                  audioPlayer
-                                                      .seek(duration);
-                                                }
-                                              },
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'استمع للحلقة',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                              ],
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  'assets/icons/recording.svg'),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                getTimeString(audioDuration -
+                                                    timeProgress),
+                                                style: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Container(
+                                                height: 10,
+                                                width: width * 0.3,
+                                                child: IgnorePointer(
+                                                  ignoring: audioDuration == 0,
+                                                  child: ProgressBar(
+                                                    thumbColor: green,
+                                                    progressBarColor: green,
+                                                    thumbRadius: 5,
+                                                    progress: Duration(
+                                                        seconds: timeProgress),
+                                                    buffered: Duration(
+                                                        seconds: timeProgress),
+                                                    total: Duration(
+                                                        seconds: audioDuration),
+                                                    timeLabelTextStyle:
+                                                        TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                    onSeek: (duration) {
+                                                      if (audioDuration != 0) {
+                                                        audioPlayer
+                                                            .seek(duration);
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ) ,
-                    ),
+                          ),
                           SizedBox(height: 20),
 
                           // youtube vedio
                           containsVideo
                               ? Padding(
-                            padding: const EdgeInsets.only(
-                                right: 19.0, top: 9, left: 19, bottom: 10),
-                            child: Column(
-                              children: [
-                                YoutubePlayerIFrame(
-                                  controller: _youtubeController,
-                                  aspectRatio: 16 / 9,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                InkWell(
-                                    onTap: () {
-                                      _launchURL(
-                                          episode.video.trim());
-                                    },
-                                    child: Text(
-                                      'View in Youtube',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ))
-                              ],
-                            ),
-                          )
+                                  padding: const EdgeInsets.only(
+                                      right: 19.0,
+                                      top: 9,
+                                      left: 19,
+                                      bottom: 10),
+                                  child: Column(
+                                    children: [
+                                      YoutubePlayerIFrame(
+                                        controller: _youtubeController,
+                                        aspectRatio: 16 / 9,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      InkWell(
+                                          onTap: () {
+                                            _launchURL(episode.video.trim());
+                                          },
+                                          child: Text(
+                                            'View in Youtube',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ))
+                                    ],
+                                  ),
+                                )
                               : Container(),
                           Align(
                             alignment: Alignment.centerRight,
@@ -418,16 +423,16 @@ class _EpisodePageState extends State<EpisodePage>
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 return widget.episodeId == episodes[index].id
-                                ?Container()
-                                :EpisodeCard(
-                                  image:
-                                  '${episodes[index].image.original}',
-                                  date: '${episodes[index].humanDate}' ,
-                                  title: '${episodes[index].title}',
-                                  episodeNumber: 'الحلقة ${index + 1}',
-                                  id:widget.program.episodes[index].id ,
-                                  program:widget.program,
-                                );
+                                    ? Container()
+                                    : EpisodeCard(
+                                        image:
+                                            '${episodes[index].image.original}',
+                                        date: '${episodes[index].humanDate}',
+                                        title: '${episodes[index].title}',
+                                        episodeNumber: 'الحلقة ${index + 1}',
+                                        id: widget.program.episodes[index].id,
+                                        program: widget.program,
+                                      );
                               }),
                           SizedBox(height: 50),
                         ],
@@ -488,7 +493,6 @@ class _EpisodePageState extends State<EpisodePage>
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
-
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
@@ -499,7 +503,7 @@ class _EpisodePageState extends State<EpisodePage>
     });
   }
 
-  String _getYoutubeId(String link){
+  String _getYoutubeId(String link) {
     return link.substring(link.indexOf('=') + 1).trim();
   }
 }

@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/models/news_broadcast_details_model.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
@@ -28,10 +29,11 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
     @required this.newsCast,
     @required this.timeSlutIndex,
     @required this.broadcasts,
-  }):assert(newsCast != null && timeSlutIndex != null && broadcasts != null);
+  }) : assert(newsCast != null && timeSlutIndex != null && broadcasts != null);
 
   @override
-  _NewsBroadcastDetailsPageState createState() => _NewsBroadcastDetailsPageState();
+  _NewsBroadcastDetailsPageState createState() =>
+      _NewsBroadcastDetailsPageState();
 }
 
 class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
@@ -40,7 +42,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   int selectedIndex = 0;
   final _controller = ScrollController();
   final _height = 100.0;
-  NewsCastDetailsModel displayedNewsCast = new NewsCastDetailsModel() ;
+  NewsCastDetailsModel displayedNewsCast = new NewsCastDetailsModel();
   final _bloc = locator<NewsCastDetailsBloc>();
 
   AnimationController _animationController;
@@ -62,54 +64,55 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   int introductionAudioDuration = 0;
   int fullAudioDuration = 0;
 
-   String introductionId = '';
-   String fullAudioId = '';
+  String introductionId = '';
+  String fullAudioId = '';
 
   @override
   void initState() {
-   selectedIndex = widget.timeSlutIndex;
+    selectedIndex = widget.timeSlutIndex;
     super.initState();
 
-   _getContent();
-   _fetchAudios();
+    _getContent();
+    _fetchAudios();
 
-   _animationController =
-       AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-   // Triggers the onDurationChanged listener and sets the max duration string
-   introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
-     setState(() {
-       introductionAudioDuration = duration.inSeconds;
-     });
-   });
-   introductionAudioPlayer.onAudioPositionChanged.listen((Duration position) async {
-     setState(() {
-       introductionTimeProgress = position.inSeconds;
-     });
-   });
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    // Triggers the onDurationChanged listener and sets the max duration string
+    introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        introductionAudioDuration = duration.inSeconds;
+      });
+    });
+    introductionAudioPlayer.onAudioPositionChanged
+        .listen((Duration position) async {
+      setState(() {
+        introductionTimeProgress = position.inSeconds;
+      });
+    });
 
-   _fullAudioAnimationController =
-       AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-   // Triggers the onDurationChanged listener and sets the max duration string
-   fullAudioPlayer.onDurationChanged.listen((Duration duration) {
-     setState(() {
-       fullAudioDuration = duration.inSeconds;
-     });
-   });
-   introductionAudioPlayer.onAudioPositionChanged.listen((Duration position) async {
-     setState(() {
-       fullTimeProgress = position.inSeconds;
-     });
-   });
+    _fullAudioAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    // Triggers the onDurationChanged listener and sets the max duration string
+    fullAudioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        fullAudioDuration = duration.inSeconds;
+      });
+    });
+    introductionAudioPlayer.onAudioPositionChanged
+        .listen((Duration position) async {
+      setState(() {
+        fullTimeProgress = position.inSeconds;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
 
-
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) { _animateToIndex(selectedIndex);});
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animateToIndex(selectedIndex);
+    });
 
     return BlocListener(
       bloc: _bloc,
@@ -117,7 +120,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         if (state is AudiosLoaded) {
           setState(() {
             log('audios fully loaded');
-            isPlaying= false;
+            isPlaying = false;
             isFullAudioPlaying = false;
             audiosLoaded = true;
             introductionAudioUrl = state.introAudio.file.url;
@@ -125,15 +128,12 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           });
         }
       },
-      child:screenUi() ,
+      child: screenUi(),
     );
-
-
-
   }
 
-  Widget screenUi(){
-    return  Scaffold(
+  Widget screenUi() {
+    return Scaffold(
       body: Stack(
         children: <Widget>[
           Positioned(
@@ -142,7 +142,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               height: 216,
               width: width,
               color: ProjectColors.BLACK,
-              padding: EdgeInsets.only(top:25),
+              padding: EdgeInsets.only(top: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -176,7 +176,6 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                     width: 30,
                     color: ProjectColors.ThemeColor,
                   ),
-
                 ],
               ),
             ),
@@ -184,7 +183,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           new Container(
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(top: 175),
-              padding: new EdgeInsets.only(top: 0, right: 20.0, left: 20.0,bottom: 50),
+              padding: new EdgeInsets.only(
+                  top: 0, right: 20.0, left: 20.0, bottom: 50),
               child: Column(
                 children: [
                   Container(
@@ -194,9 +194,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
                         itemCount: widget.broadcasts.length,
-                        itemBuilder: (BuildContext context,int index){
+                        itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               setState(() {
                                 selectedIndex = index;
                                 _animateToIndex(index);
@@ -212,11 +212,10 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                               time: widget.broadcasts[index],
                             ),
                           );
-                        }
-                    ),
+                        }),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height*0.563,
+                    height: MediaQuery.of(context).size.height * 0.563,
                     child: ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: 0),
@@ -231,34 +230,41 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flex(
                                       direction: Axis.horizontal,
                                       children: [
                                         GlowingCircularButton(
-
                                           size: 25,
                                           color: ProjectColors.ThemeColor,
-                                          icon:audiosLoaded
+                                          icon: audiosLoaded
                                               ? AnimatedIcon(
-                                            icon: AnimatedIcons.play_pause,
-                                            progress: _animationController,
-                                            size: 15,
-                                            color: Colors.white,
-                                          )
-                                          :VdlProgressIndicator(size: 5,color: Colors.white,),
-
-                                          onClick: (){
+                                                  icon:
+                                                      AnimatedIcons.play_pause,
+                                                  progress:
+                                                      _animationController,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                )
+                                              : VdlProgressIndicator(
+                                                  size: 5,
+                                                  color: Colors.white,
+                                                ),
+                                          onClick: () {
                                             !audiosLoaded
-                                            ? log('')
-                                            : _handleOnIntoPressed();
+                                                ? log('')
+                                                : _handleOnIntoPressed();
                                           },
                                           isGlowing: true,
                                         ),
-                                        SizedBox(width: 20,),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'مقدمة النشرة',
@@ -266,46 +272,49 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-
-
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                Icon(
-                                                  Icons.keyboard_voice,
-                                                  color: ProjectColors.ThemeColor,
+                                                SvgPicture.asset(
+                                                    'assets/icons/recording.svg'),
+                                                SizedBox(
+                                                  width: 5,
                                                 ),
                                                 Text(
-                                                  getTimeString(introductionAudioDuration -
-                                                      introductionTimeProgress),
+                                                  getTimeString(
+                                                      introductionAudioDuration -
+                                                          introductionTimeProgress),
                                                   style: TextStyle(
-                                                      color: Colors.grey
-                                                  ),
+                                                      color: Colors.grey),
                                                 ),
-                                                SizedBox(width: 20,),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
                                                 Container(
                                                   height: 10,
-                                                  width: width*0.3,
+                                                  width: width * 0.3,
                                                   child: IgnorePointer(
                                                     ignoring:
-                                                    introductionAudioDuration == 0,
+                                                        introductionAudioDuration ==
+                                                            0,
                                                     child: ProgressBar(
                                                       thumbColor: green,
                                                       progressBarColor: green,
                                                       thumbRadius: 5,
                                                       progress: Duration(
                                                           seconds:
-                                                          introductionTimeProgress),
+                                                              introductionTimeProgress),
                                                       buffered: Duration(
                                                           seconds:
-                                                          introductionTimeProgress),
+                                                              introductionTimeProgress),
                                                       total: Duration(
                                                           seconds:
-                                                          introductionAudioDuration),
+                                                              introductionAudioDuration),
                                                       timeLabelTextStyle:
-                                                      TextStyle(
-                                                          color: Colors
-                                                              .white),
+                                                          TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                       onSeek: (duration) {
                                                         if (introductionAudioDuration !=
                                                             0) {
@@ -323,20 +332,18 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                       ],
                                     ),
                                     GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         Share.share(widget.newsCast.link);
                                       },
-                                      child: Icon(
-                                          Icons.share
-                                      ),
+                                      child: Icon(Icons.share),
                                     ),
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20),
-                                  child: Text(
-                                      '${displayedNewsCast.description}'
-                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child:
+                                      Text('${displayedNewsCast.description}'),
                                 )
                               ],
                             ),
@@ -352,32 +359,39 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flex(
                                       direction: Axis.horizontal,
                                       children: [
                                         GlowingCircularButton(
-
                                           size: 25,
                                           color: ProjectColors.ThemeColor,
-                                          icon:audiosLoaded
+                                          icon: audiosLoaded
                                               ? AnimatedIcon(
-                                            icon: AnimatedIcons.play_pause,
-                                            progress: _fullAudioAnimationController,
-                                            size: 15,
-                                            color: Colors.white,
-                                          )
-                                              :VdlProgressIndicator(size: 5,color: Colors.white,),
-
-                                          onClick: (){
-                                             _handleOnFullAudioPressed();
+                                                  icon:
+                                                      AnimatedIcons.play_pause,
+                                                  progress:
+                                                      _fullAudioAnimationController,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                )
+                                              : VdlProgressIndicator(
+                                                  size: 5,
+                                                  color: Colors.white,
+                                                ),
+                                          onClick: () {
+                                            _handleOnFullAudioPressed();
                                           },
                                           isGlowing: true,
                                         ),
-                                        SizedBox(width: 20,),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'النشرة كاملة',
@@ -385,46 +399,48 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-
-
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Icon(
                                                   Icons.keyboard_voice,
-                                                  color: ProjectColors.ThemeColor,
+                                                  color:
+                                                      ProjectColors.ThemeColor,
                                                 ),
                                                 Text(
-                                                  getTimeString(fullAudioDuration -
-                                                      fullTimeProgress),
+                                                  getTimeString(
+                                                      fullAudioDuration -
+                                                          fullTimeProgress),
                                                   style: TextStyle(
-                                                      color: Colors.grey
-                                                  ),
+                                                      color: Colors.grey),
                                                 ),
-                                                SizedBox(width: 20,),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
                                                 Container(
                                                   height: 10,
-                                                  width: width*0.3,
+                                                  width: width * 0.3,
                                                   child: IgnorePointer(
                                                     ignoring:
-                                                    fullAudioDuration == 0,
+                                                        fullAudioDuration == 0,
                                                     child: ProgressBar(
                                                       thumbColor: green,
                                                       progressBarColor: green,
                                                       thumbRadius: 5,
                                                       progress: Duration(
                                                           seconds:
-                                                          fullTimeProgress),
+                                                              fullTimeProgress),
                                                       buffered: Duration(
                                                           seconds:
-                                                          fullTimeProgress),
+                                                              fullTimeProgress),
                                                       total: Duration(
                                                           seconds:
-                                                          fullAudioDuration),
+                                                              fullAudioDuration),
                                                       timeLabelTextStyle:
-                                                      TextStyle(
-                                                          color: Colors
-                                                              .white),
+                                                          TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                       onSeek: (duration) {
                                                         if (fullAudioDuration !=
                                                             0) {
@@ -442,16 +458,13 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                       ],
                                     ),
                                     GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         Share.share(widget.newsCast.link);
                                       },
-                                      child: Icon(
-                                          Icons.share
-                                      ),
+                                      child: Icon(Icons.share),
                                     ),
                                   ],
                                 ),
-
                               ],
                             ),
                           ),
@@ -459,58 +472,63 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                       ],
                     ),
                   ),
-
-
-
                 ],
-              )
-          )
+              ))
         ],
       ),
     );
   }
-  _animateToIndex(i) => _controller.animateTo(
-      _height * i,
-      duration: Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn);
 
+  _animateToIndex(i) => _controller.animateTo(_height * i,
+      duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
 
-  _getContent(){
-
-
-    switch(selectedIndex){
-      case 0:{
-        displayedNewsCast.description =  widget.newsCast.shortAudioDescriptionBlock715 ;
-        introductionId = widget.newsCast.shortAudioFieldBlock715;
-        fullAudioId = widget.newsCast.audioFieldBlock715;
-        break;}
-      case 1:{
-        displayedNewsCast.description = widget.newsCast.shortAudioDescriptionBlock815;
-        introductionId = widget.newsCast.shortAudioFieldBlock815;
-        fullAudioId = widget.newsCast.audioFieldBlock815;
-        break;}
-      case 2:{
-        displayedNewsCast.description =  widget.newsCast.shortAudioDescriptionBlock1415 ;
-        introductionId = widget.newsCast.shortAudioFieldBlock1415;
-        fullAudioId = widget.newsCast.audioFieldBlock1415;
-        break;}
-      case 3:{
-        displayedNewsCast.description =  widget.newsCast.shortAudioDescriptionBlock1715 ;
-        introductionId = widget.newsCast.shortAudioFieldBlock1715;
-        fullAudioId = widget.newsCast.audioFieldBlock1715;
-        break;}
-      case 4:{
-        displayedNewsCast.description = widget.newsCast.shortAudioDescriptionBlock1915 ;
-        introductionId = widget.newsCast.shortAudioFieldBlock1915;
-        fullAudioId = widget.newsCast.audioFieldBlock1915;
-        break;}
+  _getContent() {
+    switch (selectedIndex) {
+      case 0:
+        {
+          displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock715;
+          introductionId = widget.newsCast.shortAudioFieldBlock715;
+          fullAudioId = widget.newsCast.audioFieldBlock715;
+          break;
+        }
+      case 1:
+        {
+          displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock815;
+          introductionId = widget.newsCast.shortAudioFieldBlock815;
+          fullAudioId = widget.newsCast.audioFieldBlock815;
+          break;
+        }
+      case 2:
+        {
+          displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock1415;
+          introductionId = widget.newsCast.shortAudioFieldBlock1415;
+          fullAudioId = widget.newsCast.audioFieldBlock1415;
+          break;
+        }
+      case 3:
+        {
+          displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock1715;
+          introductionId = widget.newsCast.shortAudioFieldBlock1715;
+          fullAudioId = widget.newsCast.audioFieldBlock1715;
+          break;
+        }
+      case 4:
+        {
+          displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock1915;
+          introductionId = widget.newsCast.shortAudioFieldBlock1915;
+          fullAudioId = widget.newsCast.audioFieldBlock1915;
+          break;
+        }
     }
 
-    displayedNewsCast.description = Bidi.stripHtmlIfNeeded('${displayedNewsCast.description}');
-
+    displayedNewsCast.description =
+        Bidi.stripHtmlIfNeeded('${displayedNewsCast.description}');
   }
-
-
 
   /// Compulsory
   playIntroduction() async {
@@ -577,41 +595,39 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   void _handleOnIntoPressed() {
     setState(() {
       isPlaying = !isPlaying;
-      if(isPlaying){
+      if (isPlaying) {
         _animationController.forward();
         _fullAudioAnimationController.reverse();
         pauseFullAudio();
         playIntroduction();
-
-      }else{
+      } else {
         _animationController.reverse();
         pauseIntroduction();
       }
-
     });
   }
+
   void _handleOnFullAudioPressed() {
     setState(() {
       isFullAudioPlaying = !isFullAudioPlaying;
 
-      if(isFullAudioPlaying){
+      if (isFullAudioPlaying) {
         _fullAudioAnimationController.forward();
         _animationController.reverse();
         pauseIntroduction();
         playFullAudio();
-
-      }else{
+      } else {
         _fullAudioAnimationController.reverse();
         pauseFullAudio();
       }
-
     });
   }
 
-  _fetchAudios(){
+  _fetchAudios() {
     audiosLoaded = false;
     stopFullAudio();
     stopIntroduction();
-    _bloc.add(FetchAudios(introductionId: introductionId,fullAudioId: fullAudioId));
+    _bloc.add(
+        FetchAudios(introductionId: introductionId, fullAudioId: fullAudioId));
   }
 }
