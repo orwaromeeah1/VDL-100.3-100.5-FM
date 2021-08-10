@@ -89,7 +89,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
           Positioned(
               top: 0,
               child: new Container(
-                height: 200,
+                height: 216,
                 width: width,
                 color: ProjectColors.BLACK,
                 padding: EdgeInsets.all(30),
@@ -101,7 +101,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                       'البرامج',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold),
                     ),
                     Form(
@@ -111,8 +111,8 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            height: 60,
-                            width: width * 0.65,
+                            height: 65,
+                            width: width * 0.7,
                             child: Card(
                               elevation: 10,
                               color: Colors.white12,
@@ -153,8 +153,9 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       labelText: 'إضغط للبحث هنا',
+                                      floatingLabelBehavior: FloatingLabelBehavior.never,
                                       labelStyle:
-                                          TextStyle(color: Colors.white)),
+                                          TextStyle(color: Colors.white70)),
 //                                 textInputAction: TextInputAction.next,
 //                               onEditingComplete: () => node.nextFocus(),
                                   // Move focus to next
@@ -175,7 +176,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                 _modalBottomSheetMenu();
                               },
                               child: CircleAvatar(
-                                radius: 20,
+                                radius: 22,
                                 backgroundColor: green,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -201,7 +202,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
               )),
           new Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(top: 230),
+              margin: EdgeInsets.only(top: 180),
               padding: new EdgeInsets.only(
                   top: 0, right: 20.0, left: 20.0, bottom: 50),
               child: ListView.builder(
