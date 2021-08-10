@@ -38,6 +38,7 @@ class ProgramScheduleCard extends StatelessWidget {
             : null;
       },
       child: Container(
+<<<<<<< HEAD
         color: Colors.transparent,
         width: MediaQuery.of(context).size.width * 0.8,
         child: Column(
@@ -120,6 +121,66 @@ class ProgramScheduleCard extends StatelessWidget {
               color: Colors.grey,
             )
           ],
+=======
+        height: 175,
+        width: MediaQuery.of(context).size.width * 0.8,
+        padding: EdgeInsets.only(bottom: 15),
+        child: Card(
+          elevation: 0.5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flex(
+                direction: Axis.horizontal,
+                children: [
+                  CachedNetworkImage(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 100,
+                    imageUrl: '$image',
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$duration',
+                        style: TextStyle(color: ProjectColors.ThemeColor),
+                      ),
+                      Text(
+                        '$name',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: () {
+                  Share.share(link);
+                },
+                icon: Icon(Icons.share),
+              )
+            ],
+          ),
+>>>>>>> 409af56d7aea7479026d2a09114bea9dfdd8163a
         ),
       ),
     );

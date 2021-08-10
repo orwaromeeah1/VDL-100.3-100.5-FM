@@ -89,7 +89,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
           Positioned(
               top: 0,
               child: new Container(
-                height: 200,
+                height: 216,
                 width: width,
                 color: ProjectColors.BLACK,
                 padding: EdgeInsets.all(19),
@@ -159,7 +159,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       labelStyle:
-                                          TextStyle(color: Colors.white)),
+                                          TextStyle(color: Colors.white70)),
 //                                 textInputAction: TextInputAction.next,
 //                               onEditingComplete: () => node.nextFocus(),
                                   // Move focus to next

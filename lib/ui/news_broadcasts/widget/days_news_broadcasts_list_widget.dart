@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
@@ -21,7 +22,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+      padding: EdgeInsets.symmetric(vertical: 0,horizontal: 15),
       child: ListView.builder(
         itemCount: broadcasts.length,
           shrinkWrap: true,
@@ -60,6 +61,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                         '${getTimeSlut(broadcasts[index])}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                         fontSize: 30,
                          color: isActive(broadcasts[index])
                               ? Colors.black
                               : Colors.grey,
@@ -75,10 +77,12 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                       Icons.headset,
                       color: ProjectColors.ThemeColor  ,
                     ),
+                    SizedBox(width: 5,),
                     Text(
                       'استمع الآن',
                       style: TextStyle(
-                        color:  ProjectColors.ThemeColor
+                        color:  ProjectColors.ThemeColor,
+                        fontSize: 13,
                       ),
                     ),
                   ],
