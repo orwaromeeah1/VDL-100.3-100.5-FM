@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -43,7 +45,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  AudioPlayer audioPlayer = AudioPlayer();
+  AudioPlayer audioPlayer = locator<AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -68,17 +70,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    final adState = locator<AdState>();
-//    adState.initialization.then((value) {
-//      setState(() {
-//        banner = BannerAd(
-//            adUnitId: adState.bannerAdUnitId,
-//            size: AdSize.mediumRectangle,
-//            request: AdRequest(),
-//            listener: adState.adListener)
-//          ..load();
-//      });
-//    });
   }
 
   @override
@@ -96,9 +87,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         audioDuration = duration.inSeconds;
       });
     });
+
     audioPlayer.onAudioPositionChanged.listen((Duration position) async {
       setState(() {
         timeProgress = position.inSeconds;
+      });
+    });
+
+    audioPlayer.onPlayerCompletion.listen((event) {
+      setState(() {
+        isPlaying = false;
       });
     });
   }

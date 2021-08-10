@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -29,6 +30,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
     MenuPage(),
     // see the SettingsPage class
   ];
+  AudioPlayer audioPlayer = locator<AudioPlayer>();
+
+  /// Compulsory
+  pauseMusic() async {
+    int result = await audioPlayer.pause();
+  }
 
   PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
@@ -37,6 +44,13 @@ class _MainTabsPageState extends State<MainTabsPage> {
       PersistentBottomNavBarItem(
         onSelectedTabPressWhenNoScreensPushed: () {
           locator<NewsBloc>().add(MoveToTop());
+          audioPlayer.pause();
+        },
+        onPressed: (context) {
+          _controller.index = 0;
+          setState(() {
+            audioPlayer.pause();
+          });
         },
         icon: Icon(Icons.home_rounded),
         iconSize: 27,
@@ -46,6 +60,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
+        onPressed: (context) {
+          _controller.index = 1;
+          setState(() {
+            audioPlayer.pause();
+          });
+        },
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.grid_view_rounded),
@@ -54,6 +74,15 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
+        onPressed: (context) {
+          _controller.index = 2;
+          setState(() {
+            audioPlayer.pause();
+          });
+        },
+        onSelectedTabPressWhenNoScreensPushed: () {
+          audioPlayer.pause();
+        },
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.podcasts),
@@ -62,6 +91,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
+        onPressed: (context) {
+          _controller.index = 3;
+          setState(() {
+            audioPlayer.pause();
+          });
+        },
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(
@@ -72,6 +107,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
+        onPressed: (context) {
+          _controller.index = 4;
+          setState(() {
+            audioPlayer.pause();
+          });
+        },
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Ionicons.md_menu),

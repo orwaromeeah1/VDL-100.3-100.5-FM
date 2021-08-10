@@ -37,7 +37,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   final _bloc = locator<ArticleDetailsBloc>();
 //  BannerAd banner;
   Duration duration;
-  AudioPlayer audioPlayer = AudioPlayer();
+  AudioPlayer audioPlayer = locator<AudioPlayer>();
   bool audioLoaded = false;
   String audioUrl = "";
 
