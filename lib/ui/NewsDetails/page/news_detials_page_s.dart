@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart' as Player;
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_svg/svg.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,9 +23,7 @@ import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
-import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 //
@@ -40,14 +40,13 @@ class NewsPageDetails extends StatefulWidget {
   _NewsPageDetailsState createState() => _NewsPageDetailsState();
 }
 
-class _NewsPageDetailsState extends  State<NewsPageDetails>
-    with TickerProviderStateMixin  ,WidgetsBindingObserver {
-
+class _NewsPageDetailsState extends State<NewsPageDetails>
+    with TickerProviderStateMixin {
   final _bloc = locator<NewsDetailsBloc>();
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  Player.AudioPlayer audioPlayer = Player.AudioPlayer();
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -72,23 +71,11 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    final adState = locator<AdState>();
-//    adState.initialization.then((value) {
-//      setState(() {
-//        banner = BannerAd(
-//            adUnitId: adState.bannerAdUnitId,
-//            size: AdSize.mediumRectangle,
-//            request: AdRequest(),
-//            listener: adState.adListener)
-//          ..load();
-//      });
-//    });
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.removeObserver(this);
 
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
 
@@ -101,16 +88,20 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
         audioDuration = duration.inSeconds;
       });
     });
+
     audioPlayer.onAudioPositionChanged.listen((Duration position) async {
       setState(() {
         timeProgress = position.inSeconds;
       });
     });
 
-    audioPlayer.onPlayerStateChanged.listen(( Player.PlayerState state) async {
-      if(state == Player.PlayerState.values[0]){
-         setState(() {
 
+    audioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(audioPlayer.state  == Player.PlayerState.PAUSED){
+         setState(() {
+           isPlaying = false;
+            _animationController.reverse();
          });
       }
     });
@@ -119,37 +110,10 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
   /// Compulsory
   @override
   void dispose() {
-
-    audioPlayer.release();
-    audioPlayer.dispose();
 //    banner?.dispose();
     _bloc.close();
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    log('yyyyyy');
-    switch (state) {
-      case AppLifecycleState.resumed:
-       {log('ggggggg'); audioPlayer.resume();}
-        break;
-      case AppLifecycleState.paused:
-        audioPlayer.pause();
-        break;
-      default:
-        break;
-    }
-  }
-
-  @override
-  Future<bool> didPopRoute() async {
-    audioPlayer.release();
-    audioPlayer.dispose();
-    return false;
-  }
-
 
   /// Compulsory
   playMusic() async {
@@ -209,8 +173,9 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
                     viewYoutube = true;
 
                     _youtubeController = YoutubePlayerController(
-                      initialVideoId:
-                          state.newsModel.youtube.substring(state.newsModel.youtube.indexOf('=') + 1).trim(),
+                      initialVideoId: state.newsModel.youtube
+                          .substring(state.newsModel.youtube.indexOf('=') + 1)
+                          .trim(),
                       params: YoutubePlayerParams(
                         startAt: Duration(seconds: 30),
                         showControls: true,
@@ -248,16 +213,13 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
           SliverList(
               delegate: SliverChildListDelegate([
             Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.14),
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ]),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.14),
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
+                  ),
+                ]),
                 child: Stack(
                   children: [
                     Column(
@@ -346,11 +308,8 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
                                                   Expanded(
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          CupertinoIcons
-                                                              .recordingtape,
-                                                          color: blue,
-                                                        ),
+                                                        SvgPicture.asset(
+                                                            'assets/icons/recording.svg'),
                                                         SizedBox(
                                                           width: 4,
                                                         ),
@@ -368,7 +327,7 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
                                                     ),
                                                   ),
                                                   Container(
-                                                    height: 20,
+                                                    height: 10,
                                                     width:
                                                         MediaQuery.of(context)
                                                                 .size
@@ -427,9 +386,7 @@ class _NewsPageDetailsState extends  State<NewsPageDetails>
                             child: Text(
                               state.newsModel.humanDate,
                               style: TextStyle(
-                                  color: black.withOpacity(0.41),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13),
+                                  color: black.withOpacity(0.41), fontSize: 13),
                             ),
                           ),
                         ),
@@ -673,8 +630,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
         ),
         Positioned(
           top: shrinkOffset < minExtent
-              ? expandedHeight - (height / 18) - shrinkOffset
-              : expandedHeight - (height / 18) - minExtent,
+              ? expandedHeight - (height / 22) - shrinkOffset
+              : expandedHeight - (height / 22) - minExtent,
           left: 0,
           child: Padding(
             padding: const EdgeInsets.only(left: 19.0),

@@ -30,6 +30,7 @@ import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/ui/shared_widget/try_again_widget.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
+import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsPage extends StatefulWidget {
@@ -186,10 +187,13 @@ class _NewsPageState extends State<NewsPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SvgPicture.asset(
-                                          'assets/images/VDL_LOGO-image.jpg.svg',
-                                          height: 52,
-                                          width: 67,
+                                        Container(
+                                          height: 55,
+                                          width: 62,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/launcher/appIcon.png'))),
                                         ),
                                         Row(
                                           children: [
@@ -498,7 +502,7 @@ class _NewsPageState extends State<NewsPage> {
                                   ],
                                 )),
                               ),
-                         PodcastsWidet(),
+                        PodcastsWidet(),
                       ],
                     ),
                   )

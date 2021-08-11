@@ -11,36 +11,30 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: size,
-      decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(FilePath.SURROUNDING_LOGO))),
-      child: Stack(
-        children: [
-      Center(
-      child: SvgPicture.asset(
-      'assets/images/illustration.svg',
-        height: 173,
-        width: 216,
-      ),
-    ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 55.0, left: 55, right: 55),
+      child: Container(
+        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(children: [
           Center(
-            heightFactor: size*0.4,
-            widthFactor: size*0.4,
-            child: Image.asset(
-              FilePath.LOGO ,
-              height: size*0.4,
-              width: size*0.4,
+            child: SvgPicture.asset(
+              'assets/images/illustration.svg',
+              height: MediaQuery.of(context).size.height / 2.5,
+              width: MediaQuery.of(context).size.width,
             ),
           ),
-    ]),
-
-
-
-
-
-
+          Center(
+            heightFactor: size * 0.4,
+            widthFactor: size * 0.4,
+            child: Image.asset(
+              FilePath.LOGO,
+              height: MediaQuery.of(context).size.height / 2.5 * 0.3,
+              width: MediaQuery.of(context).size.width * 0.3,
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

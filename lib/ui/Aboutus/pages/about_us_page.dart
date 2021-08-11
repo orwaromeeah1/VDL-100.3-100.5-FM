@@ -44,7 +44,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     'من نحن',
                     style: TextStyle(
                       fontSize: 32,
-                      color: Colors.white,
+                      color: green,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -85,7 +85,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 61.0, top: 28),
                   child: Container(
-                    height: 306,
+                    height: 218,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -210,7 +210,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   padding: const EdgeInsets.only(top: 21.0),
                   child: Center(
                     child: Container(
-                      height: 1,
+                      height: 2,
                       width: 32,
                       color: green,
                     ),

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:get_it/get_it.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vdl/data/networking/http_client.dart';
@@ -40,6 +41,7 @@ Future setLocator(/*Future<InitializationStatus> initialization*/) async {
 
   //News Bloc
   locator.registerLazySingleton(() => NewsBloc(locator(), locator()));
+  locator.registerLazySingleton(() => AudioPlayer());
   locator.registerFactory(() => NewsState());
 
   //News Details Bloc
@@ -77,7 +79,6 @@ Future setLocator(/*Future<InitializationStatus> initialization*/) async {
 //    initialization,
 //  ));
 
-
   //NewsCastDetailsBloc
   locator.registerFactory(() => NewsCastDetailsBloc(locator(), locator()));
   locator.registerFactory(() => NewsCastDetailsState());
@@ -85,5 +86,4 @@ Future setLocator(/*Future<InitializationStatus> initialization*/) async {
   //EpisodeBloc
   locator.registerFactory(() => EpisodeBloc(locator(), locator()));
   locator.registerFactory(() => EpisodeState());
-
 }

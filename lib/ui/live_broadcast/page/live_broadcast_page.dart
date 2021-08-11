@@ -41,7 +41,7 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
                 children: [
                   Center(
                     child: LogoWidget(
-                      size: 200,
+                      size: 100,
                     ),
                   ),
                   LiveStreamButton(

@@ -80,7 +80,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                   'اتصل بنا',
                                   style: TextStyle(
                                     fontSize: 32,
-                                    color: Colors.white,
+                                    color: green,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -107,7 +107,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                       radius: 22,
                                       backgroundColor:
                                           backgroundGrey.withOpacity(0.2),
-                                      child: Icon(Icons.location_on),
+                                      child: Icon(
+                                        Icons.location_on,
+                                        color: green,
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 14,
@@ -139,7 +142,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                       radius: 22,
                                       backgroundColor:
                                           backgroundGrey.withOpacity(0.2),
-                                      child: Icon(Icons.call),
+                                      child: Icon(
+                                        Icons.call,
+                                        color: green,
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 14,
@@ -170,7 +176,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                       radius: 22,
                                       backgroundColor:
                                           backgroundGrey.withOpacity(0.2),
-                                      child: Icon(Icons.email),
+                                      child: Icon(
+                                        Icons.email,
+                                        color: green,
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 14,
@@ -232,7 +241,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
-                                top: 30.0,
+                                top: 20.0,
                                 right: 21,
                                 bottom: 5.0,
                               ),
@@ -490,7 +499,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                             child: Text(
                                               'أرسل رسالتك',
                                               style: TextStyle(
-                                                fontSize: 12,
+                                                fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                                 color: green,
                                               ),

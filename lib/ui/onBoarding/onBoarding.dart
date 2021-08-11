@@ -130,7 +130,7 @@ class OnBoarding extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'اكتشف',
+                                            '  إكتشف',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 15,
