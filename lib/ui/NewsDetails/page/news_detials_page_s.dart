@@ -111,6 +111,10 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void dispose() {
 //    banner?.dispose();
+    if(_youtubeController!=null){
+      _youtubeController.close();
+    }
+    audioPlayer.pause();
     _bloc.close();
     super.dispose();
   }

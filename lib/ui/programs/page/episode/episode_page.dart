@@ -492,7 +492,10 @@ class _EpisodePageState extends State<EpisodePage>
   /// Compulsory
   @override
   void dispose() {
-    _youtubeController.close();
+    if(_youtubeController!=null){
+      _youtubeController.close();
+    }
+    audioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
