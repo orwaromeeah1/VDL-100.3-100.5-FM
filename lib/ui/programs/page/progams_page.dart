@@ -150,7 +150,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      hintText: 'إضغط هنا للبحث',
+                                      hintText: ' إضغط هنا للبحث',
                                       hintStyle: TextStyle(
                                         color: Colors.white.withOpacity(0.8),
                                       ),
