@@ -7,14 +7,13 @@ import 'package:vdl/data/responses/search_response.dart';
 import 'package:vdl/ui/news/bloc/search/search_bloc.dart';
 import 'package:vdl/ui/news/bloc/search/search_event.dart';
 import 'package:vdl/ui/news/bloc/search/search_state.dart';
-import 'package:vdl/ui/news/widgets/news_card_widget.dart';
+
 import 'package:vdl/ui/news/widgets/search_card.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 import '../../../../injection.dart';
-
 
 class SearchPage extends StatefulWidget {
   @override
@@ -26,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   double width;
   String searchQuery = 'ابحث';
-  List<SearchResponse> searchResult =[];
+  List<SearchResponse> searchResult = [];
   final _bloc = locator<SearchBloc>();
 
   @override
@@ -57,10 +56,9 @@ class _SearchPageState extends State<SearchPage> {
         });
   }
 
-  Widget screenUi(){
+  Widget screenUi() {
     return Scaffold(
       body: Stack(
-
         children: [
           Positioned(
             child: Container(
@@ -71,7 +69,6 @@ class _SearchPageState extends State<SearchPage> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
-
                     Align(
                       alignment: Alignment.topLeft,
                       child: GestureDetector(
@@ -99,15 +96,17 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             onPressed: () {
                               searchQuery = _searchController.text.trim();
-                              _bloc.add(FetchSearchResult(searchQuery: searchQuery));
+                              _bloc.add(
+                                  FetchSearchResult(searchQuery: searchQuery));
                             }),
                         Container(
-                          width:width*0.75 ,
+                          width: width * 0.75,
                           child: TextFormField(
                             controller: _searchController,
                             onFieldSubmitted: (value) {
                               searchQuery = _searchController.text.trim();
-                              _bloc.add(FetchSearchResult(searchQuery: searchQuery));
+                              _bloc.add(
+                                  FetchSearchResult(searchQuery: searchQuery));
                             },
                             decoration: InputDecoration(
                               hintText: '$searchQuery',
@@ -115,7 +114,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             _searchController.clear();
                             searchQuery = 'ابحث';
                             setState(() {
@@ -127,37 +126,31 @@ class _SearchPageState extends State<SearchPage> {
                             width: 30,
                             decoration: BoxDecoration(
                                 color: Colors.black12,
-                                borderRadius: BorderRadius.circular(50)
-                            ),
+                                borderRadius: BorderRadius.circular(50)),
                             child: Icon(
                               Icons.close,
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ],
-                )
-            ),
+                )),
           ),
           searchResult.isEmpty
-          ? Container()
-          : Container(
-            padding: EdgeInsets.only(top: 150,bottom: 40),
-              height: 360 * searchResult.length.toDouble(),
-              child: ListView.builder(
-                  itemBuilder: (context,int index) => SearchCardWidget(
-                    title: searchResult[index].title,
-                    image: searchResult[index].image.original,
-                    date: searchResult[index].humanDate,
-                    category: searchResult[index].categories.category.name,
-                    id: searchResult[index].id
-                  ),
-                  itemCount: searchResult.length
-              )
-          ),
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.only(top: 150, bottom: 40),
+                  height: 360 * searchResult.length.toDouble(),
+                  child: ListView.builder(
+                      itemBuilder: (context, int index) => SearchCardWidget(
+                          title: searchResult[index].title,
+                          image: searchResult[index].image.original,
+                          date: searchResult[index].humanDate,
+                          category:
+                              searchResult[index].categories.category.name,
+                          id: searchResult[index].id),
+                      itemCount: searchResult.length)),
         ],
       ),
     );
