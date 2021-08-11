@@ -30,7 +30,6 @@ import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
   String tag;
-
   final bool isSpecial;
   NewsPageDetails(
       {Key key, @required this.newsId, this.tag, @required this.isSpecial})
