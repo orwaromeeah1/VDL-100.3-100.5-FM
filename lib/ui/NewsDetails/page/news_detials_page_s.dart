@@ -1,7 +1,8 @@
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,6 @@ import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
   String tag;
-
   final bool isSpecial;
   NewsPageDetails(
       {Key key, @required this.newsId, this.tag, @required this.isSpecial})
@@ -45,7 +45,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  AudioPlayer audioPlayer = locator<AudioPlayer>();
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -94,19 +94,26 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       });
     });
 
-    audioPlayer.onPlayerCompletion.listen((event) {
-      setState(() {
-        isPlaying = false;
-      });
+
+    audioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(audioPlayer.state  == Player.PlayerState.PAUSED){
+         setState(() {
+           isPlaying = false;
+            _animationController.reverse();
+         });
+      }
     });
   }
 
   /// Compulsory
   @override
   void dispose() {
-    audioPlayer.release();
-    audioPlayer.dispose();
 //    banner?.dispose();
+    if(_youtubeController!=null){
+      _youtubeController.close();
+    }
+    audioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
@@ -115,7 +122,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
