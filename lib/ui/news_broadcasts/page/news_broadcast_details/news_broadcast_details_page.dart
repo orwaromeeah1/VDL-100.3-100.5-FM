@@ -40,7 +40,7 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
 }
 
 class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   int selectedIndex = 0;
   final _controller = ScrollController();
@@ -74,7 +74,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   void initState() {
     selectedIndex = widget.timeSlutIndex;
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     _getContent();
     _fetchAudios();
 
@@ -82,58 +82,114 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     widget.introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        introductionAudioDuration = duration.inSeconds;
-      });
+      if(mounted){
+        setState(() {
+          introductionAudioDuration = duration.inSeconds;
+        });
+      }
     });
     widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        introductionTimeProgress = position.inSeconds;
-      });
+      if(mounted){
+        setState(() {
+          introductionTimeProgress = position.inSeconds;
+        });
+      }
     });
 
     _fullAudioAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     fullAudioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        fullAudioDuration = duration.inSeconds;
-      });
+     if(mounted){
+       setState(() {
+         fullAudioDuration = duration.inSeconds;
+       });
+     }
     });
     widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        introductionTimeProgress = position.inSeconds;
-      });
+     if(mounted){
+       setState(() {
+         introductionTimeProgress = position.inSeconds;
+       });
+     }
     });
     fullAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        fullTimeProgress = position.inSeconds;
-      });
+      if(mounted){
+        setState(() {
+          fullTimeProgress = position.inSeconds;
+        });
+      }
     });
 
 
     widget.introductionAudioPlayer.onPlayerStateChanged.listen((  state) async {
 
       if(widget.introductionAudioPlayer.state  == PlayerState.PAUSED){
-        setState(() {
-          isPlaying = false;
-          _animationController.reverse();
-        });
+       if(mounted){
+         setState(() {
+           isPlaying = false;
+           _animationController.reverse();
+         });
+       }
       }
     });
 
     fullAudioPlayer.onPlayerStateChanged.listen((  state) async {
 
       if(fullAudioPlayer.state  == PlayerState.PAUSED){
-        setState(() {
-          isFullAudioPlaying = false;
-          _fullAudioAnimationController.reverse();
-        });
+       if(mounted){
+         setState(() {
+           isFullAudioPlaying = false;
+           _fullAudioAnimationController.reverse();
+         });
+       }
       }
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      pauseFullAudio();
+      pauseIntroduction();
+//      if (isPlaying) {
+//        pauseFullAudio();
+//
+//        isPlaying = true;
+//      }
+//      if (isFullAudioPlaying) {
+//        pauseIntroduction();
+//
+//        isFullAudioPlaying = true;
+//      }
+
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+//      if (isPlaying) {
+//        resumeIntro();
+//        if (mounted) {
+//          setState(() {
+//            isPlaying = true;
+//          });
+//        }
+//      }
+//      if (isFullAudioPlaying) {
+//        resumeFull();
+//        if (mounted) {
+//          setState(() {
+//            isFullAudioPlaying = true;
+//          });
+//        }
+//      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -148,6 +204,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       bloc: _bloc,
       listener: (context, state) {
         if (state is AudiosLoaded) {
+        if(mounted){
           setState(() {
             log('audios fully loaded');
             isPlaying = false;
@@ -156,6 +213,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
             introductionAudioUrl = state.introAudio.file.url;
             fullAudioUrl = state.fullAudio.file.url;
           });
+        }
         }
       },
       child: screenUi(),
@@ -227,14 +285,16 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedIndex = index;
-                                _animateToIndex(index);
-                                _getContent();
-                                _animationController.reverse();
-                                _fullAudioAnimationController.reverse();
-                                _fetchAudios();
-                              });
+                             if(mounted){
+                               setState(() {
+                                 selectedIndex = index;
+                                 _animateToIndex(index);
+                                 _getContent();
+                                 _animationController.reverse();
+                                 _fullAudioAnimationController.reverse();
+                                 _fetchAudios();
+                               });
+                             }
                             },
                             child: BroadcastCard(
                               isSelected: selectedIndex == index,
@@ -557,6 +617,17 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         Bidi.stripHtmlIfNeeded('${displayedNewsCast.description}');
   }
 
+  resumeIntro() async {
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await widget.introductionAudioPlayer.setUrl(introductionAudioUrl);
+    widget.introductionAudioPlayer.resume();
+  }
+  resumeFull() async {
+    await fullAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await fullAudioPlayer.setUrl(fullAudioUrl);
+    fullAudioPlayer.resume();
+  }
+
   /// Compulsory
   playIntroduction() async {
     await widget.introductionAudioPlayer.setUrl(
@@ -568,7 +639,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     }
     widget.introductionAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+      if(mounted){
+        setState(() => {print(d)});
+      }
     });
   }
 
@@ -582,7 +655,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     }
     fullAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+     if(mounted){
+       setState(() => {print(d)});
+     }
     });
   }
 
@@ -613,42 +688,65 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   /// Compulsory
   @override
   void dispose() {
-//    widget.introductionAudioPlayer.release();
-//    widget.introductionAudioPlayer.dispose();
+    widget.introductionAudioPlayer.stop();
     fullAudioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
 
   void _handleOnIntoPressed() {
-    setState(() {
-      isPlaying = !isPlaying;
-      if (isPlaying) {
-        _animationController.forward();
-        _fullAudioAnimationController.reverse();
-        pauseFullAudio();
-        playIntroduction();
-      } else {
-        _animationController.reverse();
-        pauseIntroduction();
-      }
-    });
+   if(mounted){
+     setState(() {
+       isPlaying = !isPlaying;
+       if(isPlaying) {
+         _animationController.forward();
+         _fullAudioAnimationController.reverse();
+       }
+       else {
+         _animationController.reverse();
+       }
+
+       if (introductionTimeProgress != 0 && isPlaying) {
+         pauseFullAudio();
+         resumeIntro();
+       } else if (isPlaying) {
+         pauseFullAudio();
+         playIntroduction();
+       } else {
+         pauseIntroduction();
+       }
+     });
+   }
+
+
   }
 
   void _handleOnFullAudioPressed() {
-    setState(() {
-      isFullAudioPlaying = !isFullAudioPlaying;
+    if(mounted){
+      setState(() {
 
-      if (isFullAudioPlaying) {
-        _fullAudioAnimationController.forward();
-        _animationController.reverse();
-        pauseIntroduction();
-        playFullAudio();
-      } else {
-        _fullAudioAnimationController.reverse();
-        pauseFullAudio();
-      }
-    });
+        isFullAudioPlaying = !isFullAudioPlaying;
+        if(isFullAudioPlaying) {
+          _fullAudioAnimationController.forward();
+          _animationController.reverse();
+        }
+        else {
+          _fullAudioAnimationController.reverse();
+        }
+
+        if (fullTimeProgress != 0 && isFullAudioPlaying) {
+          pauseIntroduction();
+          resumeFull();
+        } else if (isFullAudioPlaying) {
+          pauseIntroduction();
+          playFullAudio();
+        } else {
+          pauseFullAudio();
+        }
+      });
+    }
+
+
   }
 
   _fetchAudios() {

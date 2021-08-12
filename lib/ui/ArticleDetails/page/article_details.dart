@@ -70,6 +70,17 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
         });
       }
     });
+
+    audioPlayer.onPlayerStateChanged.listen((state) async {
+      if (audioPlayer.state == PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
+      }
+    });
   }
 
   resume() async {
