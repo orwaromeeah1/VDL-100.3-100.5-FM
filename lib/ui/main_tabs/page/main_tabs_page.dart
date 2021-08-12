@@ -59,13 +59,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
           audioPlayer.pause();
           widget.introductionAudioPlayer.pause();
         },
-        onPressed: (context) {
-          _controller.index = 0;
-          setState(() {
-            audioPlayer.pause();
-            widget.introductionAudioPlayer.pause();
-          });
-        },
+
         icon: Icon(Icons.home_rounded),
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
@@ -74,13 +68,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
-        onPressed: (context) {
-          _controller.index = 1;
-          setState(() {
-            audioPlayer.pause();
-            widget.introductionAudioPlayer.pause();
-          });
-        },
+
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.grid_view_rounded),
@@ -89,17 +77,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
-        onPressed: (context) {
-          _controller.index = 2;
-          setState(() {
-            audioPlayer.pause();
-            widget.introductionAudioPlayer.pause();
-          });
-        },
-        onSelectedTabPressWhenNoScreensPushed: () {
-          audioPlayer.pause();
-          widget.introductionAudioPlayer.pause();
-        },
+
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.podcasts),
@@ -108,13 +86,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
-        onPressed: (context) {
-          _controller.index = 3;
-          setState(() {
-            audioPlayer.pause();
-            widget.introductionAudioPlayer.pause();
-          });
-        },
+
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(
@@ -125,13 +97,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
-        onPressed: (context) {
-          _controller.index = 4;
-          setState(() {
-            audioPlayer.pause();
-            widget.introductionAudioPlayer.pause();
-          });
-        },
+
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Ionicons.md_menu),
@@ -147,6 +113,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
     return Scaffold(
       body: PersistentTabView(
         context,
+        onItemSelected: (index){
+          setState(() {
+            audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
+          });
+        },
         controller: _controller,
         screens: widget._pages,
         items: _navBarsItems(),
