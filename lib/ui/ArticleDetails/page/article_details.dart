@@ -31,7 +31,7 @@ class ArticleDetailsPage extends StatefulWidget {
 }
 
 class _ArticleDetailsPageState extends State<ArticleDetailsPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   AnimationController _animationController;
   bool isPlaying = false;
   final _bloc = locator<ArticleDetailsBloc>();
@@ -51,19 +51,24 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _bloc.add(FetchArticleDetails(widget.id));
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     audioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        audioDuration = duration.inSeconds;
-      });
+      if (mounted) {
+        setState(() {
+          audioDuration = duration.inSeconds;
+        });
+      }
     });
     audioPlayer.onAudioPositionChanged.listen((Duration position) async {
-      setState(() {
-        timeProgress = position.inSeconds;
-      });
+      if (mounted) {
+        setState(() {
+          timeProgress = position.inSeconds;
+        });
+      }
     });
   }
 
@@ -78,7 +83,11 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     }
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+      if (mounted) {
+        setState(() {
+          setState(() => {print(d)});
+        });
+      }
     });
   }
 
@@ -101,26 +110,36 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   /// Compulsory
   @override
   void dispose() {
-//    banner?.dispose();
-    audioPlayer.release();
-    audioPlayer.dispose();
+    audioPlayer.stop();
+    _bloc.close();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    final adState = locator<AdState>();
-//    adState.initialization.then((value) {
-//      setState(() {
-//        banner = BannerAd(
-//            adUnitId: adState.bannerAdUnitId,
-//            size: AdSize.mediumRectangle,
-//            request: AdRequest(),
-//            listener: adState.adListener)
-//          ..load();
-//      });
-//    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      if (isPlaying) {
+        pauseMusic();
+
+        isPlaying = true;
+      }
+
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+      if (isPlaying) {
+        audioPlayer.resume();
+        if (mounted) {
+          setState(() {
+            isPlaying = true;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -552,7 +571,13 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       isPlaying
           ? _animationController.forward()
           : _animationController.reverse();
-      isPlaying ? playMusic() : pauseMusic();
+      if (timeProgress != 0 && isPlaying) {
+        audioPlayer.resume();
+      } else if (isPlaying) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
     });
   }
 }

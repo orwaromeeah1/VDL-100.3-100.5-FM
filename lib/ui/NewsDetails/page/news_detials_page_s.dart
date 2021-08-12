@@ -1,8 +1,7 @@
-import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart' as Player;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
   String tag;
+
   final bool isSpecial;
   NewsPageDetails(
       {Key key, @required this.newsId, this.tag, @required this.isSpecial})
@@ -40,12 +40,12 @@ class NewsPageDetails extends StatefulWidget {
 }
 
 class _NewsPageDetailsState extends State<NewsPageDetails>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final _bloc = locator<NewsDetailsBloc>();
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
+  AudioPlayer audioPlayer = locator<AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -58,7 +58,30 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   /// Optional
   int timeProgress = 0;
   int audioDuration = 0;
+
   //
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      if (isPlaying) {
+        pauseMusic();
+
+        isPlaying = true;
+      }
+
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+      if (isPlaying) {
+        audioPlayer.resume();
+        if (mounted) {
+          setState(() {
+            isPlaying = true;
+          });
+        }
+      }
+    }
+  }
 
   final _adController = NativeAdmobController();
 
@@ -75,33 +98,35 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void initState() {
     super.initState();
-
+    audioPlayer.stop();
+    WidgetsBinding.instance.addObserver(this);
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
-
+    WidgetsBinding.instance.addObserver(this);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
 
     // Triggers the onDurationChanged listener and sets the max duration string
     audioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        audioDuration = duration.inSeconds;
-      });
+      if (mounted) {
+        setState(() {
+          audioDuration = duration.inSeconds;
+        });
+      }
     });
 
     audioPlayer.onAudioPositionChanged.listen((Duration position) async {
-      setState(() {
-        timeProgress = position.inSeconds;
-      });
+      if (mounted) {
+        setState(() {
+          timeProgress = position.inSeconds;
+        });
+      }
     });
 
-
-    audioPlayer.onPlayerStateChanged.listen((  state) async {
-
-      if(audioPlayer.state  == Player.PlayerState.PAUSED){
-         setState(() {
-           isPlaying = false;
-            _animationController.reverse();
-         });
+    audioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          isPlaying = false;
+        });
       }
     });
   }
@@ -109,11 +134,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   /// Compulsory
   @override
   void dispose() {
-//    banner?.dispose();
-    if(_youtubeController!=null){
-      _youtubeController.close();
-    }
-    audioPlayer.pause();
+    audioPlayer.stop();
     _bloc.close();
     super.dispose();
   }
@@ -122,14 +143,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
     }
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+      if (mounted) {
+        setState(() => {print(d)});
+      }
     });
   }
 
@@ -228,6 +251,9 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: 15,
+                        ),
                         !audioLoaded
                             ? Container()
                             // : Padding(
@@ -559,7 +585,13 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       isPlaying
           ? _animationController.forward()
           : _animationController.reverse();
-      isPlaying ? playMusic() : pauseMusic();
+      if (timeProgress != 0 && isPlaying) {
+        audioPlayer.resume();
+      } else if (isPlaying) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
     });
   }
 }
