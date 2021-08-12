@@ -72,6 +72,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     });
   }
 
+  resume() async {
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setUrl(audioUrl);
+    audioPlayer.resume();
+  }
+
   /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
@@ -132,7 +138,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       //stop your audio player
     } else if (state == AppLifecycleState.resumed) {
       if (isPlaying) {
-        audioPlayer.resume();
+        resume();
         if (mounted) {
           setState(() {
             isPlaying = true;
@@ -572,7 +578,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
           ? _animationController.forward()
           : _animationController.reverse();
       if (timeProgress != 0 && isPlaying) {
-        audioPlayer.resume();
+        resume();
       } else if (isPlaying) {
         playMusic();
       } else {

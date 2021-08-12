@@ -51,7 +51,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   String audioUrl = "";
 //  BannerAd banner;
   String youtubeUrl = "";
-
 ////YoutubePlayer
   YoutubePlayerController _youtubeController;
 
@@ -66,14 +65,12 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     if (state == AppLifecycleState.inactive) {
       if (isPlaying) {
         pauseMusic();
-
         isPlaying = true;
       }
-
       //stop your audio player
     } else if (state == AppLifecycleState.resumed) {
       if (isPlaying) {
-        audioPlayer.resume();
+        resume();
         if (mounted) {
           setState(() {
             isPlaying = true;
@@ -159,6 +156,12 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   /// Compulsory
   pauseMusic() async {
     int result = await audioPlayer.pause();
+  }
+
+  resume() async {
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setUrl(audioUrl);
+    audioPlayer.resume();
   }
 
   stopMusic() async {
@@ -586,7 +589,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
           ? _animationController.forward()
           : _animationController.reverse();
       if (timeProgress != 0 && isPlaying) {
-        audioPlayer.resume();
+        resume();
       } else if (isPlaying) {
         playMusic();
       } else {

@@ -66,7 +66,6 @@ class _EpisodePageState extends State<EpisodePage>
     _bloc.add(FetchEpisode(episodeId: widget.episodeId));
     super.initState();
     episodes = widget.program.episodes;
-
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
@@ -108,7 +107,7 @@ class _EpisodePageState extends State<EpisodePage>
       //stop your audio player
     } else if (state == AppLifecycleState.resumed) {
       if (isPlaying) {
-        audioPlayer.resume();
+        resume();
         if (mounted) {
           setState(() {
             isPlaying = true;
@@ -485,6 +484,12 @@ class _EpisodePageState extends State<EpisodePage>
     );
   }
 
+  resume() async {
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
+    await audioPlayer.setUrl(audioUrl);
+    audioPlayer.resume();
+  }
+
   /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
@@ -538,7 +543,7 @@ class _EpisodePageState extends State<EpisodePage>
           ? _animationController.forward()
           : _animationController.reverse();
       if (timeProgress != 0 && isPlaying) {
-        audioPlayer.resume();
+        resume();
       } else if (isPlaying) {
         playMusic();
       } else {
