@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +19,29 @@ import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MainTabsPage extends StatefulWidget {
+
+  AudioPlayer introductionAudioPlayer =new AudioPlayer();
+  MenuPage menuPage;
+  List<Widget> _pages;
+
+  MainTabsPage(){
+    menuPage = new MenuPage(introductionAudioPlayer);
+    _pages = [
+      NewsPage(),
+      ProgramsPage(),
+      LiveBroadcastPage(),
+      ProgramsSchedulePage(),
+      menuPage,
+      // see the SettingsPage class
+    ];
+  }
   @override
   _MainTabsPageState createState() => _MainTabsPageState();
 }
 
 class _MainTabsPageState extends State<MainTabsPage> {
-  List<Widget> _pages = [
-    NewsPage(),
-    ProgramsPage(),
-    LiveBroadcastPage(),
-    ProgramsSchedulePage(),
-    MenuPage(),
-    // see the SettingsPage class
-  ];
+
+
   AudioPlayer audioPlayer = locator<AudioPlayer>();
 
   /// Compulsory
@@ -45,11 +57,13 @@ class _MainTabsPageState extends State<MainTabsPage> {
         onSelectedTabPressWhenNoScreensPushed: () {
           locator<NewsBloc>().add(MoveToTop());
           audioPlayer.pause();
+          widget.introductionAudioPlayer.pause();
         },
         onPressed: (context) {
           _controller.index = 0;
           setState(() {
             audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
           });
         },
         icon: Icon(Icons.home_rounded),
@@ -64,6 +78,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
           _controller.index = 1;
           setState(() {
             audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
           });
         },
         iconSize: 27,
@@ -78,10 +93,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
           _controller.index = 2;
           setState(() {
             audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
           });
         },
         onSelectedTabPressWhenNoScreensPushed: () {
           audioPlayer.pause();
+          widget.introductionAudioPlayer.pause();
         },
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
@@ -95,6 +112,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
           _controller.index = 3;
           setState(() {
             audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
           });
         },
         iconSize: 27,
@@ -111,6 +129,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
           _controller.index = 4;
           setState(() {
             audioPlayer.pause();
+            widget.introductionAudioPlayer.pause();
           });
         },
         iconSize: 27,
@@ -129,7 +148,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
       body: PersistentTabView(
         context,
         controller: _controller,
-        screens: _pages,
+        screens: widget._pages,
         items: _navBarsItems(),
         navBarHeight: 70,
         confineInSafeArea: true,
@@ -162,5 +181,12 @@ class _MainTabsPageState extends State<MainTabsPage> {
                 topRight: Radius.circular(35), topLeft: Radius.circular(35))),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.introductionAudioPlayer.release();
+    widget.introductionAudioPlayer.dispose();
+    super.dispose();
   }
 }

@@ -24,12 +24,15 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
   final NewsCastResponse newsCast;
   final int timeSlutIndex;
   final List<String> broadcasts;
+  final AudioPlayer introductionAudioPlayer;
 
   NewsBroadcastDetailsPage({
     @required this.newsCast,
     @required this.timeSlutIndex,
     @required this.broadcasts,
-  }) : assert(newsCast != null && timeSlutIndex != null && broadcasts != null);
+    @required this.introductionAudioPlayer,
+  }) : assert(newsCast != null && timeSlutIndex != null
+      && broadcasts != null && introductionAudioPlayer !=null);
 
   @override
   _NewsBroadcastDetailsPageState createState() =>
@@ -37,7 +40,7 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
 }
 
 class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   int selectedIndex = 0;
   final _controller = ScrollController();
@@ -51,7 +54,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   bool isPlaying = false;
   bool isFullAudioPlaying = false;
   Duration duration;
-  AudioPlayer introductionAudioPlayer =new AudioPlayer();
+//  AudioPlayer introductionAudioPlayer =new AudioPlayer();
   AudioPlayer fullAudioPlayer = locator<AudioPlayer>();
 
   bool audiosLoaded = false;
@@ -71,57 +74,122 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   void initState() {
     selectedIndex = widget.timeSlutIndex;
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     _getContent();
     _fetchAudios();
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
-    introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        introductionAudioDuration = duration.inSeconds;
-      });
+    widget.introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
+      if(mounted){
+        setState(() {
+          introductionAudioDuration = duration.inSeconds;
+        });
+      }
     });
-    introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        introductionTimeProgress = position.inSeconds;
-      });
+      if(mounted){
+        setState(() {
+          introductionTimeProgress = position.inSeconds;
+        });
+      }
     });
 
     _fullAudioAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     fullAudioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        fullAudioDuration = duration.inSeconds;
-      });
+     if(mounted){
+       setState(() {
+         fullAudioDuration = duration.inSeconds;
+       });
+     }
     });
-    introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        introductionTimeProgress = position.inSeconds;
-      });
+     if(mounted){
+       setState(() {
+         introductionTimeProgress = position.inSeconds;
+       });
+     }
     });
     fullAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      setState(() {
-        fullTimeProgress = position.inSeconds;
-      });
+      if(mounted){
+        setState(() {
+          fullTimeProgress = position.inSeconds;
+        });
+      }
     });
 
 
+    widget.introductionAudioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(widget.introductionAudioPlayer.state  == PlayerState.PAUSED){
+       if(mounted){
+         setState(() {
+           isPlaying = false;
+           _animationController.reverse();
+         });
+       }
+      }
+    });
 
     fullAudioPlayer.onPlayerStateChanged.listen((  state) async {
 
       if(fullAudioPlayer.state  == PlayerState.PAUSED){
-        setState(() {
-          isFullAudioPlaying = false;
-          _fullAudioAnimationController.reverse();
-        });
+       if(mounted){
+         setState(() {
+           isFullAudioPlaying = false;
+           _fullAudioAnimationController.reverse();
+         });
+       }
       }
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      pauseFullAudio();
+      pauseIntroduction();
+//      if (isPlaying) {
+//        pauseFullAudio();
+//
+//        isPlaying = true;
+//      }
+//      if (isFullAudioPlaying) {
+//        pauseIntroduction();
+//
+//        isFullAudioPlaying = true;
+//      }
+
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+//      if (isPlaying) {
+//        resumeIntro();
+//        if (mounted) {
+//          setState(() {
+//            isPlaying = true;
+//          });
+//        }
+//      }
+//      if (isFullAudioPlaying) {
+//        resumeFull();
+//        if (mounted) {
+//          setState(() {
+//            isFullAudioPlaying = true;
+//          });
+//        }
+//      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -136,6 +204,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       bloc: _bloc,
       listener: (context, state) {
         if (state is AudiosLoaded) {
+        if(mounted){
           setState(() {
             log('audios fully loaded');
             isPlaying = false;
@@ -144,6 +213,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
             introductionAudioUrl = state.introAudio.file.url;
             fullAudioUrl = state.fullAudio.file.url;
           });
+        }
         }
       },
       child: screenUi(),
@@ -215,14 +285,16 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedIndex = index;
-                                _animateToIndex(index);
-                                _getContent();
-                                _animationController.reverse();
-                                _fullAudioAnimationController.reverse();
-                                _fetchAudios();
-                              });
+                             if(mounted){
+                               setState(() {
+                                 selectedIndex = index;
+                                 _animateToIndex(index);
+                                 _getContent();
+                                 _animationController.reverse();
+                                 _fullAudioAnimationController.reverse();
+                                 _fetchAudios();
+                               });
+                             }
                             },
                             child: BroadcastCard(
                               isSelected: selectedIndex == index,
@@ -336,7 +408,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                       onSeek: (duration) {
                                                         if (introductionAudioDuration !=
                                                             0) {
-                                                          introductionAudioPlayer
+                                                          widget.introductionAudioPlayer
                                                               .seek(duration);
                                                         }
                                                       },
@@ -545,18 +617,31 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         Bidi.stripHtmlIfNeeded('${displayedNewsCast.description}');
   }
 
+  resumeIntro() async {
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await widget.introductionAudioPlayer.setUrl(introductionAudioUrl);
+    widget.introductionAudioPlayer.resume();
+  }
+  resumeFull() async {
+    await fullAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await fullAudioPlayer.setUrl(fullAudioUrl);
+    fullAudioPlayer.resume();
+  }
+
   /// Compulsory
   playIntroduction() async {
-    await introductionAudioPlayer.setUrl(
+    await widget.introductionAudioPlayer.setUrl(
         introductionAudioUrl); // prepare the player with this audio but do not start playing
-    await introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result = await introductionAudioPlayer.play(introductionAudioUrl);
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    int result = await widget.introductionAudioPlayer.play(introductionAudioUrl);
     if (result == 1) {
       // success
     }
-    introductionAudioPlayer.onDurationChanged.listen((Duration d) {
+    widget.introductionAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+      if(mounted){
+        setState(() => {print(d)});
+      }
     });
   }
 
@@ -570,17 +655,19 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     }
     fullAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+     if(mounted){
+       setState(() => {print(d)});
+     }
     });
   }
 
   /// Compulsory
   pauseIntroduction() async {
-    int result = await introductionAudioPlayer.pause();
+    int result = await widget.introductionAudioPlayer.pause();
   }
 
   stopIntroduction() async {
-    int result = await introductionAudioPlayer.stop();
+    int result = await widget.introductionAudioPlayer.stop();
   }
 
   pauseFullAudio() async {
@@ -601,42 +688,65 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   /// Compulsory
   @override
   void dispose() {
-    introductionAudioPlayer.release();
-    introductionAudioPlayer.dispose();
+    widget.introductionAudioPlayer.stop();
     fullAudioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
 
   void _handleOnIntoPressed() {
-    setState(() {
-      isPlaying = !isPlaying;
-      if (isPlaying) {
-        _animationController.forward();
-        _fullAudioAnimationController.reverse();
-        pauseFullAudio();
-        playIntroduction();
-      } else {
-        _animationController.reverse();
-        pauseIntroduction();
-      }
-    });
+   if(mounted){
+     setState(() {
+       isPlaying = !isPlaying;
+       if(isPlaying) {
+         _animationController.forward();
+         _fullAudioAnimationController.reverse();
+       }
+       else {
+         _animationController.reverse();
+       }
+
+       if (introductionTimeProgress != 0 && isPlaying) {
+         pauseFullAudio();
+         resumeIntro();
+       } else if (isPlaying) {
+         pauseFullAudio();
+         playIntroduction();
+       } else {
+         pauseIntroduction();
+       }
+     });
+   }
+
+
   }
 
   void _handleOnFullAudioPressed() {
-    setState(() {
-      isFullAudioPlaying = !isFullAudioPlaying;
+    if(mounted){
+      setState(() {
 
-      if (isFullAudioPlaying) {
-        _fullAudioAnimationController.forward();
-        _animationController.reverse();
-        pauseIntroduction();
-        playFullAudio();
-      } else {
-        _fullAudioAnimationController.reverse();
-        pauseFullAudio();
-      }
-    });
+        isFullAudioPlaying = !isFullAudioPlaying;
+        if(isFullAudioPlaying) {
+          _fullAudioAnimationController.forward();
+          _animationController.reverse();
+        }
+        else {
+          _fullAudioAnimationController.reverse();
+        }
+
+        if (fullTimeProgress != 0 && isFullAudioPlaying) {
+          pauseIntroduction();
+          resumeFull();
+        } else if (isFullAudioPlaying) {
+          pauseIntroduction();
+          playFullAudio();
+        } else {
+          pauseFullAudio();
+        }
+      });
+    }
+
+
   }
 
   _fetchAudios() {

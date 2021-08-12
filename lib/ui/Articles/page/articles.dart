@@ -26,7 +26,6 @@ class _ArticlesPageState extends State<ArticlesPage> {
   int page = 1;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bloc.add(FetchArticlesPage(1));
   }
