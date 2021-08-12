@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _EpisodePageState extends State<EpisodePage>
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  AudioPlayer audioPlayer = AudioPlayer();
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   String audioUrl = "";
   List<Episodes> episodes = [];
@@ -78,6 +78,16 @@ class _EpisodePageState extends State<EpisodePage>
       setState(() {
         timeProgress = position.inSeconds;
       });
+    });
+
+    audioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(audioPlayer.state  == Player.PlayerState.PAUSED){
+        setState(() {
+          isPlaying = false;
+          _animationController.reverse();
+        });
+      }
     });
   }
 
@@ -452,7 +462,7 @@ class _EpisodePageState extends State<EpisodePage>
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
@@ -482,9 +492,10 @@ class _EpisodePageState extends State<EpisodePage>
   /// Compulsory
   @override
   void dispose() {
-    audioPlayer.release();
-    audioPlayer.dispose();
-    _youtubeController.close();
+    if(_youtubeController!=null){
+      _youtubeController.close();
+    }
+    audioPlayer.pause();
     _bloc.close();
     super.dispose();
   }

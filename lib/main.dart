@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'injection.dart';
 
@@ -44,3 +45,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+

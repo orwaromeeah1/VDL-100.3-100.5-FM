@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' ;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,8 +51,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   bool isPlaying = false;
   bool isFullAudioPlaying = false;
   Duration duration;
-  AudioPlayer introductionAudioPlayer = AudioPlayer();
-  AudioPlayer fullAudioPlayer = AudioPlayer();
+  AudioPlayer introductionAudioPlayer =new AudioPlayer();
+  AudioPlayer fullAudioPlayer = locator<AudioPlayer>();
 
   bool audiosLoaded = false;
 
@@ -101,8 +101,26 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
       setState(() {
+        introductionTimeProgress = position.inSeconds;
+      });
+    });
+    fullAudioPlayer.onAudioPositionChanged
+        .listen((Duration position) async {
+      setState(() {
         fullTimeProgress = position.inSeconds;
       });
+    });
+
+
+
+    fullAudioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(fullAudioPlayer.state  == PlayerState.PAUSED){
+        setState(() {
+          isFullAudioPlaying = false;
+          _fullAudioAnimationController.reverse();
+        });
+      }
     });
   }
 
@@ -403,11 +421,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                Icon(
-                                                  Icons.keyboard_voice,
-                                                  color:
-                                                      ProjectColors.ThemeColor,
-                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/recording.svg'),
                                                 Text(
                                                   getTimeString(
                                                       fullAudioDuration -
@@ -588,6 +603,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   void dispose() {
     introductionAudioPlayer.release();
     introductionAudioPlayer.dispose();
+    fullAudioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
