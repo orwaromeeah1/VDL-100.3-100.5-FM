@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -13,6 +14,11 @@ import 'package:vdl/ui/programs/page/historical_programs/historical_programs_pag
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MenuPage extends StatefulWidget {
+   AudioPlayer introductionAudioPlayer;
+
+  MenuPage(AudioPlayer introductionAudioPlayer){
+    this.introductionAudioPlayer = introductionAudioPlayer;
+  }
   @override
   _MenuPageState createState() => _MenuPageState();
 }
@@ -65,7 +71,7 @@ class _MenuPageState extends State<MenuPage> {
                 onClick: () {
                   pushNewScreen(
                     context,
-                    screen: NewsBroadcastsPage(),
+                    screen: NewsBroadcastsPage(widget.introductionAudioPlayer),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );

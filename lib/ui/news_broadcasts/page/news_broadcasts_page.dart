@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vdl/data/models/days_news_broadcasts_model.dart';
@@ -15,6 +16,8 @@ import '../../../injection.dart';
 
 
 class NewsBroadcastsPage extends StatefulWidget {
+  AudioPlayer introductionAudioPlayer;
+  NewsBroadcastsPage(this.introductionAudioPlayer);
   @override
   _NewsBroadcastsPageState createState() => _NewsBroadcastsPageState();
 }
@@ -172,6 +175,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                                       broadcasts: newsCasts[index].timeSlots,
                                       date: newsCasts[index].slug,
                                       newsCast: newsCasts[index],
+                                      introductionAudioPlayer: widget.introductionAudioPlayer,
                                     )
                                 )
                             ),

@@ -24,12 +24,15 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
   final NewsCastResponse newsCast;
   final int timeSlutIndex;
   final List<String> broadcasts;
+  final AudioPlayer introductionAudioPlayer;
 
   NewsBroadcastDetailsPage({
     @required this.newsCast,
     @required this.timeSlutIndex,
     @required this.broadcasts,
-  }) : assert(newsCast != null && timeSlutIndex != null && broadcasts != null);
+    @required this.introductionAudioPlayer,
+  }) : assert(newsCast != null && timeSlutIndex != null
+      && broadcasts != null && introductionAudioPlayer !=null);
 
   @override
   _NewsBroadcastDetailsPageState createState() =>
@@ -51,7 +54,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   bool isPlaying = false;
   bool isFullAudioPlaying = false;
   Duration duration;
-  AudioPlayer introductionAudioPlayer =new AudioPlayer();
+//  AudioPlayer introductionAudioPlayer =new AudioPlayer();
   AudioPlayer fullAudioPlayer = locator<AudioPlayer>();
 
   bool audiosLoaded = false;
@@ -78,12 +81,12 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
-    introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
+    widget.introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
       setState(() {
         introductionAudioDuration = duration.inSeconds;
       });
     });
-    introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
       setState(() {
         introductionTimeProgress = position.inSeconds;
@@ -98,7 +101,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         fullAudioDuration = duration.inSeconds;
       });
     });
-    introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
       setState(() {
         introductionTimeProgress = position.inSeconds;
@@ -112,6 +115,15 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     });
 
 
+    widget.introductionAudioPlayer.onPlayerStateChanged.listen((  state) async {
+
+      if(widget.introductionAudioPlayer.state  == PlayerState.PAUSED){
+        setState(() {
+          isPlaying = false;
+          _animationController.reverse();
+        });
+      }
+    });
 
     fullAudioPlayer.onPlayerStateChanged.listen((  state) async {
 
@@ -336,7 +348,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                                       onSeek: (duration) {
                                                         if (introductionAudioDuration !=
                                                             0) {
-                                                          introductionAudioPlayer
+                                                          widget.introductionAudioPlayer
                                                               .seek(duration);
                                                         }
                                                       },
@@ -547,14 +559,14 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
 
   /// Compulsory
   playIntroduction() async {
-    await introductionAudioPlayer.setUrl(
+    await widget.introductionAudioPlayer.setUrl(
         introductionAudioUrl); // prepare the player with this audio but do not start playing
-    await introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result = await introductionAudioPlayer.play(introductionAudioUrl);
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
+    int result = await widget.introductionAudioPlayer.play(introductionAudioUrl);
     if (result == 1) {
       // success
     }
-    introductionAudioPlayer.onDurationChanged.listen((Duration d) {
+    widget.introductionAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       setState(() => {print(d)});
     });
@@ -576,11 +588,11 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
 
   /// Compulsory
   pauseIntroduction() async {
-    int result = await introductionAudioPlayer.pause();
+    int result = await widget.introductionAudioPlayer.pause();
   }
 
   stopIntroduction() async {
-    int result = await introductionAudioPlayer.stop();
+    int result = await widget.introductionAudioPlayer.stop();
   }
 
   pauseFullAudio() async {
@@ -601,8 +613,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   /// Compulsory
   @override
   void dispose() {
-    introductionAudioPlayer.release();
-    introductionAudioPlayer.dispose();
+//    widget.introductionAudioPlayer.release();
+//    widget.introductionAudioPlayer.dispose();
     fullAudioPlayer.pause();
     _bloc.close();
     super.dispose();

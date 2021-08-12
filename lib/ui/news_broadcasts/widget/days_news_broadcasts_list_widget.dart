@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,11 +13,13 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
   final List<String> broadcasts;
   final String date;
   final NewsCastResponse newsCast;
+  final AudioPlayer introductionAudioPlayer;
 
   DaysNewsBroadcastsWidget({
     this.broadcasts,
     this.date,
     this.newsCast,
+    this.introductionAudioPlayer,
 });
 
   @override
@@ -38,6 +41,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                    newsCast:newsCast,
                    timeSlutIndex: index,
                    broadcasts: getTimesSluts(broadcasts),
+                   introductionAudioPlayer: introductionAudioPlayer,
                  )
              )
           )
