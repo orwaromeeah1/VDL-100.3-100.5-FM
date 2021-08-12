@@ -38,7 +38,7 @@ class EpisodePage extends StatefulWidget {
 }
 
 class _EpisodePageState extends State<EpisodePage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   final _bloc = locator<EpisodeBloc>();
   EpisodeResponse episode = new EpisodeResponse();
@@ -62,6 +62,7 @@ class _EpisodePageState extends State<EpisodePage>
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     _bloc.add(FetchEpisode(episodeId: widget.episodeId));
     super.initState();
     episodes = widget.program.episodes;
@@ -70,25 +71,51 @@ class _EpisodePageState extends State<EpisodePage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     audioPlayer.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        audioDuration = duration.inSeconds;
-      });
-    });
-    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
-      setState(() {
-        timeProgress = position.inSeconds;
-      });
-    });
-
-    audioPlayer.onPlayerStateChanged.listen((  state) async {
-
-      if(audioPlayer.state  == Player.PlayerState.PAUSED){
+      if (mounted) {
         setState(() {
-          isPlaying = false;
-          _animationController.reverse();
+          audioDuration = duration.inSeconds;
         });
       }
     });
+    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+      if (mounted) {
+        setState(() {
+          timeProgress = position.inSeconds;
+        });
+      }
+    });
+
+    audioPlayer.onPlayerStateChanged.listen((state) async {
+      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      if (isPlaying) {
+        pauseMusic();
+        isPlaying = true;
+      }
+
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+      if (isPlaying) {
+        audioPlayer.resume();
+        if (mounted) {
+          setState(() {
+            isPlaying = true;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -492,7 +519,7 @@ class _EpisodePageState extends State<EpisodePage>
   /// Compulsory
   @override
   void dispose() {
-    if(_youtubeController!=null){
+    if (_youtubeController != null) {
       _youtubeController.close();
     }
     audioPlayer.pause();
@@ -510,7 +537,13 @@ class _EpisodePageState extends State<EpisodePage>
       isPlaying
           ? _animationController.forward()
           : _animationController.reverse();
-      isPlaying ? playMusic() : pauseMusic();
+      if (timeProgress != 0 && isPlaying) {
+        audioPlayer.resume();
+      } else if (isPlaying) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
     });
   }
 
