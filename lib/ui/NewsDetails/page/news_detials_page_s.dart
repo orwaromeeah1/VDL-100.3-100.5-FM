@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
-  AudioPlayer audioPlayer = locator<AudioPlayer>();
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
@@ -119,6 +119,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       }
     });
 
+    audioPlayer.onPlayerStateChanged.listen((state) async {
+      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
+      }
+    });
+
     audioPlayer.onPlayerCompletion.listen((event) {
       if (mounted) {
         setState(() {
@@ -140,7 +151,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
@@ -159,7 +170,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   }
 
   resume() async {
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     await audioPlayer.setUrl(audioUrl);
     audioPlayer.resume();
   }
