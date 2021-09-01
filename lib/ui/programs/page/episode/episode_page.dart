@@ -136,6 +136,7 @@ class _EpisodePageState extends State<EpisodePage>
           if (state is EpisodeLoaded) {
             episode = state.episode;
             containsVideo = (episode.video != "");
+
             if (containsVideo) {
               _youtubeController = YoutubePlayerController(
                 initialVideoId: _getYoutubeId(episode.video),
@@ -553,6 +554,10 @@ class _EpisodePageState extends State<EpisodePage>
   }
 
   String _getYoutubeId(String link) {
-    return link.substring(link.indexOf('=') + 1).trim();
+    if (link.contains('&')) {
+      return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
+    } else {
+      return link.substring(link.indexOf('=') + 1).trim();
+    }
   }
 }

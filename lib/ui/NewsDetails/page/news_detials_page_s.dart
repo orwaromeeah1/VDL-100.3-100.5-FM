@@ -211,11 +211,19 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                 if (state.newsModel.youtube != null) {
                   setState(() {
                     viewYoutube = true;
+                    var youtubeid = "";
+                    if (state.newsModel.youtube.contains('&')) {
+                      youtubeid = state.newsModel.youtube.substring(
+                          state.newsModel.youtube.indexOf('=') + 1,
+                          state.newsModel.youtube.indexOf('&'));
+                    } else {
+                      youtubeid = state.newsModel.youtube
+                          .substring(state.newsModel.youtube.indexOf('=') + 1)
+                          .trim();
+                    }
 
                     _youtubeController = YoutubePlayerController(
-                      initialVideoId: state.newsModel.youtube
-                          .substring(state.newsModel.youtube.indexOf('=') + 1)
-                          .trim(),
+                      initialVideoId: youtubeid,
                       params: YoutubePlayerParams(
                         startAt: Duration(seconds: 30),
                         showControls: true,
