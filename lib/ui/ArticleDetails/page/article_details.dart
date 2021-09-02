@@ -71,11 +71,20 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       }
     });
 
+    audioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          audioPlayer.seek(Duration(seconds: 0));
+          _handleOnPressed();
+        });
+      }
+    });
+
     audioPlayer.onPlayerStateChanged.listen((state) async {
       if (audioPlayer.state == PlayerState.PAUSED) {
         if (mounted) {
           setState(() {
-            isPlaying = false;
+            _handleOnPressed();
             _animationController.reverse();
           });
         }

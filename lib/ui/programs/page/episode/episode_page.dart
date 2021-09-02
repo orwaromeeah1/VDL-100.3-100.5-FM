@@ -83,6 +83,14 @@ class _EpisodePageState extends State<EpisodePage>
         });
       }
     });
+    audioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          audioPlayer.seek(Duration(seconds: 0));
+          _handleOnPressed();
+        });
+      }
+    });
 
     audioPlayer.onPlayerStateChanged.listen((state) async {
       if (audioPlayer.state == Player.PlayerState.PAUSED) {
@@ -557,8 +565,10 @@ class _EpisodePageState extends State<EpisodePage>
   String _getYoutubeId(String link) {
     if (link.contains('&')) {
       return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
-    } else {
+    } else if (link.contains('?')) {
       return link.substring(link.indexOf('=') + 1).trim();
+    } else {
+      return link.substring(17).trim();
     }
   }
 }

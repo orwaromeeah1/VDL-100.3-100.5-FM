@@ -135,7 +135,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     audioPlayer.onPlayerCompletion.listen((event) {
       if (mounted) {
         setState(() {
-          isPlaying = false;
+          audioPlayer.seek(Duration(seconds: 0));
+          _handleOnPressed();
         });
       }
     });
@@ -213,16 +214,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                 if (state.newsModel.youtube != null) {
                   setState(() {
                     viewYoutube = true;
-                    var youtubeid = "";
-                    if (state.newsModel.youtube.contains('&')) {
-                      youtubeid = state.newsModel.youtube.substring(
-                          state.newsModel.youtube.indexOf('=') + 1,
-                          state.newsModel.youtube.indexOf('&'));
-                    } else {
-                      youtubeid = state.newsModel.youtube
-                          .substring(state.newsModel.youtube.indexOf('=') + 1)
-                          .trim();
-                    }
+                    var youtubeid = getYoutubeId(state.newsModel.youtube);
+                    // if (state.newsModel.youtube.contains('&')) {
+                    //   youtubeid = state.newsModel.youtube.substring(
+                    //       state.newsModel.youtube.indexOf('=') + 1,
+                    //       state.newsModel.youtube.indexOf('&'));
+                    // } else {
+                    //   youtubeid = state.newsModel.youtube
+                    //       .substring(state.newsModel.youtube.indexOf('=') + 1)
+                    //       .trim();
+                    // }
 
                     _youtubeController = YoutubePlayerController(
                       initialVideoId: youtubeid,
@@ -617,6 +618,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         pauseMusic();
       }
     });
+  }
+}
+
+String getYoutubeId(String link) {
+  var youtubeid = "";
+  if (link.contains('&')) {
+    return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
+  } else if (link.contains('?')) {
+    return link.substring(link.indexOf('=') + 1).trim();
+  } else {
+    return link.substring(17).trim();
   }
 }
 
