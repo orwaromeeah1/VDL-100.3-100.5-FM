@@ -148,6 +148,24 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
        }
       }
     });
+
+    fullAudioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          fullAudioPlayer.seek(Duration(seconds: 0));
+          _handleOnFullAudioPressed();
+        });
+      }
+    });
+
+    widget.introductionAudioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          widget.introductionAudioPlayer.seek(Duration(seconds: 0));
+          _handleOnIntoPressed();
+        });
+      }
+    });
   }
 
   @override
