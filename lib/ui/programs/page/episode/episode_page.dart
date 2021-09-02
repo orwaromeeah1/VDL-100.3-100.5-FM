@@ -105,16 +105,17 @@ class _EpisodePageState extends State<EpisodePage>
       }
 
       //stop your audio player
-    } else if (state == AppLifecycleState.resumed) {
-      if (isPlaying) {
-        resume();
-        if (mounted) {
-          setState(() {
-            isPlaying = true;
-          });
-        }
-      }
     }
+    //  else if (state == AppLifecycleState.resumed) {
+    //   if (isPlaying) {
+    //     if (mounted) {
+    //       setState(() {
+    //         isPlaying = true;
+    //         resume();
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   @override

@@ -142,21 +142,21 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     if (state == AppLifecycleState.inactive) {
       if (isPlaying) {
         pauseMusic();
-
-        isPlaying = true;
+        isPlaying = false;
       }
 
       //stop your audio player
-    } else if (state == AppLifecycleState.resumed) {
-      if (isPlaying) {
-        resume();
-        if (mounted) {
-          setState(() {
-            isPlaying = true;
-          });
-        }
-      }
     }
+    // else if (state == AppLifecycleState.resumed) {
+    //   if (isPlaying) {
+    //     if (mounted) {
+    //       setState(() {
+    //         resume();
+    //         isPlaying = true;
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   @override

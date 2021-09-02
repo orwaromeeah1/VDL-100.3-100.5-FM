@@ -68,16 +68,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         isPlaying = true;
       }
       //stop your audio player
-    } else if (state == AppLifecycleState.resumed) {
-      if (isPlaying) {
-        resume();
-        if (mounted) {
-          setState(() {
-            isPlaying = true;
-          });
-        }
-      }
     }
+    // else if (state == AppLifecycleState.resumed) {
+    // if (isPlaying) {
+    //   if (mounted) {
+    //     setState(() {
+    //       resume();
+    //       isPlaying = true;
+    //     });
+    //   }
+    // }
+    //  }
   }
 
   final _adController = NativeAdmobController();
@@ -97,8 +98,9 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     super.initState();
     audioPlayer.stop();
     WidgetsBinding.instance.addObserver(this);
+
     _bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
-    WidgetsBinding.instance.addObserver(this);
+
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
 
