@@ -121,13 +121,13 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imageProvider,
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                           ),
                           Positioned(
-                              left: 19,
+                              left: 10,
                               top: 40,
                               child: GlowingCircularButton(
                                 color: Colors.black26,

@@ -28,6 +28,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 0,horizontal: 15),
       child: ListView.builder(
         itemCount: broadcasts.length,
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context,int index){
         return GestureDetector(
@@ -125,6 +126,7 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
     int month1 = int.parse(date.substring(0,date.indexOf('-')));
     int month2 = int.parse(now.substring(0,now.indexOf('-')));
 
+    if(month1<month2) return true;
     return((day1<day2)&&(month1<=month2))?true:false;
 
   }

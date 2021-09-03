@@ -105,18 +105,18 @@ class EpisodeCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                                Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
-                                Text(
-                                  'شاهد الآن',
-                                  style: TextStyle(
-                                    color: ProjectColors.ThemeColor,
-                                  ),
-                                ),
-                              ],
-                            ),
+//                            Flex(
+//                              direction: Axis.horizontal,
+//                              children: [
+//                                Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
+//                                Text(
+//                                  'شاهد الآن',
+//                                  style: TextStyle(
+//                                    color: ProjectColors.ThemeColor,
+//                                  ),
+//                                ),
+//                              ],
+//                            ),
                           ],
                         ),
                       ),
