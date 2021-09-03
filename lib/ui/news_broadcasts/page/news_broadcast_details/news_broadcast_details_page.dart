@@ -254,7 +254,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.topLeft, 
                     child: IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: Icon(
