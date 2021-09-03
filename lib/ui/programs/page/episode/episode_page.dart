@@ -203,8 +203,8 @@ class _EpisodePageState extends State<EpisodePage>
                             ),
                           ),
                           Positioned(
-                              top: 10,
                               left: 10,
+                              top: 40,
                               child: GlowingCircularButton(
                                 color: Colors.black26,
                                 onClick: () {

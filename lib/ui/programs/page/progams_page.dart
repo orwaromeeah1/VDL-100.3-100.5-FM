@@ -82,7 +82,6 @@ class _ProgramsPageState extends State<ProgramsPage> {
   }
 
   Widget screenUi() {
-    //TODO : add pull to refresh
     return Scaffold(
 //      appBar: AppBar(),
       body: RefreshIndicator(
