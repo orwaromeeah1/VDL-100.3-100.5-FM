@@ -44,6 +44,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   final _bloc = locator<NewsDetailsBloc>();
   AnimationController _animationController;
   bool isPlaying = false;
+  bool hasAudio = true;
   Duration duration;
   Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
@@ -258,8 +259,11 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         slivers: <Widget>[
           SliverPersistentHeader(
             pinned: true,
-            delegate:
-                MyDynamicHeader(expandedHeight: height / 2.5, state: state),
+            delegate: MyDynamicHeader(
+                expandedHeight: height / 2.5,
+                state: state,
+                viewAudio: audioLoaded,
+                hndlAudio: () => _handleOnPressed()),
           ),
           SliverList(
               delegate: SliverChildListDelegate([
@@ -483,6 +487,18 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 ),
                               )
                             : Container(),
+                        Container(
+                          height: 330,
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(bottom: 20.0),
+                          child: NativeAdmob(
+                            // Your ad unit id
+                            adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                            numberAds: 3,
+                            controller: _adController,
+                            type: NativeAdmobType.full,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                             right: 19.0,
@@ -498,41 +514,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                           ),
                         ),
 
-                        Container(
-                          height: 330,
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.only(bottom: 20.0),
-                          child: NativeAdmob(
-                            // Your ad unit id
-                            adUnitID: 'ca-app-pub-3940256099942544/8135179316',
-                            numberAds: 3,
-                            controller: _adController,
-                            type: NativeAdmobType.full,
-                          ),
-                        ),
-
-//                        banner == null
-//                            ? Container(height: 20)
-//                            : Container(
-//                                height: 240,
-//                                child: Padding(
-//                                  padding: const EdgeInsets.all(20.0),
-//                                  child: AdWidget(
-//                                    ad: banner,
-//                                  ),
-//                                ),
-//                              ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 19.0, left: 19, bottom: 34),
-                          child: Container(
-                            child: Text(
-                              Manager.removeAllHtmlTags(
-                                  state.newsModel.excerpt),
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(
+                        //       right: 19.0, left: 19, bottom: 34),
+                        //   child: Container(
+                        //     child: Text(
+                        //       Manager.removeAllHtmlTags(
+                        //           state.newsModel.excerpt),
+                        //       style: TextStyle(fontSize: 15),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
@@ -648,7 +640,13 @@ String getYoutubeId(String link) {
 class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   double expandedHeight;
   Loaded state;
-  MyDynamicHeader({@required this.expandedHeight, this.state});
+  bool viewAudio;
+  final VoidCallback hndlAudio;
+  MyDynamicHeader(
+      {@required this.expandedHeight,
+      this.state,
+      @required this.viewAudio,
+      this.hndlAudio});
 
   @override
   Widget build(
@@ -736,19 +734,26 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 SizedBox(
                   width: 9,
                 ),
-                CircleAvatar(
-                  radius: 32,
-                  backgroundColor: green.withOpacity(0.41),
-                  child: CircleAvatar(
-                    backgroundColor: green,
-                    radius: 25,
-                    child: Icon(
-                      CupertinoIcons.speaker_2_fill,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
+                viewAudio
+                    ? InkWell(
+                        onTap: () {
+                          hndlAudio();
+                        },
+                        child: CircleAvatar(
+                          radius: 32,
+                          backgroundColor: green.withOpacity(0.41),
+                          child: CircleAvatar(
+                            backgroundColor: green,
+                            radius: 25,
+                            child: Icon(
+                              CupertinoIcons.speaker_2_fill,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),
