@@ -257,7 +257,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                                   color: Colors.black
                                                       .withOpacity(0.14),
                                                   blurRadius: 10,
-                                                  offset: Offset(0, 10),
+                                                  offset: Offset(0, 0),
                                                 ),
                                               ],
                                               color: Colors.white,
@@ -272,22 +272,24 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 9,
+                                        width: audioLoaded ? 9 : 0,
                                       ),
-                                      CircleAvatar(
-                                        radius: 32,
-                                        backgroundColor:
-                                            green.withOpacity(0.41),
-                                        child: CircleAvatar(
-                                          backgroundColor: green,
-                                          radius: 25,
-                                          child: Icon(
-                                            CupertinoIcons.speaker_2_fill,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ),
+                                      audioLoaded
+                                          ? CircleAvatar(
+                                              radius: 32,
+                                              backgroundColor:
+                                                  green.withOpacity(0.41),
+                                              child: CircleAvatar(
+                                                backgroundColor: green,
+                                                radius: 25,
+                                                child: Icon(
+                                                  CupertinoIcons.speaker_2_fill,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
                                 ],

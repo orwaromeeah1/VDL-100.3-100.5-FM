@@ -243,45 +243,49 @@ class _NewsPageState extends State<NewsPage> {
                                       ],
                                     ),
                                   ),
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            isSpeacialReports = false;
-                                          });
-                                        },
-                                        child: Text(
-                                          'الاخبار',
-                                          style: TextStyle(
-                                              fontFamily: "TheSans",
-                                              color: isSpeacialReports
-                                                  ? black.withOpacity(0.25)
-                                                  : black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 32),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: isSpeacialReports ? 25 : 0),
+                                    child: Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              isSpeacialReports = false;
+                                            });
+                                          },
+                                          child: Text(
+                                            'الاخبار',
+                                            style: TextStyle(
+                                                fontFamily: "TheSans",
+                                                color: isSpeacialReports
+                                                    ? black.withOpacity(0.25)
+                                                    : black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 32),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 14,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(
-                                              () => {isSpeacialReports = true});
-                                        },
-                                        child: Text(
-                                          'تقارير خاصة',
-                                          style: TextStyle(
-                                              fontFamily: "TheSans",
-                                              color: isSpeacialReports
-                                                  ? black
-                                                  : black.withOpacity(0.25),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 32),
+                                        SizedBox(
+                                          width: 14,
                                         ),
-                                      )
-                                    ],
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() =>
+                                                {isSpeacialReports = true});
+                                          },
+                                          child: Text(
+                                            'تقارير خاصة',
+                                            style: TextStyle(
+                                                fontFamily: "TheSans",
+                                                color: isSpeacialReports
+                                                    ? black
+                                                    : black.withOpacity(0.25),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 32),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                   isSpeacialReports
                                       ? Container()
@@ -305,18 +309,6 @@ class _NewsPageState extends State<NewsPage> {
                                             itemPositionsListener:
                                                 itemPositionsListener,
                                           ),
-                                          //  ListView.builder(
-                                          //     scrollDirection: Axis.horizontal,
-                                          //     itemBuilder: (context, index) =>
-                                          //         InkWell(
-                                          //             onTap: () => selectType(
-                                          //                 categories[index].id,
-                                          //                 index,
-                                          //                 currentCatId),
-                                          //             child: tabBarCell(
-                                          //               cat: categories[index],
-                                          //             )),
-                                          //     itemCount: model.categories.length)
                                         ),
                                 ],
                               ),
@@ -332,26 +324,29 @@ class _NewsPageState extends State<NewsPage> {
             isSpeacialReports
                 ? SliverList(
                     delegate: SliverChildListDelegate([
-                    // banner == null
-                    //     ? Container(height: 20)
-                    //     : Container(
-                    //         height: 240,
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.all(20.0),
-                    //           child: AdWidget(
-                    //             ad: banner,
-                    //           ),
-                    //         ),
-                    //       ),
-                    Container(
-                        height:
-                            142 * model.specialReports.length.toDouble() + 50,
-                        child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => SpecialReportsCard(
-                                  newsModel: model.specialReports[index],
-                                ),
-                            itemCount: model.specialReports.length)),
+                    GestureDetector(
+                      onPanUpdate: (details) {
+                        // Swiping in right direction.
+                        if (details.delta.dx > 0) {}
+
+                        // Swiping in left direction.
+                        if (details.delta.dx < 0) {
+                          setState(() {
+                            isSpeacialReports = false;
+                          });
+                        }
+                      },
+                      child: Container(
+                          height:
+                              142 * model.specialReports.length.toDouble() + 50,
+                          child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) =>
+                                  SpecialReportsCard(
+                                    newsModel: model.specialReports[index],
+                                  ),
+                              itemCount: model.specialReports.length)),
+                    ),
                     state is FetchingNextPage
                         ? Container(
                             color: Colors.transparent,
@@ -442,17 +437,27 @@ class _NewsPageState extends State<NewsPage> {
                                 child: Container(
                                     child: Column(
                                   children: [
-                                    Container(
-                                      height: 330,
-                                      padding: EdgeInsets.all(10),
-                                      margin: EdgeInsets.only(bottom: 20.0),
-                                      child: NativeAdmob(
-                                        // Your ad unit id
-                                        adUnitID:
-                                            'ca-app-pub-3940256099942544/8135179316',
-                                        numberAds: 3,
-                                        controller: _adController,
-                                        type: NativeAdmobType.full,
+                                    GestureDetector(
+                                      onPanUpdate: (details) {
+                                        // Swiping in right direction.
+                                        if (details.delta.dx > 0) {
+                                          setState(() {
+                                            isSpeacialReports = true;
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 330,
+                                        padding: EdgeInsets.all(10),
+                                        margin: EdgeInsets.only(bottom: 20.0),
+                                        child: NativeAdmob(
+                                          // Your ad unit id
+                                          adUnitID:
+                                              'ca-app-pub-3940256099942544/8135179316',
+                                          numberAds: 3,
+                                          controller: _adController,
+                                          type: NativeAdmobType.full,
+                                        ),
                                       ),
                                     ),
 //                                    banner == null
@@ -468,18 +473,28 @@ class _NewsPageState extends State<NewsPage> {
 //                                            ),
 //                                          ),
 
-                                    Container(
-                                      height:
-                                          354 * model.news.length.toDouble() +
-                                              50,
-                                      child: ListView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemBuilder: (context, index) =>
-                                              NewsCardWidget(
-                                                newsModel: model.news[index],
-                                              ),
-                                          itemCount: model.news.length),
+                                    GestureDetector(
+                                      onPanUpdate: (details) {
+                                        // Swiping in right direction.
+                                        if (details.delta.dx > 0) {
+                                          setState(() {
+                                            isSpeacialReports = true;
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height:
+                                            354 * model.news.length.toDouble() +
+                                                50,
+                                        child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) =>
+                                                NewsCardWidget(
+                                                  newsModel: model.news[index],
+                                                ),
+                                            itemCount: model.news.length),
+                                      ),
                                     ),
                                     state is FetchingNextPage
                                         ? Container(
@@ -534,7 +549,6 @@ class _NewsPageState extends State<NewsPage> {
     ///
     if (currentSelected != catId) {
       _bloc.add(FetchCategoryNews(catId, page));
-      itemScrollController.jumpTo(index: index);
     }
   }
 }

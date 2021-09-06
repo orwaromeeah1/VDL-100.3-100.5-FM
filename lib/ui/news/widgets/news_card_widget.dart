@@ -7,6 +7,7 @@ import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/data/repository/repository.dart';
 
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
+import 'package:vdl/utils/category_color_helper/category_color_helper.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class NewsCardWidget extends StatelessWidget {
@@ -120,7 +121,8 @@ class NewsCardWidget extends StatelessWidget {
                               ),
                             ),
                             decoration: BoxDecoration(
-                                color: brown,
+                                color: colorHelper(
+                                    int.parse(newsModel.categories.keys.first)),
                                 borderRadius: BorderRadius.circular(13)),
                           ),
                         )

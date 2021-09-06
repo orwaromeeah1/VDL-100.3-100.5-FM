@@ -1,17 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
 import 'package:vdl/ui/live_broadcast/widget/logo_widget.dart';
+import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
+
+import '../../../../injection.dart';
 
 class LiveAudioPage extends StatefulWidget {
   @override
   _LiveAudioPageState createState() => _LiveAudioPageState();
 }
 
-class _LiveAudioPageState extends State<LiveAudioPage> {
+class _LiveAudioPageState extends State<LiveAudioPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   double height;
+  AnimationController _animationController;
+  bool isPlaying = false;
+  bool hasAudio = true;
+  Duration duration;
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
+  bool audioLoaded = false;
+  bool viewYoutube = false;
+  String audioUrl = "https://l3.itworkscdn.net/itwaudio/9054/stream";
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.inactive) {
+  //     if (isPlaying) {
+  //       pauseMusic();
+  //       isPlaying = true;
+  //     }
+  //     //stop your audio player
+  //   }
+  // }
+
+  /// Compulsory
+  pauseMusic() async {
+    int result = await audioPlayer.pause();
+  }
+
+  /// Compulsory
+  playMusic() async {
+    await audioPlayer.setUrl(
+        audioUrl); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
+    int result = await audioPlayer.play(audioUrl);
+    if (result == 1) {
+      // success
+    }
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      if (mounted) {
+        setState(() => {print(d)});
+      }
+    });
+  }
+
+  stopMusic() async {
+    int result = await audioPlayer.stop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer.stop();
+    WidgetsBinding.instance.addObserver(this);
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+
+    audioPlayer.onPlayerStateChanged.listen((state) async {
+      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
+      }
+    });
+
+    audioPlayer.onPlayerCompletion.listen((event) {
+      if (mounted) {
+        setState(() {
+          audioPlayer.seek(Duration(seconds: 0));
+          _handleOnPressed();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,13 +188,35 @@ class _LiveAudioPageState extends State<LiveAudioPage> {
                           SizedBox(
                             height: 40,
                           ),
-                          AudioPlayWidget(),
+                          Container(
+                            width: 300,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(FilePath.VOICE),
+                                    fit: BoxFit.fitWidth)),
+                            child: Center(
+                              child: GlowingCircularButton(
+                                isGlowing: true,
+                                icon: InkWell(
+                                  onTap: () => _handleOnPressed(),
+                                  child: AnimatedIcon(
+                                    color: Colors.white,
+                                    icon: AnimatedIcons.play_pause,
+                                    progress: _animationController,
+                                    size: 30,
+                                  ),
+                                ),
+                                onClick: () {},
+                                color: ProjectColors.ThemeColor,
+                                size: 50,
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: EdgeInsets.only(top: 40),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(FilePath.AUDIO_LOGO),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -136,5 +239,19 @@ class _LiveAudioPageState extends State<LiveAudioPage> {
         ),
       ),
     );
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+      if (isPlaying) {
+        playMusic();
+      } else {
+        stopMusic();
+      }
+    });
   }
 }
