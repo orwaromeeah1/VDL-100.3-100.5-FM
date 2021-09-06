@@ -190,7 +190,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
               Text(
                 '${currentMonthDays[(selectedDay - 2) % currentMonthDays.length].name}',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -213,7 +213,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                 '${currentMonthDays[(selectedDay - 1) % currentMonthDays.length].name}',
                 style: TextStyle(
                     color: ProjectColors.ThemeColor,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
               Container(
@@ -240,7 +240,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                 '${currentMonthDays[(selectedDay) % currentMonthDays.length].name}',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
             ],

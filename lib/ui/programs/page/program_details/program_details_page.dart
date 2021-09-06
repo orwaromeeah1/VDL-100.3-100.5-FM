@@ -236,7 +236,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                     color: ProjectColors.ThemeColor,
                                   ),
                                   Text(
-                                    '${program.programTextTime}',
+                                    '${program.programTextTime} ',
                                     style: TextStyle(
                                       fontSize: 12,
                                     ),
@@ -245,6 +245,16 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               ),
                             ),
                           ),
+//                          SizedBox(
+//                            height: 20,
+//                          ),
+//                          Text(
+//                            '${Bidi.stripHtmlIfNeeded(program.content)}',
+//                            style: TextStyle(
+//                              fontWeight: FontWeight.bold,
+//                              fontSize: 14,
+//                            ),
+//                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -275,7 +285,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           Text(
                             'الحلقات',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           ListView.builder(
                               shrinkWrap: true,

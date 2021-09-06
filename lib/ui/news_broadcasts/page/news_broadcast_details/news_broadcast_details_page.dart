@@ -378,6 +378,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                               'مقدمة النشرة',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: 13,
                                               ),
                                             ),
                                             Row(
@@ -451,7 +452,11 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 20),
                                   child:
-                                      Text('${displayedNewsCast.description}'),
+                                      Text('${displayedNewsCast.description}',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                      ),
                                 )
                               ],
                             ),
@@ -505,6 +510,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                               'النشرة كاملة',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: 13,
                                               ),
                                             ),
                                             Row(

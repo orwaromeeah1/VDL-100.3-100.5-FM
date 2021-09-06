@@ -31,7 +31,8 @@ class LiveStreamButton extends StatelessWidget {
              Text(
                '$text',
                style: TextStyle(
-                 color: Colors.white
+                 color: Colors.white,
+                 fontSize: 16,
                ),
              )
             ],

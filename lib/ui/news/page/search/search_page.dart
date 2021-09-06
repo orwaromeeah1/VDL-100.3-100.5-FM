@@ -149,8 +149,9 @@ class _SearchPageState extends State<SearchPage> {
                           date: searchResult[index].humanDate,
                           category:
                               searchResult[index].categories.category.name,
+
                           id: searchResult[index].id),
-                      itemCount: searchResult.length)),
+                        itemCount: searchResult.length)),
         ],
       ),
     );
