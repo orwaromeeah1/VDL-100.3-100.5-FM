@@ -16,6 +16,8 @@ PODS:
     - Flutter
     - Google-Mobile-Ads-SDK
     - PureLayout
+  - flutter_playout (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -85,6 +87,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
+  - flutter_playout (from `.symlinks/plugins/flutter_playout/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - Google-Mobile-Ads-SDK (~> 7.69.0)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -118,6 +121,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_native_admob:
     :path: ".symlinks/plugins/flutter_native_admob/ios"
+  flutter_playout:
+    :path: ".symlinks/plugins/flutter_playout/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   path_provider:
@@ -139,6 +144,7 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_native_admob: 384f39f8b8dc0a96624c7cfa4cd255205e7c3da5
+  flutter_playout: a5aed32b3003b02eb4432815ecfe0c0e42a801ff
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 2f288748a42920d1c744946a460896a95b0e9110

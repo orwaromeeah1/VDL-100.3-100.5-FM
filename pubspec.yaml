@@ -58,6 +58,7 @@ dependencies:
   auto_size_text: ^2.1.0
   font_awesome_flutter: any
   html: ^0.15.0
+  flutter_playout: 1.0.43
   #
   fluttericon: ^2.0.0
   webview_flutter: ^2.0.10

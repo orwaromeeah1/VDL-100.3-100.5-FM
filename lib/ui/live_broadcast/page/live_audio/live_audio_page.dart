@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vdl/injection.dart';
 import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
-import 'package:vdl/ui/live_broadcast/widget/logo_widget.dart';
+
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
-import 'package:vdl/utils/project_colors/project_color.dart';
 
-import '../../../../injection.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
 
 class LiveAudioPage extends StatefulWidget {
   @override
@@ -27,18 +27,17 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   bool viewYoutube = false;
   String audioUrl = "https://l3.itworkscdn.net/itwaudio/9054/stream";
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.inactive) {
-  //     if (isPlaying) {
-  //       pauseMusic();
-  //       isPlaying = true;
-  //     }
-  //     //stop your audio player
-  //   }
-  // }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      if (isPlaying) {
+        pauseMusic();
+        isPlaying = true;
+      }
+      //stop your audio player
+    }
+  }
 
-  /// Compulsory
   pauseMusic() async {
     int result = await audioPlayer.pause();
   }
@@ -93,6 +92,129 @@ class _LiveAudioPageState extends State<LiveAudioPage>
       }
     });
   }
+
+  // Audio _audioPlayer;
+  // PlayerState audioPlayerState = PlayerState.STOPPED;
+  // bool _loading = false;
+  // bool _isLive = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // Init audio player with a callback to handle events
+  //   _audioPlayer = Audio.instance();
+
+  //   // Listen for audio player events
+  //   listenForAudioPlayerEvents();
+  // }
+
+  // @override
+  // void didUpdateWidget(AudioPlayout oldWidget) {
+  //   if (oldWidget.desiredState != widget.desiredState) {
+  //     _onDesiredStateChanged(oldWidget);
+  //   } else if (oldWidget.url != widget.url) {
+  //     play();
+  //   }
+  //   super.didUpdateWidget(oldWidget);
+  // }
+
+  // /// The [desiredState] flag has changed so need to update playback to
+  // /// reflect the new state.
+  // void _onDesiredStateChanged(AudioPlayout oldWidget) async {
+  //   switch (widget.desiredState) {
+  //     case PlayerState.PLAYING:
+  //       play();
+  //       break;
+  //     case PlayerState.PAUSED:
+  //       pause();
+  //       break;
+  //     case PlayerState.STOPPED:
+  //       pause();
+  //       break;
+  //   }
+  // }
+
+  // @override
+  // void onPlay() {
+  //   setState(() {
+  //     audioPlayerState = PlayerState.PLAYING;
+  //     _loading = false;
+  //   });
+  // }
+
+  // @override
+  // void onPause() {
+  //   setState(() {
+  //     audioPlayerState = PlayerState.PAUSED;
+  //   });
+  // }
+
+  // @override
+  // void onSeek(int position, double offset) {
+  //   super.onSeek(position, offset);
+  // }
+
+  // @override
+  // void onDuration(int duration) {
+  //   if (duration <= 0) {
+  //     setState(() {
+  //       _isLive = true;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _isLive = false;
+  //       this.duration = Duration(milliseconds: duration);
+  //     });
+  //   }
+  // }
+
+  // @override
+  // void onError(String error) {
+  //   super.onError(error);
+  // }
+
+  // get isPlaying => audioPlayerState == PlayerState.PLAYING;
+  // get isPaused =>
+  //     audioPlayerState == PlayerState.PAUSED ||
+  //     audioPlayerState == PlayerState.STOPPED;
+
+  // get durationText =>
+  //     duration != null ? duration.toString().split('.').first : '';
+  // // Request audio pause
+  // Future<void> pause() async {
+  //   _audioPlayer.pause();
+  //   setState(() => audioPlayerState = PlayerState.PAUSED);
+  // }
+
+  // // Request audio stop. this will also clear lock screen controls
+  // Future<void> stop() async {
+  //   _audioPlayer.reset();
+
+  //   setState(() {
+  //     audioPlayerState = PlayerState.STOPPED;
+
+  //   });
+  // }
+  // @override
+  // void dispose() {
+  //   if (mounted) {
+  //     _audioPlayer.dispose();
+  //   }
+  //   super.dispose();
+  // }
+  // Future<void> play() async {
+  //   setState(() {
+  //     _loading = true;
+  //   });
+  //   // here we send position in case user has scrubbed already before hitting
+  //   // play in which case we want playback to start from where user has
+  //   // requested
+  //   _audioPlayer.play(widget.url,
+  //       title: widget.title,
+  //       subtitle: widget.subtitle,
+
+  //       isLiveStream: false);
+  // }
 
   @override
   Widget build(BuildContext context) {
