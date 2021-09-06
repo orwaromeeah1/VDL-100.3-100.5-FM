@@ -69,17 +69,16 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
         isPlaying = true;
       }
       //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+      if (isPlaying) {
+        if (mounted) {
+          setState(() {
+            resume();
+            isPlaying = true;
+          });
+        }
+      }
     }
-    // else if (state == AppLifecycleState.resumed) {
-    // if (isPlaying) {
-    //   if (mounted) {
-    //     setState(() {
-    //       resume();
-    //       isPlaying = true;
-    //     });
-    //   }
-    // }
-    //  }
   }
 
   final _adController = NativeAdmobController();
@@ -605,6 +604,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       if (timeProgress != 0 && isPlaying) {
         resume();
       } else if (isPlaying) {
+        stopMusic();
         playMusic();
       } else {
         pauseMusic();

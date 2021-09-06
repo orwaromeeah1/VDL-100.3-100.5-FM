@@ -52,14 +52,14 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
                         MaterialPageRoute(
                             builder: (context) => LiveAudioPage())),
                   ),
-                  LiveStreamButton(
-                    image: FilePath.VIDEO_LOGO,
-                    text: 'بث بصري',
-                    onClick: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LiveVideoPage())),
-                  ),
+                  // LiveStreamButton(
+                  //   image: FilePath.VIDEO_LOGO,
+                  //   text: 'بث بصري',
+                  //   onClick: () => Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => LiveVideoPage())),
+                  // ),
                 ],
               )),
         ),
