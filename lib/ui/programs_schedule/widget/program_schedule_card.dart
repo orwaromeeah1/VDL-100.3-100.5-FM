@@ -92,6 +92,7 @@ class ProgramScheduleCard extends StatelessWidget {
                           '$name',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: 13
                           ),
                         ),
                       ],

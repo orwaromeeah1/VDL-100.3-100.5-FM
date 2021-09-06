@@ -75,6 +75,7 @@ class EpisodeCard extends StatelessWidget {
                         '$episodeNumber - $date',
                         style: TextStyle(
                           color: Colors.grey,
+                          fontSize: 10,
                         ),
                       ),
                     ),
@@ -84,6 +85,7 @@ class EpisodeCard extends StatelessWidget {
                         '$title',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -101,6 +103,7 @@ class EpisodeCard extends StatelessWidget {
                                   'استمع الآن',
                                   style: TextStyle(
                                     color: ProjectColors.BLUE,
+                                    fontSize: 10,
                                   ),
                                 ),
                               ],
@@ -113,6 +116,7 @@ class EpisodeCard extends StatelessWidget {
 //                                  'شاهد الآن',
 //                                  style: TextStyle(
 //                                    color: ProjectColors.ThemeColor,
+//                            fontSize: 10,
 //                                  ),
 //                                ),
 //                              ],

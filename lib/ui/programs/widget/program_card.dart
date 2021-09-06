@@ -65,7 +65,7 @@ class ProgramCard extends StatelessWidget {
                           Text(
                             '${Bidi.stripHtmlIfNeeded(name)}',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           Flex(
                             direction: Axis.horizontal,
@@ -106,7 +106,11 @@ class ProgramCard extends StatelessWidget {
                         child: Text(
                           '$category',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                     ),
