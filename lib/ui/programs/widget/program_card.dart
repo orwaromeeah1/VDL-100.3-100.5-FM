@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vdl/utils/color_helper/color_helper.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ProgramCard extends StatelessWidget {
@@ -100,7 +101,7 @@ class ProgramCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        color: brown,
+                        color: ColorHelper.getColor(category),
                         elevation: 2.5,
                         child: Text(
                           '$category',
