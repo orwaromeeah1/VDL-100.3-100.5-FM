@@ -9,7 +9,6 @@ const red = Color(0xffEC1C24);
 const backgroundGrey = Color(0xffF5F6F8);
 const black = Color(0xff000000);
 
-const brown = Color(0xffDB934C);
 const iconGrey = Color(0xff9B9B9B);
 const darkBlue = Color(0xff2A2839);
 
@@ -28,10 +27,25 @@ const MaterialColor blue = const MaterialColor(
     900: const Color(0xff015289),
   },
 );
+const MaterialColor brown = const MaterialColor(
+  0xffDB934C,
+  const <int, Color>{
+    50: const Color(0xffDB934C),
+    100: const Color(0xffDB934C),
+    200: const Color(0xffDB934C),
+    300: const Color(0xffDB934C),
+    400: const Color(0xffDB934C),
+    500: const Color(0xffDB934C),
+    600: const Color(0xffDB934C),
+    700: const Color(0xffDB934C),
+    800: const Color(0xffDB934C),
+    900: const Color(0xffDB934C),
+  },
+);
 
-class ProjectColors{
+class ProjectColors {
   static const ThemeColor = Color(0xff329560);
   static const BLUE = Color(0xff005189);
   static const BLACK = Color(0xff2A2839);
-  static const ORANGE =Color(0xffDB934C);
+  static const ORANGE = Color(0xffDB934C);
 }
