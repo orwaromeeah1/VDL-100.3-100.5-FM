@@ -9,6 +9,7 @@ import 'package:fluttericon/elusive_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/injection.dart';
+import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
 import 'package:vdl/ui/menu/page/menu_page.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
@@ -19,12 +20,11 @@ import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MainTabsPage extends StatefulWidget {
-
-  AudioPlayer introductionAudioPlayer =new AudioPlayer();
+  AudioPlayer introductionAudioPlayer = new AudioPlayer();
   MenuPage menuPage;
   List<Widget> _pages;
 
-  MainTabsPage(){
+  MainTabsPage() {
     menuPage = new MenuPage(introductionAudioPlayer);
     _pages = [
       NewsPage(),
@@ -40,8 +40,6 @@ class MainTabsPage extends StatefulWidget {
 }
 
 class _MainTabsPageState extends State<MainTabsPage> {
-
-
   AudioPlayer audioPlayer = locator<AudioPlayer>();
 
   /// Compulsory
@@ -59,7 +57,6 @@ class _MainTabsPageState extends State<MainTabsPage> {
           audioPlayer.pause();
           widget.introductionAudioPlayer.pause();
         },
-
         icon: Icon(Icons.home_rounded),
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
@@ -68,7 +65,6 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'أخبار',
       ),
       PersistentBottomNavBarItem(
-
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.grid_view_rounded),
@@ -77,7 +73,6 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'برامج',
       ),
       PersistentBottomNavBarItem(
-
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Icons.podcasts),
@@ -86,7 +81,6 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'بث مباشر',
       ),
       PersistentBottomNavBarItem(
-
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(
@@ -97,7 +91,6 @@ class _MainTabsPageState extends State<MainTabsPage> {
         title: 'جدول البرامج',
       ),
       PersistentBottomNavBarItem(
-
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(Ionicons.md_menu),
@@ -113,9 +106,10 @@ class _MainTabsPageState extends State<MainTabsPage> {
     return Scaffold(
       body: PersistentTabView(
         context,
-        onItemSelected: (index){
+        onItemSelected: (index) {
           setState(() {
             audioPlayer.pause();
+            locator<BackGroundAudioPlayer>().player.stop();
             widget.introductionAudioPlayer.pause();
           });
         },

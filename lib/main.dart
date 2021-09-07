@@ -1,5 +1,8 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:vdl/injection.dart';
+import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -8,8 +11,12 @@ import 'injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//  final futureInit = MobileAds.instance.initialize();
 
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   await setLocator(/*futureInit*/);
 
   runApp(MyApp());
@@ -40,10 +47,9 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home:
-          Directionality(textDirection: TextDirection.rtl, child: OnBoarding()),
+      home: AudioServiceWidget(
+          child: Directionality(
+              textDirection: TextDirection.rtl, child: OnBoarding())),
     );
   }
 }
-
-

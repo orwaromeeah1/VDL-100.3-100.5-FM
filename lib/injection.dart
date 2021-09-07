@@ -9,6 +9,7 @@ import 'package:vdl/ui/Articles/bloc/articles_bloc.dart';
 import 'package:vdl/ui/Articles/bloc/articles_state.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_bloc.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
+import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
 import 'package:vdl/ui/news/bloc/news_state.dart';
 import 'package:vdl/ui/news/bloc/search/search_bloc.dart';
@@ -42,6 +43,8 @@ Future setLocator(/*Future<InitializationStatus> initialization*/) async {
   //News Bloc
   locator.registerLazySingleton(() => NewsBloc(locator(), locator()));
   locator.registerLazySingleton(() => AudioPlayer());
+  locator.registerLazySingleton(() => BackGroundAudioPlayer());
+
   locator.registerFactory(() => NewsState());
 
   //News Details Bloc
