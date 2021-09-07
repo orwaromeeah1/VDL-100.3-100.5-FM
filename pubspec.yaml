@@ -68,7 +68,7 @@ dependencies:
   just_audio_background: any
 #  google_mobile_ads: ^0.13.2
   flutter_native_admob: ^2.1.0+3
-  admob_flutter: ^1.0.1
+#  admob_flutter: ^1.0.1
   
 
 dev_dependencies:
