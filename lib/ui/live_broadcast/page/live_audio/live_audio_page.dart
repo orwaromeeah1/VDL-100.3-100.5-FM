@@ -73,28 +73,36 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.inactive) {
       if (player.player.playing) {
-        setState(() {
-          isPlaying = true;
-          _animationController.forward();
-        });
+        if(mounted){
+          setState(() {
+            isPlaying = true;
+            _animationController.forward();
+          });
+        }
       } else {
-        setState(() {
-          isPlaying = false;
-          _animationController.reverse();
-        });
+       if(mounted){
+         setState(() {
+           isPlaying = false;
+           _animationController.reverse();
+         });
+       }
       }
     }
     if (state == AppLifecycleState.resumed) {
       if (player.player.playing) {
-        setState(() {
-          isPlaying = true;
-          _animationController.forward();
-        });
+       if(mounted){
+         setState(() {
+           isPlaying = true;
+           _animationController.forward();
+         });
+       }
       } else {
-        setState(() {
-          isPlaying = false;
-          _animationController.reverse();
-        });
+       if(mounted){
+         setState(() {
+           isPlaying = false;
+           _animationController.reverse();
+         });
+       }
       }
     }
   }
@@ -247,6 +255,7 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   }
 
   void _handleOnPressed() {
+  if(mounted){
     setState(() {
       isPlaying = !isPlaying;
       isPlaying
@@ -259,5 +268,6 @@ class _LiveAudioPageState extends State<LiveAudioPage>
         player.player.stop();
       }
     });
+  }
   }
 }
