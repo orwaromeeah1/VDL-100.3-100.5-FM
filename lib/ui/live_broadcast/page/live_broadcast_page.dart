@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_android_page.dart';
 import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
 import 'package:vdl/ui/live_broadcast/widget/logo_widget.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
@@ -50,7 +53,9 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
                     onClick: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LiveAudioPage())),
+                            builder: (context) => Platform.isAndroid
+                                ? AndroidLiveAudioPage()
+                                : LiveAudioPage())),
                   ),
                   // LiveStreamButton(
                   //   image: FilePath.VIDEO_LOGO,

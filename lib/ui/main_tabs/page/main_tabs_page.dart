@@ -9,7 +9,10 @@ import 'package:fluttericon/elusive_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/injection.dart';
+import 'package:vdl/ui/live_broadcast/bloc/live_podcast_bloc.dart';
+import 'package:vdl/ui/live_broadcast/bloc/live_podcast_event.dart';
 import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
+import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_android_page.dart';
 import 'package:vdl/ui/live_broadcast/page/live_broadcast_page.dart';
 import 'package:vdl/ui/menu/page/menu_page.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
@@ -109,8 +112,10 @@ class _MainTabsPageState extends State<MainTabsPage> {
         onItemSelected: (index) {
           setState(() {
             audioPlayer.pause();
-            locator<BackGroundAudioPlayer>().player.stop();
+            // locator<BackGroundAudioPlayer>().player.stop();
+            // locator<BackGroundAndroidAudioPlayer>().player.stop();
             widget.introductionAudioPlayer.pause();
+            locator<LivePodcastBloc>().add(StopLiveAudio());
           });
         },
         controller: _controller,

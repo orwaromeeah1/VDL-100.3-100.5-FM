@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -74,9 +76,12 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AudioServiceWidget(
-          child: Directionality(
-              textDirection: TextDirection.rtl, child: OnBoarding())),
+      home: Platform.isAndroid
+          ? Directionality(
+              textDirection: TextDirection.rtl, child: OnBoarding())
+          : AudioServiceWidget(
+              child: Directionality(
+                  textDirection: TextDirection.rtl, child: OnBoarding())),
     );
   }
 }

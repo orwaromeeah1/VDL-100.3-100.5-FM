@@ -1,50 +1,45 @@
-//import 'package:audioplayers/audioplayers.dart';
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_bloc.dart';
+import 'package:vdl/ui/live_broadcast/bloc/live_podcast_event.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_state.dart';
-//import 'package:audioplayers/audioplayers.dart' as Player;
-
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
-
 import 'package:just_audio/just_audio.dart';
 
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 // Must be a top-level function
 
-class BackGroundAudioPlayer {
+class BackGroundAndroidAudioPlayer {
   final player = AudioPlayer();
 }
 
-class LiveAudioPage extends StatefulWidget {
+class AndroidLiveAudioPage extends StatefulWidget {
+  bool isPlaying = false;
   @override
-  _LiveAudioPageState createState() => _LiveAudioPageState();
+  _AndroidLiveAudioPageState createState() => _AndroidLiveAudioPageState();
 }
 
-class _LiveAudioPageState extends State<LiveAudioPage>
+class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   String audioUrl = "https://l3.itworkscdn.net/itwaudio/9054/stream";
   double height;
   AnimationController _animationController;
-  bool isPlaying = false;
+
   bool hasAudio = true;
   Duration duration;
   bool audioLoaded = false;
   bool viewYoutube = false;
   final bloc = locator<LivePodcastBloc>();
-
-  final player = locator<BackGroundAudioPlayer>();
+  final player = locator<BackGroundAndroidAudioPlayer>();
 
   @override
   void dispose() async {
     super.dispose();
-
     player.player.stop();
   }
 
@@ -55,21 +50,7 @@ class _LiveAudioPageState extends State<LiveAudioPage>
     WidgetsBinding.instance.addObserver(this);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-
-    final a = AudioSource.uri(
-      Uri.parse(audioUrl),
-      tag: MediaItem(
-        artist: "VDL",
-        // Specify a unique ID for each media item:
-        id: '1',
-        // Metadata to display in the notification:
-        album: "Audio Live Stream",
-        title: "VDL صوت لبنان",
-        artUri: Uri.file('assets/launcher/appIcon.png'),
-      ),
-    );
-
-    player.player.setAudioSource(a);
+    player.player.setUrl(audioUrl);
   }
 
   @override
@@ -78,14 +59,14 @@ class _LiveAudioPageState extends State<LiveAudioPage>
       if (player.player.playing) {
         if (mounted) {
           setState(() {
-            isPlaying = true;
+            widget.isPlaying = true;
             _animationController.forward();
           });
         }
       } else {
         if (mounted) {
           setState(() {
-            isPlaying = false;
+            widget.isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -95,14 +76,14 @@ class _LiveAudioPageState extends State<LiveAudioPage>
       if (player.player.playing) {
         if (mounted) {
           setState(() {
-            isPlaying = true;
+            widget.isPlaying = true;
             _animationController.forward();
           });
         }
       } else {
         if (mounted) {
           setState(() {
-            isPlaying = false;
+            widget.isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -114,14 +95,13 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
     return BlocConsumer(
       bloc: bloc,
       listener: (context, state) {
         if (state is PodcastStoped) {
           setState(() {
             player.player.stop();
-            isPlaying = false;
+            widget.isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -276,12 +256,12 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   void _handleOnPressed() {
     if (mounted) {
       setState(() {
-        isPlaying = !isPlaying;
-        isPlaying
+        widget.isPlaying = !widget.isPlaying;
+        widget.isPlaying
             ? _animationController.forward()
             : _animationController.reverse();
 
-        if (isPlaying) {
+        if (widget.isPlaying) {
           player.player.play();
         } else {
           player.player.stop();
