@@ -47,25 +47,24 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   @override
   void initState() {
     super.initState();
-
     //  audioPlayer.stop();
-
     WidgetsBinding.instance.addObserver(this);
-
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
 
     final a = AudioSource.uri(
       Uri.parse(audioUrl),
       tag: MediaItem(
+        artist: "VDL",
         // Specify a unique ID for each media item:
         id: '1',
         // Metadata to display in the notification:
         album: "Audio Live Stream",
         title: "VDL صوت لبنان",
-        artUri: Uri.parse('assets/launcher/appIcon.png'),
+        artUri: Uri.file('assets/launcher/appIcon.png'),
       ),
     );
+
     player.player.setAudioSource(a);
   }
 
@@ -73,36 +72,36 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.inactive) {
       if (player.player.playing) {
-        if(mounted){
+        if (mounted) {
           setState(() {
             isPlaying = true;
             _animationController.forward();
           });
         }
       } else {
-       if(mounted){
-         setState(() {
-           isPlaying = false;
-           _animationController.reverse();
-         });
-       }
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
       }
     }
     if (state == AppLifecycleState.resumed) {
       if (player.player.playing) {
-       if(mounted){
-         setState(() {
-           isPlaying = true;
-           _animationController.forward();
-         });
-       }
+        if (mounted) {
+          setState(() {
+            isPlaying = true;
+            _animationController.forward();
+          });
+        }
       } else {
-       if(mounted){
-         setState(() {
-           isPlaying = false;
-           _animationController.reverse();
-         });
-       }
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
       }
     }
   }
@@ -255,19 +254,19 @@ class _LiveAudioPageState extends State<LiveAudioPage>
   }
 
   void _handleOnPressed() {
-  if(mounted){
-    setState(() {
-      isPlaying = !isPlaying;
-      isPlaying
-          ? _animationController.forward()
-          : _animationController.reverse();
+    if (mounted) {
+      setState(() {
+        isPlaying = !isPlaying;
+        isPlaying
+            ? _animationController.forward()
+            : _animationController.reverse();
 
-      if (isPlaying) {
-        player.player.play();
-      } else {
-        player.player.stop();
-      }
-    });
-  }
+        if (isPlaying) {
+          player.player.play();
+        } else {
+          player.player.stop();
+        }
+      });
+    }
   }
 }

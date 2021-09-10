@@ -1,7 +1,4 @@
 PODS:
-  - admob_flutter (1.0.0):
-    - Flutter
-    - Google-Mobile-Ads-SDK (~> 7.64)
   - audio_service (0.0.1):
     - Flutter
   - audio_session (0.0.1):
@@ -69,6 +66,10 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - onesignal_flutter (3.2.3):
+    - Flutter
+    - OneSignalXCFramework (= 3.7.0)
+  - OneSignalXCFramework (3.7.0)
   - OrderedSet (5.0.0)
   - path_provider (0.0.1):
     - Flutter
@@ -88,7 +89,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - admob_flutter (from `.symlinks/plugins/admob_flutter/ios`)
   - audio_service (from `.symlinks/plugins/audio_service/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
@@ -99,6 +99,8 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - Google-Mobile-Ads-SDK (~> 7.69.0)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -114,14 +116,13 @@ SPEC REPOS:
     - GoogleUserMessagingPlatform
     - GoogleUtilities
     - nanopb
+    - OneSignalXCFramework
     - OrderedSet
     - PromisesObjC
     - PureLayout
     - Toast
 
 EXTERNAL SOURCES:
-  admob_flutter:
-    :path: ".symlinks/plugins/admob_flutter/ios"
   audio_service:
     :path: ".symlinks/plugins/audio_service/ios"
   audio_session:
@@ -140,6 +141,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   share:
@@ -154,7 +157,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  admob_flutter: 370023e0bc3f49a44ba94f14009e0728bffe43e8
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
@@ -170,6 +172,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: eea970f4a389963963bffe8d8fabe43540678b9c
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  onesignal_flutter: abfc75e8d08a0d9c977aacfab9454af58f4f4fcc
+  OneSignalXCFramework: 974dc438d68910cf04f3c8ab034e0131d41438c1
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
@@ -181,6 +185,6 @@ SPEC CHECKSUMS:
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
 
-PODFILE CHECKSUM: c06f27d11e4dd6b80f44b872e2d431bd25c9ad91
+PODFILE CHECKSUM: 0051fa2baade668f7f38aacde4279f21c8cc2bf3
 
 COCOAPODS: 1.10.1
