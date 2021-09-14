@@ -437,29 +437,29 @@ class _NewsPageState extends State<NewsPage> {
                                 child: Container(
                                     child: Column(
                                   children: [
-                                    GestureDetector(
-                                      onPanUpdate: (details) {
-                                        // Swiping in right direction.
-                                        if (details.delta.dx > 0) {
-                                          setState(() {
-                                            isSpeacialReports = true;
-                                          });
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 330,
-                                        padding: EdgeInsets.all(10),
-                                        margin: EdgeInsets.only(bottom: 20.0),
-                                        child: NativeAdmob(
-                                          // Your ad unit id
-                                          adUnitID:
-                                              'ca-app-pub-3940256099942544/8135179316',
-                                          numberAds: 3,
-                                          controller: _adController,
-                                          type: NativeAdmobType.full,
-                                        ),
-                                      ),
-                                    ),
+                                    // GestureDetector(
+                                    //   onPanUpdate: (details) {
+                                    //     // Swiping in right direction.
+                                    //     if (details.delta.dx > 0) {
+                                    //       setState(() {
+                                    //         isSpeacialReports = true;
+                                    //       });
+                                    //     }
+                                    //   },
+                                    //   child: Container(
+                                    //     height: 330,
+                                    //     padding: EdgeInsets.all(10),
+                                    //     margin: EdgeInsets.only(bottom: 20.0),
+                                    //     child: NativeAdmob(
+                                    //       // Your ad unit id
+                                    //       adUnitID:
+                                    //           'ca-app-pub-3940256099942544/8135179316',
+                                    //       numberAds: 3,
+                                    //       controller: _adController,
+                                    //       type: NativeAdmobType.full,
+                                    //     ),
+                                    //   ),
+                                    // ),
 //                                    banner == null
 //                                        ? Container(height: 20)
 //                                        : Container(
@@ -490,9 +490,40 @@ class _NewsPageState extends State<NewsPage> {
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, index) =>
+                                            index != 1?
+                                                NewsCardWidget(
+                                                  newsModel: model.news[index],
+                                                )
+                                            :Column(
+                                              children: [
+                                                GestureDetector(
+                                                  onPanUpdate: (details) {
+                                                    // Swiping in right direction.
+                                                    if (details.delta.dx > 0) {
+                                                      setState(() {
+                                                        isSpeacialReports = true;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    height: 330,
+                                                    padding: EdgeInsets.all(10),
+                                                    margin: EdgeInsets.only(bottom: 20.0),
+                                                    child: NativeAdmob(
+                                                      // Your ad unit id
+                                                      adUnitID:
+                                                      'ca-app-pub-3940256099942544/8135179316',
+                                                      numberAds: 3,
+                                                      controller: _adController,
+                                                      type: NativeAdmobType.full,
+                                                    ),
+                                                  ),
+                                                ),
                                                 NewsCardWidget(
                                                   newsModel: model.news[index],
                                                 ),
+                                              ],
+                                            ),
                                             itemCount: model.news.length),
                                       ),
                                     ),
