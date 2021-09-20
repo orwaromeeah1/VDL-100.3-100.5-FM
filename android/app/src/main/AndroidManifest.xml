@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dlimits.vdl">
+    package="com.dlimits.vdlApp">
    <application
         android:label="vdl"
         android:icon="@mipmap/launcher_icon">
