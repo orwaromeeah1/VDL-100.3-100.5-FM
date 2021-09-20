@@ -6,6 +6,7 @@ import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/data/models/news_model.dart';
 
 import 'package:vdl/data/models/category_model.dart';
+import 'package:vdl/data/models/notification_model.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
 import 'package:vdl/data/models/tweets_model.dart';
 import 'package:vdl/data/networking/http_client.dart';
@@ -344,5 +345,20 @@ class Repository {
       Urls.EPISODE + '$episodeId',
     );
     return EpisodeResponse.fromJson(response);
+  }
+
+  ///
+  ///Menus
+  Future<List<LiveNotificationModel>> getLiveNotifications(int page) async {
+    try {
+      //  String token = await getToken();
+      String response = await _client.getMethods(
+          Urls.LIVE_NOTIFICATIONS + "?per_page=20&page=$page", "");
+      return List<LiveNotificationModel>.from(convert
+          .jsonDecode(response)
+          .map((x) => LiveNotificationModel.fromJson(x)));
+    } catch (e) {
+      print(e);
+    }
   }
 }

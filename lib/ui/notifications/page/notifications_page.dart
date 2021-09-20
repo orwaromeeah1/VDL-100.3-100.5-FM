@@ -1,11 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vdl/data/models/notification_model.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
+import 'package:vdl/ui/notifications/bloc/notifications_bloc.dart';
+import 'package:vdl/ui/notifications/bloc/notifications_event.dart';
+import 'package:vdl/ui/notifications/bloc/notifications_state.dart';
 import 'package:vdl/ui/notifications/widgets/notifications_widget.dart';
+import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/ui/shared_widget/try_again_widget.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+
+import '../../../injection.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key key}) : super(key: key);
@@ -15,10 +26,50 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  final bloc = locator<NotificationBloc>();
+  int page = 1;
+  bool isLoadingNewPage = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bloc.add(FetchNotificationPage(page));
+  }
+
+  void _getNextPage() {
+    page++;
+    bloc.add(FetchNotificationPage(page));
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    return BlocConsumer(
+        bloc: bloc,
+        builder: (context, state) {
+          if (state is Loaded) {
+            return screenUI(state.notifications, state);
+          }
+          if (state is LoadingNextPage) {
+            return screenUI(state.notifications, state);
+          }
+          if (state is Loading) {
+            return LoadingScreen();
+          }
+          return TryAgain();
+        },
+        listener: (context, state) {
+          if (state is Loaded) {
+            setState(() {
+              isLoadingNewPage = false;
+            });
+          }
+        });
+  }
+
+  Widget screenUI(List<LiveNotificationModel> notifications,
+      NotificationState notificationState) {
     return Scaffold(
         backgroundColor: backgroundGrey,
         body: Column(
@@ -72,14 +123,58 @@ class _NotificationPageState extends State<NotificationPage> {
                     ],
                   ),
                 )),
-            Container(
-                child: Expanded(
-              child: ListView.builder(
-                  itemBuilder: (context, index) => NotificationCardWidget(),
-                  itemCount: 20),
-            )),
+            Expanded(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (!isLoadingNewPage &&
+                      notification.metrics.pixels ==
+                          notification.metrics.maxScrollExtent) {
+                    setState(() {
+                      isLoadingNewPage = true;
+                      _getNextPage();
+                    });
+                  }
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  child: Container(
+                      child: Column(
+                    children: [
+                      Container(
+                        child: LimitedBox(
+                          maxHeight: 200 * notifications.length.toDouble(),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) =>
+                                  NotificationCardWidget(
+                                    notificationModel: notifications[index],
+                                  ),
+                              itemCount: notifications.length),
+                        ),
+                      ),
+                      notificationState is LoadingNextPage
+                          ? Container(
+                              color: Colors.transparent,
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: Platform.isIOS
+                                  ? CupertinoActivityIndicator()
+                                  : Center(
+                                      child: Container(
+                                          height: 40,
+                                          width: 40,
+                                          child: CircularProgressIndicator()),
+                                    ),
+                            )
+                          : Container(),
+                    ],
+                  )),
+                ),
+              ),
+            ),
             SizedBox(
-              height: 30,
+              height: notificationState is LoadingNextPage ? 50 : 30,
             )
           ],
         ));

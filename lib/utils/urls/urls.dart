@@ -25,6 +25,9 @@ class Urls {
   //SEARCH
   static const String SEARCH = BASE_API + 'news/?search=';
 
+  //Live Notifications
+  static const String LIVE_NOTIFICATIONS = BASE_API + 'livenews/';
+
   //NEWSCASTS
   static const String NEWS_CASTS = BASE_API + 'newcast/';
 

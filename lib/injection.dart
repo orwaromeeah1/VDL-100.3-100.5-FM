@@ -21,6 +21,8 @@ import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast
 import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_state.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_bloc.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_state.dart';
+import 'package:vdl/ui/notifications/bloc/notifications_bloc.dart';
+import 'package:vdl/ui/notifications/bloc/notifications_state.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_bloc.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_state.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
@@ -60,6 +62,9 @@ Future setLocator(/*Future<InitializationStatus> initialization*/) async {
   //Articles  Bloc
   locator.registerFactory(() => ArticlesBLoc(locator(), locator()));
   locator.registerFactory(() => ArticlesState());
+  //NotificationBloc  Bloc
+  locator.registerFactory(() => NotificationBloc(locator(), locator()));
+  locator.registerFactory(() => NotificationState());
 
   //Articles Details  Bloc
   locator.registerFactory(() => ArticleDetailsBloc(locator(), locator()));

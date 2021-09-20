@@ -105,17 +105,20 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                        height:
-                                            (state.articles.length * 145.5 + 50)
-                                                .toDouble(),
-                                        child: ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context, index) =>
-                                                ArticleCardWidget(
-                                                  model: state.articles[index],
-                                                ),
-                                            itemCount: state.articles.length)),
+                                        child: LimitedBox(
+                                      maxHeight:
+                                          (state.articles.length * 145.5 + 50)
+                                              .toDouble(),
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) =>
+                                              ArticleCardWidget(
+                                                model: state.articles[index],
+                                              ),
+                                          itemCount: state.articles.length),
+                                    )),
                                     state is LoadingNextPage
                                         ? Container(
                                             color: Colors.transparent,

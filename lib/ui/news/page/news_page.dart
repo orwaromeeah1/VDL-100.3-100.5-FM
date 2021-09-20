@@ -324,29 +324,15 @@ class _NewsPageState extends State<NewsPage> {
             isSpeacialReports
                 ? SliverList(
                     delegate: SliverChildListDelegate([
-                    GestureDetector(
-                      onPanUpdate: (details) {
-                        // Swiping in right direction.
-                        if (details.delta.dx > 0) {}
-
-                        // Swiping in left direction.
-                        if (details.delta.dx < 0) {
-                          setState(() {
-                            isSpeacialReports = false;
-                          });
-                        }
-                      },
-                      child: Container(
-                          height:
-                              142 * model.specialReports.length.toDouble() + 50,
-                          child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) =>
-                                  SpecialReportsCard(
-                                    newsModel: model.specialReports[index],
-                                  ),
-                              itemCount: model.specialReports.length)),
-                    ),
+                    Container(
+                        height:
+                            142 * model.specialReports.length.toDouble() + 50,
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) => SpecialReportsCard(
+                                  newsModel: model.specialReports[index],
+                                ),
+                            itemCount: model.specialReports.length)),
                     state is FetchingNextPage
                         ? Container(
                             color: Colors.transparent,
@@ -473,57 +459,50 @@ class _NewsPageState extends State<NewsPage> {
 //                                            ),
 //                                          ),
 
-                                    GestureDetector(
-                                      onPanUpdate: (details) {
-                                        // Swiping in right direction.
-                                        if (details.delta.dx > 0) {
-                                          setState(() {
-                                            isSpeacialReports = true;
-                                          });
-                                        }
-                                      },
+                                    LimitedBox(
+                                      maxHeight:
+                                          400 * model.news.length.toDouble() +
+                                              50,
                                       child: Container(
-                                        height:
-                                            354 * model.news.length.toDouble() +
-                                                50,
                                         child: ListView.builder(
+                                            shrinkWrap: true,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, index) =>
-                                            index != 1?
-                                                NewsCardWidget(
-                                                  newsModel: model.news[index],
-                                                )
-                                            :Column(
-                                              children: [
-                                                GestureDetector(
-                                                  onPanUpdate: (details) {
-                                                    // Swiping in right direction.
-                                                    if (details.delta.dx > 0) {
-                                                      setState(() {
-                                                        isSpeacialReports = true;
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    height: 330,
-                                                    padding: EdgeInsets.all(10),
-                                                    margin: EdgeInsets.only(bottom: 20.0),
-                                                    child: NativeAdmob(
-                                                      // Your ad unit id
-                                                      adUnitID:
-                                                      'ca-app-pub-3940256099942544/8135179316',
-                                                      numberAds: 3,
-                                                      controller: _adController,
-                                                      type: NativeAdmobType.full,
-                                                    ),
-                                                  ),
-                                                ),
-                                                NewsCardWidget(
-                                                  newsModel: model.news[index],
-                                                ),
-                                              ],
-                                            ),
+                                                index != 1
+                                                    ? NewsCardWidget(
+                                                        newsModel:
+                                                            model.news[index],
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 330,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    10),
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    bottom:
+                                                                        20.0),
+                                                            child: NativeAdmob(
+                                                              // Your ad unit id
+                                                              adUnitID:
+                                                                  'ca-app-pub-3940256099942544/8135179316',
+                                                              numberAds: 3,
+                                                              controller:
+                                                                  _adController,
+                                                              type:
+                                                                  NativeAdmobType
+                                                                      .full,
+                                                            ),
+                                                          ),
+                                                          NewsCardWidget(
+                                                            newsModel: model
+                                                                .news[index],
+                                                          ),
+                                                        ],
+                                                      ),
                                             itemCount: model.news.length),
                                       ),
                                     ),
