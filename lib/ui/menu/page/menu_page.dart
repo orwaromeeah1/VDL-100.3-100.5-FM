@@ -14,9 +14,9 @@ import 'package:vdl/ui/programs/page/historical_programs/historical_programs_pag
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MenuPage extends StatefulWidget {
-   AudioPlayer introductionAudioPlayer;
+  AudioPlayer introductionAudioPlayer;
 
-  MenuPage(AudioPlayer introductionAudioPlayer){
+  MenuPage(AudioPlayer introductionAudioPlayer) {
     this.introductionAudioPlayer = introductionAudioPlayer;
   }
   @override
@@ -29,7 +29,6 @@ class _MenuPageState extends State<MenuPage> {
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
-
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +150,8 @@ class _MenuPageState extends State<MenuPage> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: ()=> _launchURL('https://twitter.com/sawtlebnan?lang=en'),
+                      onTap: () =>
+                          _launchURL('https://twitter.com/sawtlebnan?lang=en'),
                       child: SocialButton(
                         tag: 3,
                       ),
@@ -160,7 +160,8 @@ class _MenuPageState extends State<MenuPage> {
                       width: 13,
                     ),
                     GestureDetector(
-                      onTap: ()=> _launchURL('https://www.instagram.com/voice_of_lebanon/'),
+                      onTap: () => _launchURL(
+                          'https://www.instagram.com/voice_of_lebanon/'),
                       child: SocialButton(
                         tag: 2,
                       ),
@@ -168,14 +169,12 @@ class _MenuPageState extends State<MenuPage> {
                     SizedBox(
                       width: 13,
                     ),
-
                     GestureDetector(
-                      onTap: ()=> _launchURL('https://www.facebook.com/sawtlebnan/'),
-                      child:SocialButton(
-                        tag: 1,
-                      )
-                    ),
-
+                        onTap: () =>
+                            _launchURL('https://www.facebook.com/sawtlebnan/'),
+                        child: SocialButton(
+                          tag: 1,
+                        )),
                   ],
                 ),
               )
