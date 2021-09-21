@@ -13,28 +13,6 @@ import 'injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//Remove this method to stop OneSignal Debugging
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-
-  OneSignal.shared.setAppId("56917385-48bf-4670-bf10-2df27fc640c1");
-
-// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-    print("Accepted permission: $accepted");
-  });
-
-  OneSignal.shared.setNotificationWillShowInForegroundHandler(
-      (OSNotificationReceivedEvent event) {
-    // Will be called whenever a notification is received in foreground
-    // Display Notification, pass null param for not displaying the notification
-    event.complete(event.notification);
-  });
-
-  OneSignal.shared
-      .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-    print(result.notification.body);
-    // Will be called whenever a notification is opened/button pressed.
-  });
 
   ////
   ///
@@ -53,8 +31,20 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initPlatformState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -85,5 +75,29 @@ class MyApp extends StatelessWidget {
               child: Directionality(
                   textDirection: TextDirection.rtl, child: OnBoarding())),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    //Remove this method to stop OneSignal Debugging
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared.setAppId('56917385-48bf-4670-bf10-2df27fc640c1');
+
+    OneSignal.shared.setNotificationOpenedHandler((notification) {
+      // var section = notification.notification.additionalData!['section'];
+      // if (section == 'news') {
+      //   navigatorKey.currentState!.push(MaterialPageRoute(
+      //       builder: (context) => ArticleDetailsPage(
+      //             id: notification.notification.additionalData!['id'],
+      //           )));
+      // } else {
+      //   navigatorKey.currentState!
+      //       .push(MaterialPageRoute(builder: (context) => NotificationPage()));
+      // }
+    });
+    // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      print("Accepted permission: $accepted");
+    });
+// OneSignal.shared.pauseInAppMessages(!isNotificationOn);
   }
 }
