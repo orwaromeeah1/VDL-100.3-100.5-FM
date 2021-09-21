@@ -1,4 +1,4 @@
-package com.dlimits.vdlApp
+package com.vdl.stream
 
 import io.flutter.embedding.android.FlutterActivity
 
