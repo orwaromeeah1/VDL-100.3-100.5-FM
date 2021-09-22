@@ -6,6 +6,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
+import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -83,16 +84,8 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared.setAppId('56917385-48bf-4670-bf10-2df27fc640c1');
 
     OneSignal.shared.setNotificationOpenedHandler((notification) {
-      // var section = notification.notification.additionalData!['section'];
-      // if (section == 'news') {
-      //   navigatorKey.currentState!.push(MaterialPageRoute(
-      //       builder: (context) => ArticleDetailsPage(
-      //             id: notification.notification.additionalData!['id'],
-      //           )));
-      // } else {
-      //   navigatorKey.currentState!
-      //       .push(MaterialPageRoute(builder: (context) => NotificationPage()));
-      // }
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => NotificationPage()));
     });
     // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {

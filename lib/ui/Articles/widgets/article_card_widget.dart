@@ -114,7 +114,7 @@ class ArticleCardWidget extends StatelessWidget {
                             width: 2,
                           ),
                           Text(
-                            this.model.selectAuthor.name,
+                            this.model.selectAuthor.name ?? "لايوجد اسم",
                             style: TextStyle(
                               color: blue,
                               fontSize: 12,
