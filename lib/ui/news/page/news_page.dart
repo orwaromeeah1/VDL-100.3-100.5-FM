@@ -316,6 +316,24 @@ class _NewsPageState extends State<NewsPage> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 32),
                                             ),
+                                          ),
+                                          SizedBox(
+                                            width: 14,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() => {pageIndex = 3});
+                                            },
+                                            child: Text(
+                                              'نشرة الأخبار',
+                                              style: TextStyle(
+                                                  fontFamily: "TheSans",
+                                                  color: pageIndex == 3
+                                                      ? black
+                                                      : black.withOpacity(0.25),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 32),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -361,12 +379,24 @@ class _NewsPageState extends State<NewsPage> {
                 ? SpecialReportsWidget(model, state)
                 : pageIndex == 0
                     ? AllNewsWidget(model, state)
-                    : ArticlesWidget(model, state)
+                    : pageIndex == 2
+                        ? ArticlesWidget(model, state)
+                        : SliverList(
+                            delegate: SliverChildListDelegate(
+                                [Container(height: 100, width: 100)]))
           ],
         ),
       ),
     );
   }
+  /////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
 
   Widget ArticlesWidget(HomeModel model, NewsState state) {
     return SliverList(
@@ -409,6 +439,19 @@ class _NewsPageState extends State<NewsPage> {
   }
 
 /////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
   ///
   ///
   Widget AllNewsWidget(HomeModel model, NewsState state) {
@@ -573,6 +616,23 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   ////
+  ///
+  /////////////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
   ///
   ///
   ///
