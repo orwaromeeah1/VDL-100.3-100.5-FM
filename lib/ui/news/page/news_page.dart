@@ -46,6 +46,7 @@ class _NewsPageState extends State<NewsPage> {
   int selectedIndex = 0;
   int page = 1;
   int specialReportsPage = 1;
+  int articlesPage = 1;
   int pageIndex = 0;
 
   final _scrollController = ScrollController();
@@ -71,10 +72,20 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   void _getNextPage() {
-    isSpeacialReports ? specialReportsPage++ : page++;
-    isSpeacialReports
-        ? _bloc.add(FetchSpecialReportsPages(specialReportsPage))
-        : _bloc.add(FetchCategoryNews(currentCatId, page));
+    switch (pageIndex) {
+      case 0:
+        page++;
+        _bloc.add(FetchCategoryNews(currentCatId, page));
+        break;
+      case 1:
+        _bloc.add(FetchSpecialReportsPages(specialReportsPage));
+        specialReportsPage++;
+        break;
+      case 2:
+        articlesPage++;
+        _bloc.add(FetchArticles(articlesPage));
+        break;
+    }
   }
 
   List<NewsCategoryModel> categories = [
@@ -378,24 +389,19 @@ class _NewsPageState extends State<NewsPage> {
               ? Container(
                   color: Colors.transparent,
                   width: MediaQuery.of(context).size.width,
-                  height: 50,
+                  height: 100,
                   child: Platform.isIOS
                       ? CupertinoActivityIndicator()
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  child: CircularProgressIndicator()),
-                            ),
-                          ],
+                      : Center(
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              child: CircularProgressIndicator()),
                         ),
                 )
               : Container(),
           SizedBox(
-            height: 50,
+            height: 40,
           )
         ],
       ),

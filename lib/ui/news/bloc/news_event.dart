@@ -27,3 +27,9 @@ class FetchCategories extends NewsEvent {
 
   FetchCategories(this.page);
 }
+
+class FetchArticles extends NewsEvent {
+  final int page;
+
+  FetchArticles(this.page);
+}
