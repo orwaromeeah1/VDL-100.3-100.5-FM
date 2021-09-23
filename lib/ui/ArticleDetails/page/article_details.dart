@@ -325,7 +325,8 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                         width: 10,
                                       ),
                                       Text(
-                                        article.selectAuthor.name,
+                                        article.selectAuthor.name ??
+                                            "لا يوجد اسم ",
                                         style: TextStyle(
                                           color: blue,
                                           fontSize: 12,

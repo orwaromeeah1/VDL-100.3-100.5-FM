@@ -61,6 +61,16 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     } else if (event is MoveToTop) {
       yield MoveingToTop(homeModel);
       yield Loaded(homeModel);
+    } else if (event is FetchArticles) {
+      try {
+        yield FetchingNextPage(homeModel);
+        List<NewsModel> articles = await repo.getArticles(event.page);
+        homeModel.articles = homeModel.articles + articles;
+        yield Loaded(homeModel);
+      } catch (e) {
+        print(e);
+        yield Loaded(homeModel);
+      }
     }
   }
 }

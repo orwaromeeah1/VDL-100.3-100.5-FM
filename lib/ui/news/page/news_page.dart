@@ -15,6 +15,7 @@ import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/injection.dart';
+import 'package:vdl/ui/Articles/widgets/article_card_widget.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
 import 'package:vdl/ui/news/bloc/news_event.dart';
 import 'package:vdl/ui/news/bloc/news_state.dart';
@@ -45,6 +46,9 @@ class _NewsPageState extends State<NewsPage> {
   int selectedIndex = 0;
   int page = 1;
   int specialReportsPage = 1;
+  int articlesPage = 1;
+  int pageIndex = 0;
+
   final _scrollController = ScrollController();
   bool isLoadingNextPage = false;
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -68,10 +72,20 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   void _getNextPage() {
-    isSpeacialReports ? specialReportsPage++ : page++;
-    isSpeacialReports
-        ? _bloc.add(FetchSpecialReportsPages(specialReportsPage))
-        : _bloc.add(FetchCategoryNews(currentCatId, page));
+    switch (pageIndex) {
+      case 0:
+        page++;
+        _bloc.add(FetchCategoryNews(currentCatId, page));
+        break;
+      case 1:
+        _bloc.add(FetchSpecialReportsPages(specialReportsPage));
+        specialReportsPage++;
+        break;
+      case 2:
+        articlesPage++;
+        _bloc.add(FetchArticles(articlesPage));
+        break;
+    }
   }
 
   List<NewsCategoryModel> categories = [
@@ -246,49 +260,89 @@ class _NewsPageState extends State<NewsPage> {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         bottom: isSpeacialReports ? 25 : 0),
-                                    child: Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              isSpeacialReports = false;
-                                            });
-                                          },
-                                          child: Text(
-                                            'الاخبار',
-                                            style: TextStyle(
-                                                fontFamily: "TheSans",
-                                                color: isSpeacialReports
-                                                    ? black.withOpacity(0.25)
-                                                    : black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 32),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                pageIndex = 0;
+                                              });
+                                            },
+                                            child: Text(
+                                              'الاخبار',
+                                              style: TextStyle(
+                                                  fontFamily: "TheSans",
+                                                  color: pageIndex != 0
+                                                      ? black.withOpacity(0.25)
+                                                      : black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 32),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 14,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() =>
-                                                {isSpeacialReports = true});
-                                          },
-                                          child: Text(
-                                            'تقارير خاصة',
-                                            style: TextStyle(
-                                                fontFamily: "TheSans",
-                                                color: isSpeacialReports
-                                                    ? black
-                                                    : black.withOpacity(0.25),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 32),
+                                          SizedBox(
+                                            width: 14,
                                           ),
-                                        )
-                                      ],
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() => {pageIndex = 1});
+                                            },
+                                            child: Text(
+                                              'تقارير خاصة',
+                                              style: TextStyle(
+                                                  fontFamily: "TheSans",
+                                                  color: pageIndex == 1
+                                                      ? black
+                                                      : black.withOpacity(0.25),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 32),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 14,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() => {pageIndex = 2});
+                                            },
+                                            child: Text(
+                                              'مقالات',
+                                              style: TextStyle(
+                                                  fontFamily: "TheSans",
+                                                  color: pageIndex == 2
+                                                      ? black
+                                                      : black.withOpacity(0.25),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 32),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 14,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() => {pageIndex = 3});
+                                            },
+                                            child: Text(
+                                              'نشرة الأخبار',
+                                              style: TextStyle(
+                                                  fontFamily: "TheSans",
+                                                  color: pageIndex == 3
+                                                      ? black
+                                                      : black.withOpacity(0.25),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 32),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  isSpeacialReports
-                                      ? Container()
+                                  pageIndex != 0
+                                      ? Container(
+                                          height: 50,
+                                        )
                                       : Container(
                                           height: 50,
                                           child:
@@ -321,131 +375,176 @@ class _NewsPageState extends State<NewsPage> {
                 ),
               ),
             ),
-            isSpeacialReports
-                ? SliverList(
-                    delegate: SliverChildListDelegate([
-                    Container(
-                        height:
-                            142 * model.specialReports.length.toDouble() + 50,
-                        child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => SpecialReportsCard(
-                                  newsModel: model.specialReports[index],
-                                ),
-                            itemCount: model.specialReports.length)),
-                    state is FetchingNextPage
-                        ? Container(
-                            color: Colors.transparent,
-                            width: MediaQuery.of(context).size.width,
-                            height: 100,
-                            child: Platform.isIOS
-                                ? CupertinoActivityIndicator()
-                                : Center(
-                                    child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        child: CircularProgressIndicator()),
-                                  ),
-                          )
-                        : Container(),
-                    SizedBox(
-                      height: 40,
-                    )
-                  ]))
-                : SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        SizedBox(
-                          height: 30,
+            pageIndex == 1
+                ? SpecialReportsWidget(model, state)
+                : pageIndex == 0
+                    ? AllNewsWidget(model, state)
+                    : pageIndex == 2
+                        ? ArticlesWidget(model, state)
+                        : SliverList(
+                            delegate: SliverChildListDelegate(
+                                [Container(height: 100, width: 100)]))
+          ],
+        ),
+      ),
+    );
+  }
+  /////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+
+  Widget ArticlesWidget(HomeModel model, NewsState state) {
+    return SliverList(
+        delegate: SliverChildListDelegate([
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              child: LimitedBox(
+            maxHeight: (model.articles.length * 145.5 + 50).toDouble(),
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => ArticleCardWidget(
+                      model: model.articles[index],
+                    ),
+                itemCount: model.articles.length),
+          )),
+          state is FetchingNextPage
+              ? Container(
+                  color: Colors.transparent,
+                  width: MediaQuery.of(context).size.width,
+                  height: 100,
+                  child: Platform.isIOS
+                      ? CupertinoActivityIndicator()
+                      : Center(
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              child: CircularProgressIndicator()),
                         ),
-                        model.timeline == null
-                            ? Container()
-                            : Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 19.0),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/images/twitter.svg',
-                                          height: 21,
-                                          width: 17,
-                                        ),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          'أحدث التغريدات',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 19.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 130,
-                                            child: ListView.builder(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder: (context, index) =>
-                                                    twitterCard(
-                                                      tweet: model
-                                                          .timeline.data[index],
-                                                    ),
-                                                itemCount: model
-                                                    .timeline.data.length)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                        state is FetchingCategoryNews
-                            ? Container(
-                                height: MediaQuery.of(context).size.height / 3,
-                                child: Center(
-                                    child: Platform.isIOS
-                                        ? CupertinoActivityIndicator()
-                                        : CircularProgressIndicator(
-                                            color: blue,
-                                          )),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(bottom: 50.0),
-                                child: Container(
-                                    child: Column(
-                                  children: [
-                                    // GestureDetector(
-                                    //   onPanUpdate: (details) {
-                                    //     // Swiping in right direction.
-                                    //     if (details.delta.dx > 0) {
-                                    //       setState(() {
-                                    //         isSpeacialReports = true;
-                                    //       });
-                                    //     }
-                                    //   },
-                                    //   child: Container(
-                                    //     height: 330,
-                                    //     padding: EdgeInsets.all(10),
-                                    //     margin: EdgeInsets.only(bottom: 20.0),
-                                    //     child: NativeAdmob(
-                                    //       // Your ad unit id
-                                    //       adUnitID:
-                                    //           'ca-app-pub-3940256099942544/8135179316',
-                                    //       numberAds: 3,
-                                    //       controller: _adController,
-                                    //       type: NativeAdmobType.full,
-                                    //     ),
-                                    //   ),
-                                    // ),
+                )
+              : Container(),
+          SizedBox(
+            height: 40,
+          )
+        ],
+      ),
+    ]));
+  }
+
+/////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  Widget AllNewsWidget(HomeModel model, NewsState state) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          SizedBox(
+            height: 30,
+          ),
+          model.timeline == null
+              ? Container()
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 19.0),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/images/twitter.svg',
+                            height: 21,
+                            width: 17,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'أحدث التغريدات',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 19.0),
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 130,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) => twitterCard(
+                                        tweet: model.timeline.data[index],
+                                      ),
+                                  itemCount: model.timeline.data.length)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+          state is FetchingCategoryNews
+              ? Container(
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: Center(
+                      child: Platform.isIOS
+                          ? CupertinoActivityIndicator()
+                          : CircularProgressIndicator(
+                              color: blue,
+                            )),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: Container(
+                      child: Column(
+                    children: [
+                      // GestureDetector(
+                      //   onPanUpdate: (details) {
+                      //     // Swiping in right direction.
+                      //     if (details.delta.dx > 0) {
+                      //       setState(() {
+                      //         isSpeacialReports = true;
+                      //       });
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     height: 330,
+                      //     padding: EdgeInsets.all(10),
+                      //     margin: EdgeInsets.only(bottom: 20.0),
+                      //     child: NativeAdmob(
+                      //       // Your ad unit id
+                      //       adUnitID:
+                      //           'ca-app-pub-3940256099942544/8135179316',
+                      //       numberAds: 3,
+                      //       controller: _adController,
+                      //       type: NativeAdmobType.full,
+                      //     ),
+                      //   ),
+                      // ),
 //                                    banner == null
 //                                        ? Container(height: 20)
 //                                        : Container(
@@ -459,88 +558,115 @@ class _NewsPageState extends State<NewsPage> {
 //                                            ),
 //                                          ),
 
-                                    LimitedBox(
-                                      maxHeight:
-                                          400 * model.news.length.toDouble() +
-                                              50,
-                                      child: Container(
-                                        child: ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context, index) =>
-                                                index != 1
-                                                    ? NewsCardWidget(
-                                                        newsModel:
-                                                            model.news[index],
-                                                      )
-                                                    : Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 330,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    10),
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    bottom:
-                                                                        20.0),
-                                                            child: NativeAdmob(
-                                                              // Your ad unit id
-                                                              adUnitID:
-                                                                  'ca-app-pub-3940256099942544/8135179316',
-                                                              numberAds: 3,
-                                                              controller:
-                                                                  _adController,
-                                                              type:
-                                                                  NativeAdmobType
-                                                                      .full,
-                                                            ),
-                                                          ),
-                                                          NewsCardWidget(
-                                                            newsModel: model
-                                                                .news[index],
-                                                          ),
-                                                        ],
-                                                      ),
-                                            itemCount: model.news.length),
-                                      ),
+                      LimitedBox(
+                        maxHeight: 400 * model.news.length.toDouble() + 50,
+                        child: Container(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) => index != 1
+                                  ? NewsCardWidget(
+                                      newsModel: model.news[index],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Container(
+                                          height: 330,
+                                          padding: EdgeInsets.all(10),
+                                          margin: EdgeInsets.only(bottom: 20.0),
+                                          child: NativeAdmob(
+                                            // Your ad unit id
+                                            adUnitID:
+                                                'ca-app-pub-3940256099942544/8135179316',
+                                            numberAds: 3,
+                                            controller: _adController,
+                                            type: NativeAdmobType.full,
+                                          ),
+                                        ),
+                                        NewsCardWidget(
+                                          newsModel: model.news[index],
+                                        ),
+                                      ],
                                     ),
-                                    state is FetchingNextPage
-                                        ? Container(
-                                            color: Colors.transparent,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 50,
-                                            child: Platform.isIOS
-                                                ? CupertinoActivityIndicator()
-                                                : Center(
-                                                    child: Container(
-                                                        height: 40,
-                                                        width: 40,
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                  ),
-                                          )
-                                        : Container()
-                                  ],
-                                )),
-                              ),
-                        PodcastsWidet(),
-                      ],
-                    ),
-                  )
-          ],
-        ),
+                              itemCount: model.news.length),
+                        ),
+                      ),
+                      state is FetchingNextPage
+                          ? Container(
+                              color: Colors.transparent,
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: Platform.isIOS
+                                  ? CupertinoActivityIndicator()
+                                  : Center(
+                                      child: Container(
+                                          height: 40,
+                                          width: 40,
+                                          child: CircularProgressIndicator()),
+                                    ),
+                            )
+                          : Container()
+                    ],
+                  )),
+                ),
+          PodcastsWidet(),
+        ],
       ),
     );
   }
 
   ////
   ///
+  /////////////
   ///
   ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  Widget SpecialReportsWidget(HomeModel model, NewsState state) {
+    return SliverList(
+        delegate: SliverChildListDelegate([
+      Container(
+          height: 142 * model.specialReports.length.toDouble() + 50,
+          child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => SpecialReportsCard(
+                    newsModel: model.specialReports[index],
+                  ),
+              itemCount: model.specialReports.length)),
+      state is FetchingNextPage
+          ? Container(
+              color: Colors.transparent,
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+              child: Platform.isIOS
+                  ? CupertinoActivityIndicator()
+                  : Center(
+                      child: Container(
+                          height: 40,
+                          width: 40,
+                          child: CircularProgressIndicator()),
+                    ),
+            )
+          : Container(),
+      SizedBox(
+        height: 40,
+      )
+    ]));
+  }
 
   void selectType(catId, index, currentSelected) {
     setState(() {
