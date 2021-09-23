@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/core/Manager.dart';
@@ -67,28 +68,44 @@ class NewsCardWidget extends StatelessWidget {
                   ),
                   Container(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 19.0, left: 14, right: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            this.newsModel.humanDate,
-                            style: TextStyle(
-                                fontSize: 11, color: black.withOpacity(0.41)),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            Manager.removeAllHtmlTags(this.newsModel.title),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                            maxLines: 2,
-                          )
-                        ],
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(
+                            top: 19.0, left: 14, right: 15),
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  this.newsModel.humanDate,
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: black.withOpacity(0.41)),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  Manager.removeAllHtmlTags(
+                                      this.newsModel.title),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
+                            (newsModel.youtube != null)
+                                ? Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Icon(Icons.video_call))
+                                : Container(),
+                            (newsModel.audio != null && newsModel.audio != "")
+                                ? Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Icon(CupertinoIcons.speaker))
+                                : Container()
+                          ],
+                        )),
                   )
                 ],
               ),

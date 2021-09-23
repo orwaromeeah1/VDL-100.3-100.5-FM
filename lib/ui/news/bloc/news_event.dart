@@ -21,3 +21,9 @@ class FetchSpecialReportsPages extends NewsEvent {
 }
 
 class MoveToTop extends NewsEvent {}
+
+class FetchCategories extends NewsEvent {
+  final int page;
+
+  FetchCategories(this.page);
+}

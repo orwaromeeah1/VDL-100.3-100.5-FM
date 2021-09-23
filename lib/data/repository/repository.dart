@@ -27,6 +27,7 @@ Menus menus = Menus();
 List<NewsModel> news = [];
 List<NewsModel> special = [];
 List<NewsCategoryModel> categories = [];
+List<NewsModel> articles = [];
 Timeline timeline = Timeline(data: []);
 
 class Repository {
@@ -125,10 +126,11 @@ class Repository {
 
   ///
   ///   All news
-  Future<void> getNewsCategories() async {
+  Future<void> getNewsCategories(int page) async {
     //  String token = await getToken();
-    String response = await _client.getMethods(Urls.News_Categories, "");
-    categories = newsCategoriesFromJson(response);
+    String response =
+        await _client.getMethods(Urls.News_Categories + "/?page=$page", "");
+    categories = categories + newsCategoriesFromJson(response);
   }
 
   ///
@@ -166,8 +168,12 @@ class Repository {
     await Future.wait([
       getAllNews(1),
       getMenus(),
-      getNewsCategories(),
+      getNewsCategories(1),
+      getNewsCategories(2),
+      getNewsCategories(3),
+      getNewsCategories(4),
       getSpecialReports(1),
+      getStartUpArticles(1),
       getLatestTweets(),
     ]);
 
@@ -176,7 +182,8 @@ class Repository {
         categories: categories,
         specialReports: special,
         menus: menus,
-        timeline: timeline);
+        timeline: timeline,
+        articles: articles);
   }
 
   ///
@@ -190,6 +197,14 @@ class Repository {
     String response =
         await _client.getMethods(Urls.Articles_Url + '?page=${page}', '');
     return allNewsFromJson(response);
+  }
+
+  ///  getArticles
+  Future<void> getStartUpArticles(int page) async {
+    //  String token = await getToken();
+    String response =
+        await _client.getMethods(Urls.Articles_Url + '?page=${page}', '');
+    articles = allNewsFromJson(response);
   }
 
   ///
