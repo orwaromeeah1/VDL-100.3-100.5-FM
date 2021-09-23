@@ -6,9 +6,11 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
+import 'package:vdl/ui/main_tabs/page/main_tabs_page.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+import 'data/shared_preferences/auth_prefes_helper.dart';
 import 'injection.dart';
 
 void main() async {
@@ -38,12 +40,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initPlatformState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +75,10 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Platform.isAndroid
           ? Directionality(
-              textDirection: TextDirection.rtl, child: OnBoarding())
+              textDirection: TextDirection.rtl, child:OnBoarding() )
           : AudioServiceWidget(
               child: Directionality(
-                  textDirection: TextDirection.rtl, child: OnBoarding())),
+                  textDirection: TextDirection.rtl, child:  OnBoarding() )),
     );
   }
 
