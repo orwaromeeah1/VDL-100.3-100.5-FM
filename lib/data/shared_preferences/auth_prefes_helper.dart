@@ -47,4 +47,17 @@ class AuthPrefsHelper {
   }
 
 
+  Future<bool> isFirstTimeInApp()async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+    var result = await preferencesHelper.getBool('first_time');
+
+    return result==null?true:result;
+
+  }
+  Future<void> setNotFirstTimeInApp()async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+     await preferencesHelper.setBool('first_time',false);
+
+  }
+
 }
