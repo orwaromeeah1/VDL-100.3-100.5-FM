@@ -25,12 +25,14 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class MainTabsPage extends StatefulWidget {
   AudioPlayer introductionAudioPlayer = new AudioPlayer();
   MenuPage menuPage;
+  NewsPage newsPage;
   List<Widget> _pages;
 
   MainTabsPage() {
     menuPage = new MenuPage(introductionAudioPlayer);
+    newsPage = new NewsPage(introductionAudioPlayer);
     _pages = [
-      NewsPage(),
+      newsPage,
       ProgramsPage(),
       LiveBroadcastPage(),
       ProgramsSchedulePage(),

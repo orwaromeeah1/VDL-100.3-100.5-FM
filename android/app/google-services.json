@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:444593454318:android:c4d1b06205c482e07587ff",
         "android_client_info": {
-          "package_name": "com.dlimits.vdl"
+          "package_name": "com.vdl.stream"
         }
       },
       "oauth_client": [
