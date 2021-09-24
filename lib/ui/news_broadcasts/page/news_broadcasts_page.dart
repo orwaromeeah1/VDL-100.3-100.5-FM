@@ -17,7 +17,7 @@ import '../../../injection.dart';
 
 class NewsBroadcastsPage extends StatefulWidget {
   AudioPlayer introductionAudioPlayer;
-  NewsBroadcastsPage(this.introductionAudioPlayer);
+  NewsBroadcastsPage({this.introductionAudioPlayer});
   @override
   _NewsBroadcastsPageState createState() => _NewsBroadcastsPageState();
 }
@@ -72,7 +72,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
 
   Widget screenUi(){
     return Scaffold(
-      body: Stack(
+      body:Stack(
         children: <Widget>[
           Positioned(
             top: 0,

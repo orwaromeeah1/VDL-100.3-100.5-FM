@@ -29,6 +29,7 @@ List<NewsModel> special = [];
 List<NewsCategoryModel> categories = [];
 List<NewsModel> articles = [];
 Timeline timeline = Timeline(data: []);
+List<NewsCastResponse> newsCasts = [];
 
 class Repository {
   HttpClient _client;
@@ -174,6 +175,7 @@ class Repository {
       getNewsCategories(4),
       getSpecialReports(1),
       getStartUpArticles(1),
+      getNewsCasts(),
       getLatestTweets(),
     ]);
 
@@ -183,7 +185,9 @@ class Repository {
         specialReports: special,
         menus: menus,
         timeline: timeline,
-        articles: articles);
+        articles: articles,
+        newsCasts: newsCasts,
+    );
   }
 
   ///
@@ -309,9 +313,13 @@ class Repository {
     );
 
     List<NewsCastResponse> result = [];
+    //init home screen newscasts
+    newsCasts = [];
 
     for (int i = 0; i < response.length; i++) {
       result.add(NewsCastResponse.fromJson(response[i]));
+      //for home screen
+      newsCasts.add(NewsCastResponse.fromJson(response[i]));
     }
 
     return result;

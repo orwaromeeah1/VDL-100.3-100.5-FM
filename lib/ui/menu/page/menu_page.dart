@@ -70,7 +70,7 @@ class _MenuPageState extends State<MenuPage> {
                 onClick: () {
                   pushNewScreen(
                     context,
-                    screen: NewsBroadcastsPage(widget.introductionAudioPlayer),
+                    screen: NewsBroadcastsPage(introductionAudioPlayer: widget.introductionAudioPlayer,),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
