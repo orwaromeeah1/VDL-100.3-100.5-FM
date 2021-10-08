@@ -300,6 +300,8 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                   episodeNumber: 'الحلقة ${index + 1}',
                                   id: program.episodes[index].id,
                                   program: program,
+                                  containsAudio: program.episodes[index].containAudio,
+                                  containsVideo: program.episodes[index].containVideo,
                                 );
                               }),
                           SizedBox(height: 50),

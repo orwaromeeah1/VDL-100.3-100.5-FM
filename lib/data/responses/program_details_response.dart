@@ -174,6 +174,11 @@ class Episodes {
   String humanDate;
   String sinceDate;
   Image image;
+  String time;
+  String audio;
+  bool containAudio;
+  String video;
+  bool containVideo;
 
   Episodes(
       {this.id,
@@ -190,7 +195,12 @@ class Episodes {
         this.modifiedGmt,
         this.humanDate,
         this.sinceDate,
-        this.image});
+        this.image,
+        this.time,
+        this.audio,
+        this.containAudio,
+        this.video,
+        this.containVideo});
 
   Episodes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -208,6 +218,11 @@ class Episodes {
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    time = json['time'];
+    audio = json['audio'];
+    containAudio = json['contain_audio'];
+    video = json['video'];
+    containVideo = json['contain_video'];
   }
 
   Map<String, dynamic> toJson() {
@@ -229,6 +244,11 @@ class Episodes {
     if (this.image != null) {
       data['image'] = this.image.toJson();
     }
+    data['time'] = this.time;
+    data['audio'] = this.audio;
+    data['contain_audio'] = this.containAudio;
+    data['video'] = this.video;
+    data['contain_video'] = this.containVideo;
     return data;
   }
 }
