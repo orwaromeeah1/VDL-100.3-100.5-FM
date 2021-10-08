@@ -48,7 +48,8 @@ class NewsPage extends StatefulWidget {
   _NewsPageState createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin<NewsPage>{
+class _NewsPageState extends State<NewsPage>
+    with TickerProviderStateMixin<NewsPage> {
   bool isSpeacialReports = false;
   final _bloc = locator<NewsBloc>();
   int currentCatId = 0;
@@ -333,15 +334,20 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin<NewsP
                                             onTap: () {
                                               setState(() => {pageIndex = 3});
                                             },
-                                            child: Text(
-                                              'نشرة الأخبار',
-                                              style: TextStyle(
-                                                  fontFamily: "TheSans",
-                                                  color: pageIndex == 3
-                                                      ? black
-                                                      : black.withOpacity(0.25),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 32),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0),
+                                              child: Text(
+                                                'نشرة الأخبار',
+                                                style: TextStyle(
+                                                    fontFamily: "TheSans",
+                                                    color: pageIndex == 3
+                                                        ? black
+                                                        : black
+                                                            .withOpacity(0.25),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 32),
+                                              ),
                                             ),
                                           )
                                         ],
@@ -391,7 +397,6 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin<NewsP
                     : pageIndex == 2
                         ? ArticlesWidget(model, state)
                         : NewsBroadcastsWidget(model)
-
           ],
         ),
       ),
@@ -438,89 +443,100 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin<NewsP
     ]));
   }
 
-  Widget NewsBroadcastsWidget(HomeModel model){
+  Widget NewsBroadcastsWidget(HomeModel model) {
     return SliverList(
         delegate: SliverChildListDelegate([
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  child: LimitedBox(
-                      maxHeight: (model.newsCasts.length * 145.5 + 50).toDouble(),
-                      child: ListView.builder(
-                          itemCount: model.newsCasts.length,
-                          padding: EdgeInsets.only(top: 0),
-                          shrinkWrap: true,
-                          itemBuilder:  (BuildContext context, int index){
-                            return
-                              Container(
-                                width: MediaQuery.of(context).size.width*0.8,
-                                color: Colors.white,
-                                margin: EdgeInsets.only(bottom: 20),
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            model.newsCasts[index].isOpened = !model.newsCasts[index].isOpened;
-                                          });
-                                        },
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          height: 55,
-                                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                          color: model.newsCasts[index].isOpened ? ProjectColors.ThemeColor : Colors.white,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                '${model.newsCasts[index].slug}',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: model.newsCasts[index].isOpened ? Colors.white : Colors.black,
-                                                ),
-                                              ),
-                                              Icon(
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, bottom: 10, top: 15),
+            child: Container(
+                child: LimitedBox(
+                    maxHeight: (model.newsCasts.length * 145.5 + 50).toDouble(),
+                    child: ListView.builder(
+                        itemCount: model.newsCasts.length,
+                        padding: EdgeInsets.only(top: 0),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            color: Colors.white,
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Column(
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        model.newsCasts[index].isOpened =
+                                            !model.newsCasts[index].isOpened;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 55,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 15),
+                                      color: model.newsCasts[index].isOpened
+                                          ? ProjectColors.ThemeColor
+                                          : Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${model.newsCasts[index].slug}',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: model
+                                                      .newsCasts[index].isOpened
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                          Icon(
+                                            model.newsCasts[index].isOpened
+                                                ? Icons.keyboard_arrow_up
+                                                : Icons.keyboard_arrow_down,
+                                            color:
                                                 model.newsCasts[index].isOpened
-                                                    ? Icons.keyboard_arrow_up
-                                                    : Icons.keyboard_arrow_down,
-                                                color:model.newsCasts[index].isOpened
                                                     ? Colors.white
                                                     : ProjectColors.ThemeColor,
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                    ),
-                                    new AnimatedSize(
-                                        vsync: this,
-                                        duration: const Duration(milliseconds: 500),
-                                        child: new ConstrainedBox(
-                                            constraints: model.newsCasts[index].isOpened
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                                new AnimatedSize(
+                                    vsync: this,
+                                    duration: const Duration(milliseconds: 500),
+                                    child: new ConstrainedBox(
+                                        constraints:
+                                            model.newsCasts[index].isOpened
                                                 ? new BoxConstraints()
-                                                : new BoxConstraints(maxHeight: 0.0),
-                                            child:DaysNewsBroadcastsWidget(
-                                              broadcasts: model.newsCasts[index].timeSlots,
-                                              date: model.newsCasts[index].slug,
-                                              newsCast: model.newsCasts[index],
-                                              introductionAudioPlayer: widget.introductionAudioPlayer,
-                                            )
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              );
-                          }
-                      )
-                  )),
-
-              SizedBox(
-                height: 40,
-              )
-            ],
+                                                : new BoxConstraints(
+                                                    maxHeight: 0.0),
+                                        child: DaysNewsBroadcastsWidget(
+                                          broadcasts:
+                                              model.newsCasts[index].timeSlots,
+                                          date: model.newsCasts[index].slug,
+                                          newsCast: model.newsCasts[index],
+                                          introductionAudioPlayer:
+                                              widget.introductionAudioPlayer,
+                                        ))),
+                              ],
+                            ),
+                          );
+                        }))),
           ),
-        ]));
+          SizedBox(
+            height: 40,
+          )
+        ],
+      ),
+    ]));
   }
 
 /////
