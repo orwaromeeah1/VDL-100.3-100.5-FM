@@ -13,6 +13,8 @@ class EpisodeCard extends StatelessWidget {
   final String videoLink;
   final int id;
   final ProgramDetailsResponse program;
+  final bool containsAudio;
+  final containsVideo;
 
   EpisodeCard({
     this.date,
@@ -23,6 +25,8 @@ class EpisodeCard extends StatelessWidget {
     this.videoLink,
     this.id,
     this.program,
+    this.containsAudio,
+    this.containsVideo,
 });
 
   @override
@@ -95,7 +99,8 @@ class EpisodeCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flex(
+                          containsAudio
+                              ?  Flex(
                               direction: Axis.horizontal,
                               children: [
                                Icon(Icons.headset,color: ProjectColors.BLUE,),
@@ -107,20 +112,23 @@ class EpisodeCard extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-//                            Flex(
-//                              direction: Axis.horizontal,
-//                              children: [
-//                                Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
-//                                Text(
-//                                  'شاهد الآن',
-//                                  style: TextStyle(
-//                                    color: ProjectColors.ThemeColor,
-//                            fontSize: 10,
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
+                            )
+                            :Container(),
+                        containsVideo
+                            ?Flex(
+                             direction: Axis.horizontal,
+                             children: [
+                               Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
+                               Text(
+                                 'شاهد الآن',
+                                 style: TextStyle(
+                                   color: ProjectColors.ThemeColor,
+                           fontSize: 10,
+                                 ),
+                               ),
+                             ],
+                           )
+                            :Container(),
                           ],
                         ),
                       ),

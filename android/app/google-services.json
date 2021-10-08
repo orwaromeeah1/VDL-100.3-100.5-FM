@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "444593454318",
-    "project_id": "vdlapp-6f149",
-    "storage_bucket": "vdlapp-6f149.appspot.com"
+    "project_number": "283233289302",
+    "firebase_url": "https://vdl-mobile-app.firebaseio.com",
+    "project_id": "vdl-mobile-app",
+    "storage_bucket": "vdl-mobile-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:444593454318:android:c4d1b06205c482e07587ff",
+        "mobilesdk_app_id": "1:283233289302:android:b34e452793778248e6e7f7",
         "android_client_info": {
           "package_name": "com.vdl.stream"
         }
       },
       "oauth_client": [
         {
-          "client_id": "444593454318-satr7ham10jf4ge17hmmj4vku0ndgiqg.apps.googleusercontent.com",
+          "client_id": "283233289302-cmskj6trebddqf0qpk9kdddnj03cmulm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDq1WtBRBIOhMI6mNQ5L4v9MfEXX-UpXcI"
+          "current_key": "AIzaSyBBNvk7JEuiklAk_6ItU3g9Lw40kgHmon0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "444593454318-satr7ham10jf4ge17hmmj4vku0ndgiqg.apps.googleusercontent.com",
+              "client_id": "283233289302-cmskj6trebddqf0qpk9kdddnj03cmulm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
