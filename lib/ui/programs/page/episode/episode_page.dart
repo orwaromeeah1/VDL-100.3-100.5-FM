@@ -478,6 +478,8 @@ class _EpisodePageState extends State<EpisodePage>
                                         episodeNumber: 'الحلقة ${index + 1}',
                                         id: widget.program.episodes[index].id,
                                         program: widget.program,
+                                  containsVideo: widget.program.episodes[index].containVideo,
+                                  containsAudio: widget.program.episodes[index].containAudio,
                                       );
                               }),
                           SizedBox(height: 50),
