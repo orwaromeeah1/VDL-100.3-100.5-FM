@@ -97,29 +97,37 @@ class NewsCardWidget extends StatelessWidget {
                             ),
                             Align(
                                 alignment: Alignment.bottomLeft,
-                                child: Container(
-                                  width: 50,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      (newsModel.youtube != null)
-                                          ? Icon(
-                                              Icons.videocam,
-                                              size: 27,
-                                              color: ProjectColors.ThemeColor,
-                                            )
-                                          : Container(),
-                                      (newsModel.audio != null &&
-                                              newsModel.audio != "")
-                                          ? Icon(
-                                              CupertinoIcons.speaker_2_fill,
-                                              color: ProjectColors.ThemeColor,
-                                              size: 20,
-                                            )
-                                          : Container()
-                                    ],
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Container(
+                                    width: 50,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          (newsModel.audio == null ||
+                                                  newsModel.audio == "" ||
+                                                  newsModel.youtube == null)
+                                              ? MainAxisAlignment.center
+                                              : MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (newsModel.youtube != null)
+                                            ? Icon(
+                                                Icons.videocam,
+                                                size: 27,
+                                                color: ProjectColors.ThemeColor,
+                                              )
+                                            : Container(),
+                                        (newsModel.audio != null &&
+                                                newsModel.audio != "")
+                                            ? Icon(
+                                                CupertinoIcons.speaker_2_fill,
+                                                color: ProjectColors.ThemeColor,
+                                                size: 20,
+                                              )
+                                            : Container()
+                                      ],
+                                    ),
                                   ),
                                 ))
                           ],
