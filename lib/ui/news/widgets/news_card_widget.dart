@@ -105,11 +105,7 @@ class NewsCardWidget extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                          (newsModel.audio == null ||
-                                                  newsModel.audio == "" ||
-                                                  newsModel.youtube == null)
-                                              ? MainAxisAlignment.center
-                                              : MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       children: [
                                         (newsModel.youtube != null)
                                             ? Icon(
@@ -117,15 +113,16 @@ class NewsCardWidget extends StatelessWidget {
                                                 size: 27,
                                                 color: ProjectColors.ThemeColor,
                                               )
-                                            : Container(),
-                                        (newsModel.audio != null &&
-                                                newsModel.audio != "")
-                                            ? Icon(
-                                                CupertinoIcons.speaker_2_fill,
-                                                color: ProjectColors.ThemeColor,
-                                                size: 20,
-                                              )
-                                            : Container()
+                                            : (newsModel.audio != null &&
+                                                    newsModel.audio != "")
+                                                ? Icon(
+                                                    CupertinoIcons
+                                                        .speaker_2_fill,
+                                                    color: ProjectColors
+                                                        .ThemeColor,
+                                                    size: 20,
+                                                  )
+                                                : Container(),
                                       ],
                                     ),
                                   ),
