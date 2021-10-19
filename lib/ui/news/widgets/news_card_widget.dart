@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
@@ -94,16 +95,33 @@ class NewsCardWidget extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            (newsModel.youtube != null)
-                                ? Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Icon(Icons.video_call))
-                                : Container(),
-                            (newsModel.audio != null && newsModel.audio != "")
-                                ? Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Icon(CupertinoIcons.speaker))
-                                : Container()
+                            Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Container(
+                                  width: 50,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      (newsModel.youtube != null)
+                                          ? Icon(
+                                              Icons.videocam,
+                                              size: 27,
+                                              color: ProjectColors.ThemeColor,
+                                            )
+                                          : Container(),
+                                      (newsModel.audio != null &&
+                                              newsModel.audio != "")
+                                          ? Icon(
+                                              CupertinoIcons.speaker_2_fill,
+                                              color: ProjectColors.ThemeColor,
+                                              size: 20,
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+                                ))
                           ],
                         )),
                   )

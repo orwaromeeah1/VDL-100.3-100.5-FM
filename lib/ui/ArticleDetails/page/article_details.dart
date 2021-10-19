@@ -1,5 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,8 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   final _bloc = locator<ArticleDetailsBloc>();
 //  BannerAd banner;
   Duration duration;
-  AudioPlayer audioPlayer = locator<AudioPlayer>();
+  Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
+
   bool audioLoaded = false;
   String audioUrl = "";
 
@@ -56,6 +57,15 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
+    audioPlayer.stop();
+    WidgetsBinding.instance.addObserver(this);
+
+    //_bloc.add(FetchNewsDetails(widget.newsId, widget.isSpecial));
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+
+    // Triggers the onDurationChanged listener and sets the max duration string
     audioPlayer.onDurationChanged.listen((Duration duration) {
       if (mounted) {
         setState(() {
@@ -63,11 +73,23 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
         });
       }
     });
+
     audioPlayer.onAudioPositionChanged.listen((Duration position) async {
       if (mounted) {
         setState(() {
           timeProgress = position.inSeconds;
         });
+      }
+    });
+
+    audioPlayer.onPlayerStateChanged.listen((state) async {
+      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
       }
     });
 
@@ -79,30 +101,32 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
         });
       }
     });
+  }
 
-    audioPlayer.onPlayerStateChanged.listen((state) async {
-      if (audioPlayer.state == PlayerState.PAUSED) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      if (isPlaying) {
+        pauseMusic();
+        isPlaying = true;
+      }
+      //stop your audio player
+    } else if (state == AppLifecycleState.resumed) {
+      if (isPlaying) {
         if (mounted) {
           setState(() {
-            _handleOnPressed();
-            _animationController.reverse();
+            resume();
+            isPlaying = true;
           });
         }
       }
-    });
+    }
   }
 
-  resume() async {
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
-    await audioPlayer.setUrl(audioUrl);
-    audioPlayer.resume();
-  }
-
-  /// Compulsory
   playMusic() async {
     await audioPlayer.setUrl(
         audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
     int result = await audioPlayer.play(audioUrl);
     if (result == 1) {
       // success
@@ -110,9 +134,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       if (mounted) {
-        setState(() {
-          setState(() => {print(d)});
-        });
+        setState(() => {print(d)});
       }
     });
   }
@@ -120,6 +142,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   /// Compulsory
   pauseMusic() async {
     int result = await audioPlayer.pause();
+  }
+
+  resume() async {
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
+    await audioPlayer.setUrl(audioUrl);
+    audioPlayer.resume();
   }
 
   stopMusic() async {
@@ -144,28 +172,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      if (isPlaying) {
-        pauseMusic();
-        isPlaying = false;
-      }
-
-      //stop your audio player
-    }
-    // else if (state == AppLifecycleState.resumed) {
-    //   if (isPlaying) {
-    //     if (mounted) {
-    //       setState(() {
-    //         resume();
-    //         isPlaying = true;
-    //       });
-    //     }
-    //   }
-    // }
   }
 
   @override
@@ -603,6 +609,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       if (timeProgress != 0 && isPlaying) {
         resume();
       } else if (isPlaying) {
+        stopMusic();
         playMusic();
       } else {
         pauseMusic();
