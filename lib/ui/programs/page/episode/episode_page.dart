@@ -250,7 +250,9 @@ class _EpisodePageState extends State<EpisodePage>
                           size: 50,
                           color: ProjectColors.ThemeColor,
                           isGlowing: true,
-                          onClick: () {},
+                          onClick: () {
+                            _handleOnPressed();
+                          },
                           icon: Icon(
                             Icons.volume_down,
                             color: Colors.white,

@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/ui/Aboutus/pages/about_us_page.dart';
 import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
@@ -12,6 +16,8 @@ import 'package:vdl/ui/menu/widget/social_buttons.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/programs/page/historical_programs/historical_programs_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+
+import '../../../injection.dart';
 
 class MenuPage extends StatefulWidget {
   AudioPlayer introductionAudioPlayer;
@@ -25,15 +31,33 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   double width;
+  bool notificationOn = true;
+  final _helper = locator<AuthPrefsHelper>();
+
+  @override
+  void initState() {
+    super.initState();
+    getNotification();
+  }
 
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
+
+
+  void getNotification() async {
+    notificationOn = await _helper.getNotification();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    bool notificationOn = false;
+
+
     return Scaffold(
       body: Container(
         width: width,
@@ -133,10 +157,15 @@ class _MenuPageState extends State<MenuPage> {
                             borderRadius: 21.0,
                             activeColor: green,
                             value: notificationOn,
-                            onToggle: (value) {
+                            onToggle: (value) async{
+                              await _helper.setNotification(notificationOn);
+
                               setState(() {
                                 notificationOn = value;
-                              });
+                                OneSignal.shared.disablePush(!notificationOn);
+                              }
+
+                              );
                             },
                           ),
                         ],

@@ -60,4 +60,14 @@ class AuthPrefsHelper {
 
   }
 
+  Future<void> setNotification(bool isOn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notification', isOn);
+  }
+
+  Future<bool> getNotification() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool res = prefs.getBool('notification');
+    return res != null ? res : true;
+  }
 }

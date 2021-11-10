@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:vdl/data/models/news_model.dart';
+import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/Articles/bloc/articles_bloc.dart';
 import 'package:vdl/ui/Articles/bloc/articles_event.dart';
@@ -24,11 +26,15 @@ class _ArticlesPageState extends State<ArticlesPage> {
   final bloc = locator<ArticlesBLoc>();
   bool isLoadingNewPage = false;
   int page = 1;
+
+
   @override
   void initState() {
     super.initState();
     bloc.add(FetchArticlesPage(1));
   }
+
+
 
   void _getNextPage() {
     page++;
