@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   double width;
   List<DayModel> currentMonthDays = [];
   int selectedDay = DateTime.now().day;
+  int totalDays =0;
   List<ProgramSchedule> programSchedule = [];
 
   final _bloc = locator<ProgramsScheduleBloc>();
@@ -33,8 +35,9 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   void initState() {
     super.initState();
     currentMonthDays = DateHelper.getDays();
+    totalDays = DateHelper.daysInMonth( DateTime.now());
     _bloc.add(FetchProgramsSchedule(
-        dayNum: selectedDay, day: currentMonthDays[selectedDay].name));
+        dayNum: selectedDay, day: currentMonthDays[(selectedDay-1)%totalDays].name));
   }
 
   @override
@@ -155,8 +158,12 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             setState(() {
               selectedDay--;
             });
+            log('jmnjmn'+(selectedDay%totalDays).toString());
             _bloc.add(FetchProgramsSchedule(
-                dayNum: selectedDay, day: currentMonthDays[selectedDay].name));
+                dayNum: selectedDay==0? totalDays:
+                                        selectedDay==totalDays? selectedDay
+                                                                :selectedDay%totalDays,
+                day: currentMonthDays[(selectedDay-1)%totalDays].name));
           },
           child: Container(
             height: 35,
@@ -251,8 +258,12 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             setState(() {
               selectedDay++;
             });
+            log('jmnjmnnn'+(selectedDay%totalDays).toString());
             _bloc.add(FetchProgramsSchedule(
-                dayNum: selectedDay, day: currentMonthDays[selectedDay].name));
+                dayNum: selectedDay==0? totalDays:
+                selectedDay==totalDays? selectedDay
+                    :selectedDay%totalDays,
+                day: currentMonthDays[(selectedDay-1)%totalDays].name));
           },
           child: Container(
             height: 35,
