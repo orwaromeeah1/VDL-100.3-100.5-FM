@@ -31,12 +31,13 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   double width;
-  bool notificationOn = true;
-  final _helper = locator<AuthPrefsHelper>();
 
+  final _helper = locator<AuthPrefsHelper>();
+  var notification = true;
   @override
   void initState() {
     super.initState();
+
     getNotification();
   }
 
@@ -44,19 +45,23 @@ class _MenuPageState extends State<MenuPage> {
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
-
-
   void getNotification() async {
-    notificationOn = await _helper.getNotification();
-    if (mounted) {
-      setState(() {});
-    }
+    bool n = await _helper.getNotification();
+
+    OneSignal.shared.disablePush(!notification);
+    setState(() {
+      notification = n;
+    });
+  }
+
+  void setNotifications(bool value) async {
+    await _helper.setNotification(value);
+    OneSignal.shared.disablePush(!notification);
   }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-
 
     return Scaffold(
       body: Container(
@@ -94,7 +99,9 @@ class _MenuPageState extends State<MenuPage> {
                 onClick: () {
                   pushNewScreen(
                     context,
-                    screen: NewsBroadcastsPage(introductionAudioPlayer: widget.introductionAudioPlayer,),
+                    screen: NewsBroadcastsPage(
+                      introductionAudioPlayer: widget.introductionAudioPlayer,
+                    ),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
@@ -149,25 +156,15 @@ class _MenuPageState extends State<MenuPage> {
                               fontSize: 15,
                             ),
                           ),
-                          FlutterSwitch(
-                            height: 30.0,
-                            width: 49.0,
-                            padding: 4.0,
-                            toggleSize: 22.0,
-                            borderRadius: 21.0,
-                            activeColor: green,
-                            value: notificationOn,
-                            onToggle: (value) async{
-                              await _helper.setNotification(notificationOn);
-
-                              setState(() {
-                                notificationOn = value;
-                                OneSignal.shared.disablePush(!notificationOn);
-                              }
-
-                              );
-                            },
-                          ),
+                          CupertinoSwitch(
+                              activeColor: green,
+                              value: notification,
+                              onChanged: (value) {
+                                setNotifications(value);
+                                setState(() {
+                                  notification = value;
+                                });
+                              }),
                         ],
                       ),
                     ),

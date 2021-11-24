@@ -36,8 +36,6 @@ class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
-
-
 }
 
 class _MyAppState extends State<MyApp> {
@@ -47,8 +45,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlatformState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
