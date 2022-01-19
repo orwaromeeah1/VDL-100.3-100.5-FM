@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -510,47 +512,52 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             ),
                           ),
                         ),
-                        ListTileTheme(
-                          contentPadding: const EdgeInsets.only(
-                              right: 19.0, left: 19, bottom: 34),
-                          child: ExpansionTile(
-                            key: GlobalKey(),
-                            title: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  child: Text(
-                                    "المصدر:",
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                )),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: state.newsModel.link == null
-                                    ? Text(
-                                        'No Brand Brief',
-                                        style: TextStyle(
-                                          fontSize: 13,
+                        Platform.isIOS
+                            ? Container()
+                            : ListTileTheme(
+                                contentPadding: const EdgeInsets.only(
+                                    right: 19.0, left: 19, bottom: 34),
+                                child: ExpansionTile(
+                                  key: GlobalKey(),
+                                  title: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        child: Text(
+                                          "المصدر:",
+                                          style: TextStyle(fontSize: 15),
                                         ),
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          _launchURL(state.newsModel.link);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            state.newsModel.link,
-                                            style: TextStyle(
+                                      )),
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: state.newsModel.link == null
+                                          ? Text(
+                                              'No Brand Brief',
+                                              style: TextStyle(
                                                 fontSize: 13,
-                                                color: Colors.blue),
-                                          ),
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          ),
-                        )
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                _launchURL(
+                                                    state.newsModel.link);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  state.newsModel.link,
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.blue),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                  ],
+                                ),
+                              )
                       ],
                     ),
                   ],
