@@ -68,9 +68,12 @@ dependencies:
   share: ^2.0.4
   just_audio_background: any
 #  google_mobile_ads: ^0.13.2
-  flutter_native_admob: ^2.1.0+3
+  #flutter_native_admob: ^2.1.0+3
+  firebase_core: ^1.11.0
+  firebase_analytics: ^9.0.5
 #  admob_flutter: ^1.0.1
-  
+  google_mobile_ads: ^1.0.1
+  video_player: ^2.2.15
 
 dev_dependencies:
   flutter_test:

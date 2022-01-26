@@ -119,7 +119,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'تبث “صوت لبنان” على مدى عشرين ساعة يومياً من الساعة الخامسة والنصف صباحاً الى الواحدة والنصف بعد منتصف الليل بتوقيت بيروت وتشمل التغطية الجغرافيّة الأراضي اللبنانية والبلدان المجاورة على موجتيها :\n\n 100.5 – 100.3 FM ، كما يمكن الإستماع إليها في سائر دول العالم عبر موقعها الإلكتروني:www.vdl.me،ومن خلال التطبيق الخاص بها على الاجهزة الخلوية Android وIOS إبحثوا عن Voice of Lebanon 100,5',
+                          'تبث “صوت لبنان” على مدى عشرين ساعة يومياً من الساعة الخامسة والنصف صباحاً الى الثانية عشرة والنصف بعد منتصف الليل بتوقيت بيروت وتشمل التغطية الجغرافيّة الأراضي اللبنانية والبلدان المجاورة على موجتيها :\n\n100.5 – 100.3 FM ، كما يمكن الإستماع إليها في سائر دول العالم عبر موقعها الإلكتروني:www.vdl.me،ومن خلال التطبيق الخاص بها على الاجهزة الخلوية Android وIOS إبحث عن Voice of Lebanon 100,5',
                           style: TextStyle(
                             height: 1.5,
                             fontSize: 14,
@@ -196,8 +196,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     height: 33,
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      'أول محاولة بث لإذاعه صوت لبنان',
-                      textAlign: TextAlign.right,
+                      'السياسة التحريرية',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -220,11 +220,11 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   padding:
                       const EdgeInsets.only(top: 15.5, right: 32, left: 32),
                   child: Container(
-                    height: 176,
+                    height: 200,
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      'تعتمد السياسة التحريرية ل “صوت لبنان”نقل نبض الناس وتحرص على رواية المعلومة بمهنية ووضوح ودقة وصدق وموضوعية، وتقديم كل وجهات النظر بشكل متوازن، وبطريقة جذابة تحث على المتابعة، كل ذلك بهدف ترسيخ إذاعة “صوت لبنان” كقيمة مضافة في الفضاء الإعلامي اللبناني .',
-                      textAlign: TextAlign.right,
+                      'تعتمد السياسة التحريرية ل “صوت لبنان”نقل نبض الناس وتحرص على رواية المعلومة بمهنية ووضوح ودقة وصدق وموضوعية، وتقديم كل وجهات النظر بشكل متوازن، وبطريقة جذابة تحث على المتابعة، كل ذلك بهدف ترسيخ إذاعة “صوت لبنان” كقيمة مضافة في الفضاء الإعلامي اللبناني والعربي.\nلم تكتف "صوت لبنان" بالإعلام مهنة، صنعت الخبر والكثير من السياسة اللبنانية.',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
                         height: 1.8,

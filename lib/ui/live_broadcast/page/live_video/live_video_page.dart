@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+import 'package:video_player/video_player.dart';
 
 class LiveVideoPage extends StatefulWidget {
   @override
@@ -15,6 +16,27 @@ class _LiveVideoPageState extends State<LiveVideoPage> {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
+    VideoPlayerController _controller = VideoPlayerController.network(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
+
+    @override
+    void initState() {
+      super.initState();
+
+      _controller.addListener(() {
+        setState(() {});
+      });
+
+      _controller.initialize();
+
+      ;
+    }
+
+    @override
+    void dispose() {
+      super.dispose();
+      _controller.dispose();
+    }
 
     return Scaffold(
       body: Container(
@@ -76,31 +98,34 @@ class _LiveVideoPageState extends State<LiveVideoPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            FilePath.LOGO,
-                            height: 100,
-                            width: 100,
-                          ),
-                          SizedBox(
-                            height: 32,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 4,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: ProjectColors.ThemeColor,
-                                      width: 1),
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                        FilePath.VIDEO_IMAGE_BACKGROUND,
-                                      ),
-                                      fit: BoxFit.fill)),
-                              child: AudioPlayWidget(),
-                            ),
-                          ),
+                          _controller.value.isInitialized
+                              ? VideoPlayer(_controller)
+                              : Container(),
+                          // Image.asset(
+                          //   FilePath.LOGO,
+                          //   height: 100,
+                          //   width: 100,
+                          // ),
+                          // SizedBox(
+                          //   height: 32,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                          //   child: Container(
+                          //     height: MediaQuery.of(context).size.height / 4,
+                          //     width: MediaQuery.of(context).size.width,
+                          //     decoration: BoxDecoration(
+                          //         border: Border.all(
+                          //             color: ProjectColors.ThemeColor,
+                          //             width: 1),
+                          //         image: DecorationImage(
+                          //             image: AssetImage(
+                          //               FilePath.VIDEO_IMAGE_BACKGROUND,
+                          //             ),
+                          //             fit: BoxFit.fill)),
+                          //     child: AudioPlayWidget(),
+                          //   ),
+                          // ),
                           SizedBox(
                             height: 32,
                           ),

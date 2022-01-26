@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:vdl/firebase_options.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
@@ -14,7 +17,10 @@ import 'injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  MobileAds.instance.initialize();
   ////
   ///
   ///

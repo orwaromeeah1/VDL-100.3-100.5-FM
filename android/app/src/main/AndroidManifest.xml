@@ -46,7 +46,7 @@
        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
        <meta-data
            android:name="com.google.android.gms.ads.APPLICATION_ID"
-           android:value="ca-app-pub-1119497502577985~7945843286"/>
+           android:value="ca-app-pub-3344712509481171~5220571872"/>
 
 <!--   background audio-->
        <service android:name="com.ryanheise.audioservice.AudioService">

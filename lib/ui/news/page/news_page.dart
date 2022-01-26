@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -65,10 +64,6 @@ class _NewsPageState extends State<NewsPage>
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-//  BannerAd banner;
-
-  final _adController = NativeAdmobController();
-
   @override
   void initState() {
     super.initState();
@@ -77,7 +72,7 @@ class _NewsPageState extends State<NewsPage>
 
   @override
   void dispose() {
-//    banner?.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -102,21 +97,34 @@ class _NewsPageState extends State<NewsPage>
     NewsCategoryModel(name: "كل الاخبار", id: 0)
   ];
 
+  BannerAd _bannerAd;
+  bool _bannerAdIsLoaded = false;
+  bool _bannerAdIfailed = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    final adState = locator<AdState>();
-//
-//    adState.initialization.then((value) {
-//      setState(() {
-//        banner = BannerAd(
-//            adUnitId: adState.bannerAdUnitId,
-//            size: AdSize.mediumRectangle,
-//            request: AdRequest(),
-//            listener: adState.adListener)
-//          ..load();
-//      });
-//    });
+    // Create the ad objects and load ads.
+    _bannerAd = BannerAd(
+        size: AdSize.largeBanner,
+        adUnitId: AdState.bannerAdUnitId,
+        listener: BannerAdListener(
+          onAdLoaded: (Ad ad) {
+            print('$BannerAd loaded.');
+            setState(() {
+              _bannerAdIsLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            print('$BannerAd failedToLoad: $error');
+            _bannerAdIfailed = true;
+            _bannerAdIsLoaded = true;
+            ad.dispose();
+          },
+          onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
+          onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
+        ),
+        request: AdRequest())
+      ..load();
   }
 
   @override
@@ -671,19 +679,33 @@ class _NewsPageState extends State<NewsPage>
                                     )
                                   : Column(
                                       children: [
-                                        Container(
-                                          height: 330,
-                                          padding: EdgeInsets.all(10),
-                                          margin: EdgeInsets.only(bottom: 20.0),
-                                          child: NativeAdmob(
-                                            // Your ad unit id
-                                            adUnitID:
-                                                'ca-app-pub-3940256099942544/8135179316',
-                                            numberAds: 3,
-                                            controller: _adController,
-                                            type: NativeAdmobType.full,
-                                          ),
-                                        ),
+                                        // Container(
+                                        //   height: 330,
+                                        //   padding: EdgeInsets.all(10),
+                                        //   margin: EdgeInsets.only(bottom: 20.0),
+                                        //   child: NativeAdmob(
+                                        //     // Your ad unit id
+                                        //     adUnitID:
+                                        //         'ca-app-pub-3940256099942544/8135179316',
+                                        //     numberAds: 3,
+                                        //     controller: _adController,
+                                        //     type: NativeAdmobType.full,
+                                        //   ),
+                                        // ),
+                                        !_bannerAdIsLoaded
+                                            ? LoadingIndicator()
+                                            : _bannerAdIfailed
+                                                ? Container()
+                                                : Container(
+                                                    height: 330,
+                                                    padding: EdgeInsets.all(10),
+                                                    margin: EdgeInsets.only(
+                                                        bottom: 20.0),
+                                                    child: Center(
+                                                      child: AdWidget(
+                                                        ad: _bannerAd,
+                                                      ),
+                                                    )),
                                         NewsCardWidget(
                                           newsModel: model.news[index],
                                         ),
