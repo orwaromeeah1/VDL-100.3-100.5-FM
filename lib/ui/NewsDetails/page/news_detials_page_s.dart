@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
@@ -537,16 +538,20 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                         // ),
                         Padding(
                           padding: const EdgeInsets.only(
-                            right: 19.0,
-                            top: 9,
-                            left: 19,
-                          ),
+                              right: 19.0, top: 9, left: 19, bottom: 20),
                           child: Container(
-                            child: Text(
-                              Manager.removeAllHtmlTags(
-                                  state.newsModel.content),
-                              style: TextStyle(fontSize: 15),
+                            child: HtmlWidget(
+                              state.newsModel.content,
+                              webViewMediaPlaybackAlwaysAllow: true,
+                              webView: true,
+                              webViewJs: true,
                             ),
+                            //Html(data: state.newsModel.content),
+                            //     Text(
+                            //   Manager.removeAllHtmlTags(
+                            //       state.newsModel.content),
+                            //   style: TextStyle(fontSize: 15),
+                            // ),
                           ),
                         ),
                         Platform.isIOS

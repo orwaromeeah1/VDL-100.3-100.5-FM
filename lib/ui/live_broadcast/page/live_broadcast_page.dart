@@ -59,7 +59,7 @@ class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
                   ),
                   LiveStreamButton(
                     image: FilePath.VIDEO_LOGO,
-                    text: 'بث بصري',
+                    text: 'بث بالفيديو',
                     onClick: () => Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -19,6 +19,7 @@ import 'package:vdl/ui/news/bloc/news_bloc.dart';
 import 'package:vdl/ui/news/bloc/news_event.dart';
 import 'package:vdl/ui/news/bloc/news_state.dart';
 import 'package:vdl/ui/news/page/search/search_page.dart';
+import 'package:vdl/ui/news/widgets/live_stream_widget.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/news/widgets/news_list_widget.dart';
 import 'package:vdl/ui/news/widgets/podcasts_widget.dart';
@@ -100,6 +101,7 @@ class _NewsPageState extends State<NewsPage>
   BannerAd _bannerAd;
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -138,11 +140,21 @@ class _NewsPageState extends State<NewsPage>
                   state is FetchingCategoryNews ||
                   state is FetchingNextPage ||
                   state is MoveToTop) {
-                return newsScreenLoaded(context, state.homeModel, state);
+                return Stack(
+                  children: [
+                    newsScreenLoaded(context, state.homeModel, state),
+                    LiveStreamWidget()
+                  ],
+                );
               } else if (state is Loading) {
                 return LoadingScreen();
               } else if (state is Startup) {
-                return newsScreenLoaded(context, state.homeModel, state);
+                return Stack(
+                  children: [
+                    newsScreenLoaded(context, state.homeModel, state),
+                    LiveStreamWidget()
+                  ],
+                );
               } else
                 return ErrorScreen(
                   onRetry: () => _bloc.add(FetchData()),
@@ -166,6 +178,8 @@ class _NewsPageState extends State<NewsPage>
   }
 
   //
+  ///
+  ///
   ///
   ///
   ///

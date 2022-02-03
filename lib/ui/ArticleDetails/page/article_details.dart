@@ -8,6 +8,7 @@ import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
@@ -340,7 +341,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                             image: CachedNetworkImageProvider(
                                                 article
                                                     .selectAuthor.image.medium),
-                                            fit: BoxFit.fitHeight)),
+                                            fit: BoxFit.cover)),
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -539,16 +540,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 19.0, top: 9, left: 19),
-                        child: Container(
-                          child: Text(
-                            Manager.removeAllHtmlTags(article.content),
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ),
                       !_bannerAdIsLoaded
                           ? LoadingIndicator()
                           : _bannerAdIfailed
@@ -562,29 +553,29 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                       ad: _bannerAd,
                                     ),
                                   )),
-                      // Container(
-                      //   height: 330,
-                      //   padding: EdgeInsets.all(10),
-                      //   margin: EdgeInsets.only(bottom: 20.0),
-                      //   child: NativeAdmob(
-                      //     // Your ad unit id
-                      //     adUnitID: 'ca-app-pub-3940256099942544/8135179316',
-                      //     numberAds: 3,
-                      //     controller: _adController,
-                      //     type: NativeAdmobType.full,
-                      //   ),
-                      // ),
-//
                       Padding(
                         padding: const EdgeInsets.only(
-                            right: 19.0, left: 19, bottom: 34),
+                            bottom: 19, right: 19.0, top: 9, left: 19),
                         child: Container(
-                          child: Text(
-                            Manager.removeAllHtmlTags(article.excerpt),
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          child: HtmlWidget(article.content),
+                          //  Text(
+                          //   Manager.removeAllHtmlTags(article.content),
+                          //   style: TextStyle(fontSize: 15),
+                          // ),
                         ),
                       ),
+
+//
+                      // Padding(
+                      //   padding: const EdgeInsets.only(
+                      //       right: 19.0, left: 19, bottom: 34),
+                      //   child: Container(
+                      //     child: Text(
+                      //       Manager.removeAllHtmlTags(article.excerpt),
+                      //       style: TextStyle(fontSize: 15),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 50,
                       ),
@@ -592,37 +583,6 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                   ),
                 ],
               )),
-          // Padding(
-          //   padding: const EdgeInsets.only(
-          //       right: 19.0, top: 34, left: 19, bottom: 15),
-          //   child: Container(
-          //     child: Center(
-          //       child: Text(
-          //         'اقرأ ايضا',
-          //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   height: 400,
-          //   child: Swiper(
-          //     itemHeight: 330,
-          //     itemBuilder: (BuildContext context, int index) {
-          //       return Padding(
-          //         padding: const EdgeInsets.only(top: 10.0, bottom: 24),
-          //         child: NewsCardWidget(newsModel:,),
-          //       );
-          //     },
-          //     itemCount: 3,
-          //     pagination: SwiperPagination(
-          //         builder: DotSwiperPaginationBuilder(
-          //             color: Colors.grey,
-          //             activeColor: Colors.green,
-          //             size: 10.0,
-          //             activeSize: 10.0)),
-          //   ),
-          // ),
         ],
       ),
     );
