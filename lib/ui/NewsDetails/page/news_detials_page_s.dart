@@ -516,9 +516,10 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                             : _bannerAdIfailed
                                 ? Container()
                                 : Container(
-                                    height: 330,
+                                    height: Platform.isIOS ? 330 : 150,
                                     padding: EdgeInsets.all(10),
-                                    margin: EdgeInsets.only(bottom: 20.0),
+                                    margin: EdgeInsets.only(
+                                        bottom: Platform.isIOS ? 20.0 : 10),
                                     child: Center(
                                       child: AdWidget(
                                         ad: _bannerAd,

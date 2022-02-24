@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart' as Player;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -545,9 +547,10 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                           : _bannerAdIfailed
                               ? Container()
                               : Container(
-                                  height: 330,
+                                  height: Platform.isIOS ? 330 : 150,
                                   padding: EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(bottom: 20.0),
+                                  margin: EdgeInsets.only(
+                                      bottom: Platform.isIOS ? 20.0 : 10),
                                   child: Center(
                                     child: AdWidget(
                                       ad: _bannerAd,
