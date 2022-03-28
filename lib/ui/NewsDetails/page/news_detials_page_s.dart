@@ -7,9 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
+
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +23,7 @@ import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
@@ -81,16 +83,38 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     }
   }
 
-  final _adController = NativeAdmobController();
-
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
-  //////
+  BannerAd _bannerAd;
+  bool _bannerAdIsLoaded = false;
+  bool _bannerAdIfailed = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Create the ad objects and load ads.
+    _bannerAd = BannerAd(
+        size: AdSize.largeBanner,
+        adUnitId: AdState.bannerAdUnitId,
+        listener: BannerAdListener(
+          onAdLoaded: (Ad ad) {
+            print('$BannerAd loaded.');
+            setState(() {
+              _bannerAdIsLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            print('$BannerAd failedToLoad: $error');
+            _bannerAdIfailed = true;
+            _bannerAdIsLoaded = true;
+            ad.dispose();
+          },
+          onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
+          onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
+        ),
+        request: AdRequest())
+      ..load();
   }
 
   @override
@@ -146,6 +170,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   @override
   void dispose() {
     audioPlayer.stop();
+    _bannerAd.dispose();
     _bloc.close();
     super.dispose();
   }
@@ -486,30 +511,48 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 ),
                               )
                             : Container(),
-                        Container(
-                          height: 330,
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.only(bottom: 20.0),
-                          child: NativeAdmob(
-                            // Your ad unit id
-                            adUnitID: 'ca-app-pub-3940256099942544/8135179316',
-                            numberAds: 3,
-                            controller: _adController,
-                            type: NativeAdmobType.full,
-                          ),
-                        ),
+                        !_bannerAdIsLoaded
+                            ? LoadingIndicator()
+                            : _bannerAdIfailed
+                                ? Container()
+                                : Container(
+                                    height: Platform.isIOS ? 330 : 150,
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.only(
+                                        bottom: Platform.isIOS ? 20.0 : 10),
+                                    child: Center(
+                                      child: AdWidget(
+                                        ad: _bannerAd,
+                                      ),
+                                    )),
+                        // Container(
+                        //   height: 330,
+                        //   padding: EdgeInsets.all(10),
+                        //   margin: EdgeInsets.only(bottom: 20.0),
+                        //   child: NativeAdmob(
+                        //     // Your ad unit id
+                        //     adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                        //     numberAds: 3,
+                        //     controller: _adController,
+                        //     type: NativeAdmobType.full,
+                        //   ),
+                        // ),
                         Padding(
                           padding: const EdgeInsets.only(
-                            right: 19.0,
-                            top: 9,
-                            left: 19,
-                          ),
+                              right: 19.0, top: 9, left: 19, bottom: 20),
                           child: Container(
-                            child: Text(
-                              Manager.removeAllHtmlTags(
-                                  state.newsModel.content),
-                              style: TextStyle(fontSize: 15),
+                            child: HtmlWidget(
+                              state.newsModel.content,
+                              webViewMediaPlaybackAlwaysAllow: true,
+                              webView: true,
+                              webViewJs: true,
                             ),
+                            //Html(data: state.newsModel.content),
+                            //     Text(
+                            //   Manager.removeAllHtmlTags(
+                            //       state.newsModel.content),
+                            //   style: TextStyle(fontSize: 15),
+                            // ),
                           ),
                         ),
                         Platform.isIOS

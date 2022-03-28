@@ -13,6 +13,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(NewsState initialState, this.repo) : super(initialState);
   List<NewsModel> viewedNews = [];
   HomeModel homeModel;
+  bool dismessdLive = false;
   @override
   Stream<NewsState> mapEventToState(NewsEvent event) async* {
     if (event is FetchData) {

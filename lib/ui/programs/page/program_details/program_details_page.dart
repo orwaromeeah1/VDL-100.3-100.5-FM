@@ -1,11 +1,11 @@
-
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 // import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'package:vdl/core/Manager.dart';
@@ -17,6 +17,7 @@ import 'package:vdl/ui/programs/widget/episode_card.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
+import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 import '../../../../injection.dart';
@@ -35,34 +36,46 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   ProgramDetailsResponse program;
   final _bloc = locator<ProgramDetailsBloc>();
 
-//  BannerAd banner;
-  final _adController = NativeAdmobController();
-
   @override
   void initState() {
     _bloc.add(FetchProgramDetails(programId: widget.programId));
     super.initState();
   }
 
+  BannerAd _bannerAd;
+  bool _bannerAdIsLoaded = false;
+  bool _bannerAdIfailed = true;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    final adState = locator<AdState>();
-//    adState.initialization.then((value) {
-//      setState(() {
-//        banner = BannerAd(
-//            adUnitId: adState.bannerAdUnitId,
-//            size: AdSize.mediumRectangle,
-//            request: AdRequest(),
-//            listener: adState.adListener)
-//          ..load();
-//      });
-//    });
+    // Create the ad objects and load ads.
+    _bannerAd = BannerAd(
+        size: AdSize.largeBanner,
+        adUnitId: AdState.bannerAdUnitId,
+        listener: BannerAdListener(
+          onAdLoaded: (Ad ad) {
+            print('$BannerAd loaded.');
+            setState(() {
+              _bannerAdIsLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            print('$BannerAd failedToLoad: $error');
+            _bannerAdIsLoaded = true;
+
+            _bannerAdIfailed = false;
+            ad.dispose();
+          },
+          onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
+          onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
+        ),
+        request: AdRequest())
+      ..load();
   }
 
   @override
   void dispose() {
-//    banner?.dispose();
+    _bannerAd.dispose();
     _bloc.close();
     super.dispose();
   }
@@ -139,8 +152,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                   Icons.arrow_forward_ios,
                                   color: Colors.white,
                                 ),
-                              )
-                          ),
+                              )),
                         ],
                       )),
                 ],
@@ -212,8 +224,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                       child: Column(
                         children: [
                           Text(
-                            '${Manager.removeAllHtmlTags(
-                      program.programInfoDescription.trim())}',
+                            '${Manager.removeAllHtmlTags(program.programInfoDescription.trim())}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
@@ -229,7 +240,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                                 borderRadius: BorderRadius.circular(17.5)),
                             child: Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 5),
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: Flex(
                                 direction: Axis.horizontal,
                                 children: [
@@ -260,27 +271,33 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            height: 330,
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(bottom: 20.0),
-                            child: NativeAdmob(
-                              // Your ad unit id
-                              adUnitID:
-                              'ca-app-pub-3940256099942544/8135179316',
-                              numberAds: 3,
-                              controller: _adController,
-                              type: NativeAdmobType.full,
-                            ),
-                          ),
-//                          banner == null
-//                              ? Container(height: 20)
-//                              : Container(
-//                                  height: 250,
-//                                  child: AdWidget(
-//                                    ad: banner,
-//                                  ),
-//                                ),
+                          !_bannerAdIsLoaded
+                              ? LoadingIndicator()
+                              : Container(
+                                  height: Platform.isIOS ? 330 : 150,
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(
+                                      bottom: Platform.isIOS ? 20.0 : 10),
+                                  child: Center(
+                                    child: AdWidget(
+                                      ad: _bannerAd,
+                                    ),
+                                  )),
+                          //Add Place
+                          // Container(
+                          //   height: 330,
+                          //   padding: EdgeInsets.all(10),
+                          //   margin: EdgeInsets.only(bottom: 20.0),
+                          //   child: NativeAdmob(
+                          //     // Your ad unit id
+                          //     adUnitID:
+                          //         'ca-app-pub-3940256099942544/8135179316',
+                          //     numberAds: 3,
+                          //     controller: _adController,
+                          //     type: NativeAdmobType.full,
+                          //   ),
+                          // ),
+//
                           SizedBox(
                             height: 20,
                           ),
@@ -296,14 +313,16 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return EpisodeCard(
                                   image:
-                                  '${program.episodes[index].image.original}',
+                                      '${program.episodes[index].image.original}',
                                   date: '${program.episodes[index].humanDate}',
                                   title: '${program.episodes[index].title}',
                                   episodeNumber: 'الحلقة ${index + 1}',
                                   id: program.episodes[index].id,
                                   program: program,
-                                  containsAudio: program.episodes[index].containAudio,
-                                  containsVideo: program.episodes[index].containVideo,
+                                  containsAudio:
+                                      program.episodes[index].containAudio,
+                                  containsVideo:
+                                      program.episodes[index].containVideo,
                                 );
                               }),
                           SizedBox(height: 50),
@@ -320,7 +339,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
     );
   }
 
-
   Widget screenUiWithSliver() {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -331,61 +349,60 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
           SliverPersistentHeader(
             pinned: true,
             delegate: MyDynamicHeader(
-                expandedHeight: height / 3,
-                program: program,
-                viewAudio: true,
+              expandedHeight: height / 3,
+              program: program,
+              viewAudio: true,
             ),
           ),
           SliverList(
               delegate: SliverChildListDelegate([
-                Container(
-                    padding: new EdgeInsets.only(top: 30, right: 10.0, left: 10.0),
-                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.14),
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ]),
-                    child: Stack(
+            Container(
+                padding: new EdgeInsets.only(top: 30, right: 10.0, left: 10.0),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.14),
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
+                  ),
+                ]),
+                child: Stack(
+                  children: [
+                    Column(
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              '${Manager.removeAllHtmlTags(program.programInfoDescription.trim())}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              height: 35,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(17.5)),
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 5),
-                                child: Flex(
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    Icon(
-                                      Icons.watch_later,
-                                      color: ProjectColors.ThemeColor,
-                                    ),
-                                    Text(
-                                      '${program.programTextTime} ',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
+                        Text(
+                          '${Manager.removeAllHtmlTags(program.programInfoDescription.trim())}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 35,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(17.5)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                Icon(
+                                  Icons.watch_later,
+                                  color: ProjectColors.ThemeColor,
                                 ),
-                              ),
+                                Text(
+                                  '${program.programTextTime} ',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                        ),
 //                          SizedBox(
 //                            height: 20,
 //                          ),
@@ -396,62 +413,69 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 //                              fontSize: 14,
 //                            ),
 //                          ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 330,
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.only(bottom: 20.0),
-                              child: NativeAdmob(
-                                // Your ad unit id
-                                adUnitID:
-                                'ca-app-pub-3940256099942544/8135179316',
-                                numberAds: 3,
-                                controller: _adController,
-                                type: NativeAdmobType.full,
-                              ),
-                            ),
-//                          banner == null
-//                              ? Container(height: 20)
-//                              : Container(
-//                                  height: 250,
-//                                  child: AdWidget(
-//                                    ad: banner,
-//                                  ),
-//                                ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'الحلقات',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: program.episodes.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return EpisodeCard(
-                                    image:
-                                    '${program.episodes[index].image.original}',
-                                    date: '${program.episodes[index].humanDate}',
-                                    title: '${program.episodes[index].title}',
-                                    episodeNumber: 'الحلقة ${index + 1}',
-                                    id: program.episodes[index].id,
-                                    program: program,
-                                    containsAudio: program.episodes[index].containAudio,
-                                    containsVideo: program.episodes[index].containVideo,
-                                  );
-                                }),
-                            SizedBox(height: 50),
-                          ],
+                        SizedBox(
+                          height: 20,
                         ),
-                      ],
-                    )),
+                        !_bannerAdIsLoaded
+                            ? LoadingIndicator()
+                            : _bannerAdIfailed
+                                ? Container()
+                                : Container(
+                                    height: Platform.isIOS ? 330 : 150,
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.only(
+                                        bottom: Platform.isIOS ? 20.0 : 10),
+                                    child: Center(
+                                      child: AdWidget(
+                                        ad: _bannerAd,
+                                      ),
+                                    )),
+                        // Container(
+                        //   height: 330,
+                        //   padding: EdgeInsets.all(10),
+                        //   margin: EdgeInsets.only(bottom: 20.0),
+                        //   child: NativeAdmob(
+                        //     // Your ad unit id
+                        //     adUnitID: 'ca-app-pub-3940256099942544/8135179316',
+                        //     numberAds: 3,
+                        //     controller: _adController,
+                        //     type: NativeAdmobType.full,
+                        //   ),
+                        // ),
 
-              ])),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'الحلقات',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: program.episodes.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return EpisodeCard(
+                                image:
+                                    '${program.episodes[index].image.original}',
+                                date: '${program.episodes[index].humanDate}',
+                                title: '${program.episodes[index].title}',
+                                episodeNumber: 'الحلقة ${index + 1}',
+                                id: program.episodes[index].id,
+                                program: program,
+                                containsAudio:
+                                    program.episodes[index].containAudio,
+                                containsVideo:
+                                    program.episodes[index].containVideo,
+                              );
+                            }),
+                        SizedBox(height: 50),
+                      ],
+                    ),
+                  ],
+                )),
+          ])),
           SliverFillRemaining(
             hasScrollBody: false,
             child: Container(
@@ -465,7 +489,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
   }
 }
 
-
 class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   double expandedHeight;
   ProgramDetailsResponse program;
@@ -473,9 +496,9 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   final VoidCallback hndlAudio;
   MyDynamicHeader(
       {@required this.expandedHeight,
-        this.program,
-        this.viewAudio,
-        this.hndlAudio});
+      this.program,
+      this.viewAudio,
+      this.hndlAudio});
 
   @override
   Widget build(
@@ -522,8 +545,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
           ),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image:
-                CachedNetworkImageProvider(program.image.original),
+                image: CachedNetworkImageProvider(program.image.original),
                 fit: BoxFit.cover),
           ),
         ),
@@ -566,23 +588,23 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 ),
                 viewAudio
                     ? InkWell(
-                  onTap: () {
-                    hndlAudio();
-                  },
-                  child: CircleAvatar(
-                    radius: 32,
-                    backgroundColor: green.withOpacity(0.41),
-                    child: CircleAvatar(
-                      backgroundColor: green,
-                      radius: 25,
-                      child: Icon(
-                        CupertinoIcons.speaker_2_fill,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                )
+                        onTap: () {
+                          hndlAudio();
+                        },
+                        child: CircleAvatar(
+                          radius: 32,
+                          backgroundColor: green.withOpacity(0.41),
+                          child: CircleAvatar(
+                            backgroundColor: green,
+                            radius: 25,
+                            child: Icon(
+                              CupertinoIcons.speaker_2_fill,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      )
                     : Container(),
               ],
             ),
