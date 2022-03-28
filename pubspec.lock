@@ -309,7 +309,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5+1"
   fluttericon:
     dependency: "direct main"
     description:
@@ -811,7 +811,7 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.16"
+    version: "2.2.17"
   video_player_platform_interface:
     dependency: transitive
     description:
@@ -825,7 +825,7 @@ packages:
       name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   visibility_detector:
     dependency: transitive
     description:
