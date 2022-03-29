@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:update_available/update_available.dart';
 import 'package:vdl/data/models/homeModel.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/data/repository/repository.dart';
@@ -22,6 +23,12 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         homeModel = await repo.getHomeData();
         viewedNews = homeModel.news;
         yield Startup(homeModel);
+
+        bool canBeUpdated = await checkForUpdate();
+        if (canBeUpdated) {
+          yield ShowUpdatePopup();
+          yield Startup(homeModel);
+        }
       } catch (e) {
         print(e);
         yield NoInternetConnection();
@@ -72,6 +79,22 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         print(e);
         yield Loaded(homeModel);
       }
+    }
+  }
+
+  Future<bool> checkForUpdate() async {
+    try {
+      Availability updateAvailability = await getUpdateAvailability();
+
+      final text = updateAvailability.fold(
+        available: () => true,
+        notAvailable: () => false,
+        unknown: () => false,
+      );
+
+      return text;
+    } catch (e) {
+      return false;
     }
   }
 }

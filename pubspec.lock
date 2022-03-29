@@ -397,9 +397,11 @@ packages:
   google_mobile_ads:
     dependency: "direct main"
     description:
-      name: google_mobile_ads
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/google_mobile_ads"
+      ref: "feature/suamusica"
+      resolved-ref: b2051250b83633c5d3a533c6c82bee8728243ec6
+      url: "https://github.com/SuaMusica/googleads-mobile-flutter.git"
+    source: git
     version: "1.0.1"
   html:
     dependency: "direct main"
@@ -506,6 +508,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.3"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   path:
     dependency: transitive
     description:
@@ -611,6 +620,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  pub_semver:
+    dependency: transitive
+    description:
+      name: pub_semver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   rxdart:
     dependency: transitive
     description:
@@ -700,6 +716,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  store_redirect:
+    dependency: "direct main"
+    description:
+      name: store_redirect
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   stream_channel:
     dependency: transitive
     description:
@@ -749,6 +772,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  update_available:
+    dependency: "direct main"
+    description:
+      name: update_available
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  update_available_android:
+    dependency: transitive
+    description:
+      name: update_available_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  update_available_ios:
+    dependency: transitive
+    description:
+      name: update_available_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  update_available_platform_interface:
+    dependency: transitive
+    description:
+      name: update_available_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   url_launcher:
     dependency: "direct main"
     description:

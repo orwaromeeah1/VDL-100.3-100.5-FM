@@ -26,6 +26,7 @@ import 'package:vdl/ui/news/widgets/podcasts_widget.dart';
 import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
+import 'package:vdl/ui/news/widgets/update_dialog.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/news_broadcasts/widget/days_news_broadcasts_list_widget.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
@@ -161,6 +162,9 @@ class _NewsPageState extends State<NewsPage>
                 );
             },
             listener: (context, state) {
+              if (state is ShowUpdatePopup) {
+                showUpdateDialog(context);
+              }
               if (state is Startup) {
                 categories = categories + state.homeModel.categories;
                 selectType(categories[0].id, 0, 0);

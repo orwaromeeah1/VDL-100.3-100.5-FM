@@ -38,3 +38,5 @@ class MoveingToTop extends NewsState {
 }
 
 class NoInternetConnection extends NewsState {}
+
+class ShowUpdatePopup extends NewsState {}
