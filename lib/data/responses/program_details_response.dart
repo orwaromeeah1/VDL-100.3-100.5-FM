@@ -23,26 +23,26 @@ class ProgramDetailsResponse {
 
   ProgramDetailsResponse(
       {this.id,
-        this.date,
-        this.dateGmt,
-        this.modified,
-        this.modifiedGmt,
-        this.slug,
-        this.status,
-        this.link,
-        this.title,
-        this.content,
-        this.excerpt,
-        this.author,
-        this.menuOrder,
-        this.format,
-        this.programInfoDescription,
-        this.timeProgramm,
-        this.programTextTime,
-        this.image,
-        this.humanDate,
-        this.sinceDate,
-        this.episodes});
+      this.date,
+      this.dateGmt,
+      this.modified,
+      this.modifiedGmt,
+      this.slug,
+      this.status,
+      this.link,
+      this.title,
+      this.content,
+      this.excerpt,
+      this.author,
+      this.menuOrder,
+      this.format,
+      this.programInfoDescription,
+      this.timeProgramm,
+      this.programTextTime,
+      this.image,
+      this.humanDate,
+      this.sinceDate,
+      this.episodes});
 
   ProgramDetailsResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,10 +61,13 @@ class ProgramDetailsResponse {
     format = json['format'];
     programInfoDescription = json['program_info_description'];
     if (json['time_programm'] != null) {
-      timeProgramm = new List<TimeProgramm>();
-      json['time_programm'].forEach((v) {
-        timeProgramm.add(new TimeProgramm.fromJson(v));
-      });
+      if (json['time_programm'] == false) {
+      } else {
+        timeProgramm = new List<TimeProgramm>();
+        json['time_programm'].forEach((v) {
+          timeProgramm.add(new TimeProgramm.fromJson(v));
+        });
+      }
     }
     programTextTime = json['program_text_time'];
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
@@ -182,25 +185,25 @@ class Episodes {
 
   Episodes(
       {this.id,
-        this.link,
-        this.author,
-        this.date,
-        this.dateGmt,
-        this.content,
-        this.title,
-        this.excerpt,
-        this.status,
-        this.name,
-        this.modified,
-        this.modifiedGmt,
-        this.humanDate,
-        this.sinceDate,
-        this.image,
-        this.time,
-        this.audio,
-        this.containAudio,
-        this.video,
-        this.containVideo});
+      this.link,
+      this.author,
+      this.date,
+      this.dateGmt,
+      this.content,
+      this.title,
+      this.excerpt,
+      this.status,
+      this.name,
+      this.modified,
+      this.modifiedGmt,
+      this.humanDate,
+      this.sinceDate,
+      this.image,
+      this.time,
+      this.audio,
+      this.containAudio,
+      this.video,
+      this.containVideo});
 
   Episodes.fromJson(Map<String, dynamic> json) {
     id = json['id'];

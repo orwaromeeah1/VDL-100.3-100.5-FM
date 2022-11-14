@@ -42,7 +42,8 @@ class NewsModel {
       this.vimeo,
       this.youtube,
       this.relatedArticles,
-      this.selectAuthor});
+      this.selectAuthor,
+      this.kwikmotion});
 
   int id;
   int date;
@@ -74,6 +75,7 @@ class NewsModel {
   String video;
   dynamic vimeo;
   String youtube;
+  String kwikmotion;
   List<RelatedArticle> relatedArticles;
 
   factory NewsModel.fromJson(Map<String, dynamic> json) => NewsModel(
@@ -120,6 +122,7 @@ class NewsModel {
         video: json["video"],
         vimeo: json["vimeo"] == null ? "" : json["vimeo"],
         youtube: json["youtube"] == null ? null : json["youtube"],
+        kwikmotion: json["kwikmotion"] == null ? null : json["kwikmotion"],
         relatedArticles: json["related_articles"] == null
             ? []
             : List<RelatedArticle>.from(json["related_articles"]

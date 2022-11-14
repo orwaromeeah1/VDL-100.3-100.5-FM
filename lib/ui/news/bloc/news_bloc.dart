@@ -42,17 +42,17 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
               await repo.getNewsByCategory(event.page, event.catId);
 
           viewedNews = homeModel.news;
-          yield Loaded(homeModel);
+          yield Loaded(homeModel, true);
         } else {
           yield FetchingNextPage(homeModel);
           List<NewsModel> extra =
               await repo.getNewsByCategory(event.page, event.catId);
           homeModel.news = homeModel.news + extra;
-          yield Loaded(homeModel);
+          yield Loaded(homeModel, false);
         }
       } catch (e) {
         print(e);
-        yield Loaded(homeModel);
+        yield Loaded(homeModel, false);
       }
     } else if (event is FetchSpecialReportsPages) {
       try {
@@ -61,23 +61,23 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             await repo.getSpecialReports(event.page);
         homeModel.specialReports =
             homeModel.specialReports + specialReportsNextPage;
-        yield Loaded(homeModel);
+        yield Loaded(homeModel, false);
       } catch (e) {
         print(e);
-        yield Loaded(homeModel);
+        yield Loaded(homeModel, false);
       }
     } else if (event is MoveToTop) {
       yield MoveingToTop(homeModel);
-      yield Loaded(homeModel);
+      yield Loaded(homeModel, false);
     } else if (event is FetchArticles) {
       try {
         yield FetchingNextPage(homeModel);
         List<NewsModel> articles = await repo.getArticles(event.page);
         homeModel.articles = homeModel.articles + articles;
-        yield Loaded(homeModel);
+        yield Loaded(homeModel, false);
       } catch (e) {
         print(e);
-        yield Loaded(homeModel);
+        yield Loaded(homeModel, false);
       }
     }
   }

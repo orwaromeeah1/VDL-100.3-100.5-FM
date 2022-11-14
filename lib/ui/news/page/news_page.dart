@@ -85,8 +85,9 @@ class _NewsPageState extends State<NewsPage>
         _bloc.add(FetchCategoryNews(currentCatId, page));
         break;
       case 1:
-        _bloc.add(FetchSpecialReportsPages(specialReportsPage));
         specialReportsPage++;
+        _bloc.add(FetchSpecialReportsPages(specialReportsPage));
+
         break;
       case 2:
         articlesPage++;
@@ -170,6 +171,9 @@ class _NewsPageState extends State<NewsPage>
                 selectType(categories[0].id, 0, 0);
               }
               if (state is Loaded) {
+                if (state.resetPage) {
+                  page = 2;
+                }
                 setState(() {
                   isLoadingNextPage = false;
                 });
@@ -204,6 +208,9 @@ class _NewsPageState extends State<NewsPage>
       },
       child: RefreshIndicator(
         onRefresh: () {
+          page = 1;
+          specialReportsPage = 1;
+          articlesPage = 1;
           _bloc.add(FetchData());
         },
         child: CustomScrollView(
@@ -585,55 +592,51 @@ class _NewsPageState extends State<NewsPage>
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          SizedBox(
-            height: 30,
-          ),
-          model.timeline == null
-              ? Container()
-              : Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 19.0),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/twitter.svg',
-                            height: 21,
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'أحدث التغريدات',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
+          if (model.timeline.data.isNotEmpty)
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 19.0, top: 30),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/twitter.svg',
+                        height: 21,
+                        width: 17,
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 19.0),
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 130,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) => twitterCard(
-                                        tweet: model.timeline.data[index],
-                                      ),
-                                  itemCount: model.timeline.data.length)),
-                        ],
+                      SizedBox(
+                        width: 8,
                       ),
-                    ),
-                  ],
+                      Text(
+                        'أحدث التغريدات',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 19.0),
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 130,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) => twitterCard(
+                                    tweet: model.timeline.data[index],
+                                  ),
+                              itemCount: model.timeline.data.length)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           state is FetchingCategoryNews
               ? Container(
                   height: MediaQuery.of(context).size.height / 3,

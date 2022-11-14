@@ -12,7 +12,8 @@ class Loading extends NewsState {}
 
 class Loaded extends NewsState {
   final HomeModel homeModel;
-  Loaded(this.homeModel);
+  final bool resetPage;
+  Loaded(this.homeModel, this.resetPage);
 }
 
 class Startup extends NewsState {

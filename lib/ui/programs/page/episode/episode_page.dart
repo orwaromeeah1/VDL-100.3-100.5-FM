@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/data/responses/episode_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
+import 'package:vdl/ui/NewsDetails/widgets/video_player.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_bloc.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_event.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_state.dart';
@@ -429,33 +430,37 @@ class _EpisodePageState extends State<EpisodePage>
 
                           // youtube vedio
                           containsVideo
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 19.0,
-                                      top: 9,
-                                      left: 19,
-                                      bottom: 10),
-                                  child: Column(
-                                    children: [
-                                      YoutubePlayerIFrame(
-                                        controller: _youtubeController,
-                                        aspectRatio: 16 / 9,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      InkWell(
-                                          onTap: () {
-                                            _launchURL(episode.video.trim());
-                                          },
-                                          child: Text(
-                                            'View in Youtube',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                    ],
-                                  ),
+                              ? VideoPlayer(
+                                  path: 'https://embed.kwikmotion.com/Embed/' +
+                                      episode.video,
                                 )
+                              // Padding(
+                              //     padding: const EdgeInsets.only(
+                              //         right: 19.0,
+                              //         top: 9,
+                              //         left: 19,
+                              //         bottom: 10),
+                              //     child: Column(
+                              //       children: [
+                              //         YoutubePlayerIFrame(
+                              //           controller: _youtubeController,
+                              //           aspectRatio: 16 / 9,
+                              //         ),
+                              //         SizedBox(
+                              //           height: 10,
+                              //         ),
+                              //         InkWell(
+                              //             onTap: () {
+                              //               _launchURL(episode.video.trim());
+                              //             },
+                              //             child: Text(
+                              //               'View in Youtube',
+                              //               style: TextStyle(
+                              //                   fontWeight: FontWeight.bold),
+                              //             ))
+                              //       ],
+                              //     ),
+                              //   )
                               : Container(),
                           Align(
                             alignment: Alignment.centerRight,
@@ -480,8 +485,10 @@ class _EpisodePageState extends State<EpisodePage>
                                         episodeNumber: 'الحلقة ${index + 1}',
                                         id: widget.program.episodes[index].id,
                                         program: widget.program,
-                                  containsVideo: widget.program.episodes[index].containVideo,
-                                  containsAudio: widget.program.episodes[index].containAudio,
+                                        containsVideo: widget.program
+                                            .episodes[index].containVideo,
+                                        containsAudio: widget.program
+                                            .episodes[index].containAudio,
                                       );
                               }),
                           SizedBox(height: 50),

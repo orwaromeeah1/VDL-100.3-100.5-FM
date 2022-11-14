@@ -180,13 +180,13 @@ class Repository {
     ]);
 
     return new HomeModel(
-        news: news,
-        categories: categories,
-        specialReports: special,
-        menus: menus,
-        timeline: timeline,
-        articles: articles,
-        newsCasts: newsCasts,
+      news: news,
+      categories: categories,
+      specialReports: special,
+      menus: menus,
+      timeline: timeline,
+      articles: articles,
+      newsCasts: newsCasts,
     );
   }
 
@@ -340,9 +340,11 @@ class Repository {
   ///
   ///
   Future<Timeline> getLatestTweets() async {
-    dynamic response = await _client.getTweetsMethod(
-        Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
-    timeline = tweetsFromJson(response);
+    try {
+      dynamic response = await _client.getTweetsMethod(
+          Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
+      timeline = tweetsFromJson(response);
+    } catch (e) {}
   }
 
   ////

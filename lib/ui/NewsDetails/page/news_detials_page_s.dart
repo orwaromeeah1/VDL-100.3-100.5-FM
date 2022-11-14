@@ -20,6 +20,7 @@ import 'package:vdl/injection.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_bloc.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_event.dart';
 import 'package:vdl/ui/NewsDetails/bloc/news_details_state.dart';
+import 'package:vdl/ui/NewsDetails/widgets/video_player.dart';
 
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
@@ -260,19 +261,36 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     );
                   });
                 }
+                if (state.newsModel.video != null &&
+                    state.newsModel.video.contains('youtube')) {
+                  setState(() {
+                    viewYoutube = true;
+                    var youtubeid = getYoutubeId(state.newsModel.video);
+                    // if (state.newsModel.youtube.contains('&')) {
+                    //   youtubeid = state.newsModel.youtube.substring(
+                    //       state.newsModel.youtube.indexOf('=') + 1,
+                    //       state.newsModel.youtube.indexOf('&'));
+                    // } else {
+                    //   youtubeid = state.newsModel.youtube
+                    //       .substring(state.newsModel.youtube.indexOf('=') + 1)
+                    //       .trim();
+                    // }
+
+                    _youtubeController = YoutubePlayerController(
+                      initialVideoId: youtubeid,
+                      params: YoutubePlayerParams(
+                        startAt: Duration(seconds: 30),
+                        showControls: true,
+                        showFullscreenButton: true,
+                      ),
+                    );
+                  });
+                }
               } else if (state is AudioLoaded) {
                 audioUrl = state.audio.file.url;
               }
             }));
   }
-
-  ///////
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
 
   Widget LoadedScreen(BuildContext context, Loaded state) {
     var height = MediaQuery.of(context).size.height;
@@ -511,6 +529,15 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                 ),
                               )
                             : Container(),
+
+                        if (state.newsModel.kwikmotion != null)
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: VideoPlayer(
+                              path: state.newsModel.kwikmotion,
+                            ),
+                          ),
+
                         !_bannerAdIsLoaded
                             ? LoadingIndicator()
                             : _bannerAdIfailed
@@ -664,14 +691,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     );
   }
 
-////
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
@@ -701,19 +720,6 @@ String getYoutubeId(String link) {
   }
 }
 
-/////
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
 class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   double expandedHeight;
   Loaded state;

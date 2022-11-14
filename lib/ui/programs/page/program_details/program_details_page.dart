@@ -62,7 +62,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             print('$BannerAd failedToLoad: $error');
             _bannerAdIsLoaded = true;
-
             _bannerAdIfailed = false;
             ad.dispose();
           },
@@ -273,16 +272,18 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           ),
                           !_bannerAdIsLoaded
                               ? LoadingIndicator()
-                              : Container(
-                                  height: Platform.isIOS ? 330 : 150,
-                                  padding: EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(
-                                      bottom: Platform.isIOS ? 20.0 : 10),
-                                  child: Center(
-                                    child: AdWidget(
-                                      ad: _bannerAd,
-                                    ),
-                                  )),
+                              : _bannerAdIfailed
+                                  ? Container()
+                                  : Container(
+                                      height: Platform.isIOS ? 330 : 150,
+                                      padding: EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(
+                                          bottom: Platform.isIOS ? 20.0 : 10),
+                                      child: Center(
+                                        child: AdWidget(
+                                          ad: _bannerAd,
+                                        ),
+                                      )),
                           //Add Place
                           // Container(
                           //   height: 330,
