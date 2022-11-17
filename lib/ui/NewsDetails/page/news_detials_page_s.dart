@@ -92,9 +92,11 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = false;
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Create the ad objects and load ads.
+  Future loadBanner() async {
+    await _bannerAd.load();
+  }
+
+  void setAds() {
     _bannerAd = BannerAd(
         size: AdSize.largeBanner,
         adUnitId: AdState.bannerAdUnitId,
@@ -102,24 +104,28 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
           onAdLoaded: (Ad ad) {
             print('$BannerAd loaded.');
             setState(() {
+              _bannerAdIfailed = false;
               _bannerAdIsLoaded = true;
             });
           },
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             print('$BannerAd failedToLoad: $error');
-            _bannerAdIfailed = true;
-            _bannerAdIsLoaded = true;
+            setState(() {
+              _bannerAdIfailed = true;
+              _bannerAdIsLoaded = true;
+            });
+
             ad.dispose();
           },
           onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
           onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
         ),
-        request: AdRequest())
-      ..load();
+        request: AdRequest());
   }
 
   @override
   void initState() {
+    setAds();
     super.initState();
     audioPlayer.stop();
     WidgetsBinding.instance.addObserver(this);
@@ -223,6 +229,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
             bloc: _bloc,
             builder: (context, state) {
               if (state is Loaded) {
+                loadBanner();
                 return LoadedScreen(context, state);
               } else if (state is Loading) {
                 return LoadingScreen();
@@ -237,45 +244,21 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                   _bloc.add(FetchAudio(state.newsModel.audio));
                 }
 
-                if (state.newsModel.youtube != null) {
+                if (state.newsModel.youtube != null ||
+                    state.newsModel.video != null) {
                   setState(() {
-                    viewYoutube = true;
-                    var youtubeid = getYoutubeId(state.newsModel.youtube);
-                    // if (state.newsModel.youtube.contains('&')) {
-                    //   youtubeid = state.newsModel.youtube.substring(
-                    //       state.newsModel.youtube.indexOf('=') + 1,
-                    //       state.newsModel.youtube.indexOf('&'));
-                    // } else {
-                    //   youtubeid = state.newsModel.youtube
-                    //       .substring(state.newsModel.youtube.indexOf('=') + 1)
-                    //       .trim();
-                    // }
-
-                    _youtubeController = YoutubePlayerController(
-                      initialVideoId: youtubeid,
-                      params: YoutubePlayerParams(
-                        startAt: Duration(seconds: 30),
-                        showControls: true,
-                        showFullscreenButton: true,
-                      ),
-                    );
-                  });
-                }
-                if (state.newsModel.video != null &&
-                    state.newsModel.video.contains('youtube')) {
-                  setState(() {
-                    viewYoutube = true;
-                    var youtubeid = getYoutubeId(state.newsModel.video);
-                    // if (state.newsModel.youtube.contains('&')) {
-                    //   youtubeid = state.newsModel.youtube.substring(
-                    //       state.newsModel.youtube.indexOf('=') + 1,
-                    //       state.newsModel.youtube.indexOf('&'));
-                    // } else {
-                    //   youtubeid = state.newsModel.youtube
-                    //       .substring(state.newsModel.youtube.indexOf('=') + 1)
-                    //       .trim();
-                    // }
-
+                    String youtubeid;
+                    if (state.newsModel.video != null &&
+                        state.newsModel.video != '' &&
+                        state.newsModel.video.contains('https')) {
+                      viewYoutube = true;
+                      youtubeid = getYoutubeId(state.newsModel.video);
+                    }
+                    if (state.newsModel.youtube != null &&
+                        state.newsModel.youtube != '') {
+                      viewYoutube = true;
+                      youtubeid = getYoutubeId(state.newsModel.youtube);
+                    }
                     _youtubeController = YoutubePlayerController(
                       initialVideoId: youtubeid,
                       params: YoutubePlayerParams(
@@ -530,7 +513,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                               )
                             : Container(),
 
-                        if (state.newsModel.kwikmotion != null)
+                        if (state.newsModel.kwikmotion != null &&
+                            state.newsModel.kwikmotion != "")
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: VideoPlayer(
@@ -710,13 +694,17 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
 }
 
 String getYoutubeId(String link) {
-  var youtubeid = "";
-  if (link.contains('&')) {
-    return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
-  } else if (link.contains('?')) {
-    return link.substring(link.indexOf('=') + 1).trim();
-  } else {
-    return link.substring(17).trim();
+  try {
+    var youtubeid = "";
+    if (link.contains('&')) {
+      return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
+    } else if (link.contains('?')) {
+      return link.substring(link.indexOf('=') + 1).trim();
+    } else {
+      return link.substring(17).trim();
+    }
+  } catch (e) {
+    return "";
   }
 }
 

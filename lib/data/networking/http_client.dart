@@ -36,7 +36,8 @@ class HttpClient {
             throw BadRequestError("");
           }
       }
-    } on TimeoutException catch (_) {} catch (e) {
+    } on TimeoutException catch (_) {
+    } catch (e) {
       print(e);
     }
   }
@@ -71,7 +72,8 @@ class HttpClient {
             throw BadRequestError("");
           }
       }
-    } on TimeoutException catch (_) {} catch (e) {
+    } on TimeoutException catch (_) {
+    } catch (e) {
       print(e);
     }
   }
@@ -129,7 +131,8 @@ class HttpClient {
             throw BadRequestError("");
           }
       }
-    } on TimeoutException catch (_) {} catch (e) {
+    } on TimeoutException catch (_) {
+    } catch (e) {
       print(e);
       throw BadRequestError("");
     }

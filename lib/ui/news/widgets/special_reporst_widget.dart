@@ -73,7 +73,7 @@ class SpecialReportsCard extends StatelessWidget {
                       Container(
                         child: Text(
                           Manager.removeAllHtmlTags(this.newsModel.title),
-                          maxLines: 4,
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 12),

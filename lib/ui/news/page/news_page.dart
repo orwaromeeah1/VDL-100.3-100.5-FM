@@ -108,27 +108,28 @@ class _NewsPageState extends State<NewsPage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Create the ad objects and load ads.
-    _bannerAd = BannerAd(
-        size: AdSize.largeBanner,
-        adUnitId: AdState.bannerAdUnitId,
-        listener: BannerAdListener(
-          onAdLoaded: (Ad ad) {
-            print('$BannerAd loaded.');
-            setState(() {
+    if (_bannerAd == null)
+      _bannerAd = BannerAd(
+          size: AdSize.largeBanner,
+          adUnitId: AdState.bannerAdUnitId,
+          listener: BannerAdListener(
+            onAdLoaded: (Ad ad) {
+              print('$BannerAd loaded.');
+              setState(() {
+                _bannerAdIfailed = false;
+                _bannerAdIsLoaded = true;
+              });
+            },
+            onAdFailedToLoad: (Ad ad, LoadAdError error) {
+              print('$BannerAd failedToLoad: $error');
+              _bannerAdIfailed = true;
               _bannerAdIsLoaded = true;
-            });
-          },
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            print('$BannerAd failedToLoad: $error');
-            _bannerAdIfailed = true;
-            _bannerAdIsLoaded = true;
-            ad.dispose();
-          },
-          onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
-          onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
-        ),
-        request: AdRequest())
-      ..load();
+              ad.dispose();
+            },
+            onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
+            onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
+          ),
+          request: AdRequest());
   }
 
   @override
@@ -142,6 +143,10 @@ class _NewsPageState extends State<NewsPage>
                   state is FetchingCategoryNews ||
                   state is FetchingNextPage ||
                   state is MoveToTop) {
+                if (!isSpeacialReports &&
+                    _bannerAd != null &&
+                    !_bannerAdIsLoaded) _bannerAd.load();
+
                 return Stack(
                   children: [
                     newsScreenLoaded(context, state.homeModel, state),

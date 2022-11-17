@@ -21,16 +21,18 @@ class LoadingScreen extends StatelessWidget {
 }
 
 Widget LoadingIndicator() {
-  return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Container(
-        height: 50,
-        width: 50,
-        child: Center(
-            child: Platform.isIOS
-                ? CupertinoActivityIndicator()
-                : CircularProgressIndicator(
-                    color: ProjectColors.ThemeColor,
-                  )),
-      ));
+  return Center(
+    child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Container(
+          height: 50,
+          width: 50,
+          child: Center(
+              child: Platform.isIOS
+                  ? CupertinoActivityIndicator()
+                  : CircularProgressIndicator(
+                      color: ProjectColors.ThemeColor,
+                    )),
+        )),
+  );
 }

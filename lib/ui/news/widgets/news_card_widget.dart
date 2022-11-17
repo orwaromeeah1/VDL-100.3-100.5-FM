@@ -22,6 +22,9 @@ class NewsCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasVideo =
+        ((newsModel.video != null && newsModel.video.contains('youtube')) ||
+            (newsModel.kwikmotion != null && newsModel.kwikmotion != ''));
     return InkWell(
       onTap: () => pushNewScreen(
         context,
@@ -107,7 +110,7 @@ class NewsCardWidget extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        (newsModel.youtube != null)
+                                        hasVideo
                                             ? Icon(
                                                 Icons.videocam,
                                                 size: 27,

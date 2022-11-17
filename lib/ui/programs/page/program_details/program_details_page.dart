@@ -56,20 +56,23 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
           onAdLoaded: (Ad ad) {
             print('$BannerAd loaded.');
             setState(() {
+              _bannerAdIfailed = false;
               _bannerAdIsLoaded = true;
             });
           },
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             print('$BannerAd failedToLoad: $error');
-            _bannerAdIsLoaded = true;
-            _bannerAdIfailed = false;
+            setState(() {
+              _bannerAdIsLoaded = true;
+              _bannerAdIfailed = false;
+            });
+
             ad.dispose();
           },
           onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
           onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
         ),
-        request: AdRequest())
-      ..load();
+        request: AdRequest());
   }
 
   @override
@@ -77,6 +80,10 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
     _bannerAd.dispose();
     _bloc.close();
     super.dispose();
+  }
+
+  Future loadBanner() async {
+    await _bannerAd.load();
   }
 
   @override
@@ -96,6 +103,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
           }
           if (state is ProgramDetailsLoaded) {
             program = state.program;
+            loadBanner();
             return screenUiWithSliver();
           }
 

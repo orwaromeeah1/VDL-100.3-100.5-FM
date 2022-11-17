@@ -47,9 +47,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     initPlatformState();
+    super.initState();
   }
 
   @override
@@ -93,6 +92,7 @@ class _MyAppState extends State<MyApp> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NotificationPage()));
     });
+
     // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       print("Accepted permission: $accepted");
