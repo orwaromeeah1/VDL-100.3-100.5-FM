@@ -58,19 +58,6 @@
            android:name="com.google.android.gms.ads.APPLICATION_ID"
            android:value="ca-app-pub-3344712509481171~5220571872"/>
 
-<!--   background audio-->
-       <service android:name="com.ryanheise.audioservice.AudioService">
-           <intent-filter>
-               <action android:name="android.media.browse.MediaBrowserService" />
-           </intent-filter>
-       </service>
-
-       <receiver android:name="com.ryanheise.audioservice.MediaButtonReceiver" >
-           <intent-filter>
-               <action android:name="android.intent.action.MEDIA_BUTTON" />
-           </intent-filter>
-       </receiver>
-
 
    </application>
 
