@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:vdl/firebase_options.dart';
 import 'package:vdl/injection.dart';
+import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
+import 'package:vdl/ui/news/bloc/news_bloc.dart';
+import 'package:vdl/ui/news/bloc/news_event.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -47,13 +51,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    initPlatformState();
+    initPlatformState(context);
     super.initState();
   }
+
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       locale: Locale('ar'),
       builder: (BuildContext context, Widget child) {
         return MediaQuery(
@@ -83,14 +91,32 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> initPlatformState(BuildContext context) async {
     //Remove this method to stop OneSignal Debugging
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
     OneSignal.shared.setAppId('56917385-48bf-4670-bf10-2df27fc640c1');
 
-    OneSignal.shared.setNotificationOpenedHandler((notification) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NotificationPage()));
+    OneSignal.shared.setNotificationOpenedHandler((notification) async {
+      try {
+        final source = await notification.notification.additionalData;
+        await Future.delayed(const Duration(seconds: 2));
+        navigatorKey.currentState.push(
+          MaterialPageRoute(
+            builder: (context) => Directionality(
+              textDirection: TextDirection.rtl,
+              child: NewsPageDetails(
+                  newsId: int.parse(source['post_id']), isSpecial: false),
+            ),
+          ),
+        );
+      } catch (e) {
+        navigatorKey.currentState.push(
+          MaterialPageRoute(
+            builder: (context) => Directionality(
+                textDirection: TextDirection.rtl, child: NotificationPage()),
+          ),
+        );
+      }
     });
 
     // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
