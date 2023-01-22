@@ -49,17 +49,107 @@ class NewsCastResponse {
   String audioTitleBlock1915;
   String audioFieldBlock1915;
   String audioDescriptionBlock1915;
+  String videoYoutubeKeyBlock715;
+  String videoKwikMotionKeyBlock715;
+  String videoYoutubeKeyBlock815;
+  String videoKwikMotionKeyBlock815;
+  String videoYoutubeKeyBlock1015;
+  String videoKwikMotionKeyBlock1015;
+  String videoYoutubeKeyBlock1415;
+  String videoKwikMotionKeyBlock1415;
+  String videoYoutubeKeyBlock1715;
+  String videoKwikMotionKeyBlock1715;
+  String videoYoutubeKeyBlock1915;
+  String videoKwikMotionKeyBlock1915;
+  String audioTimeBlock1015;
+  String shortAudioTitleBlock1015;
+  String shortAudioFieldBlock1015;
+  String shortAudioDescriptionBlock1015;
+  String audioTitleBlock1015;
+  String audioFieldBlock1015;
+  String audioDescriptionBlock1015;
+
 //  Image image;
   String humanDate;
   String sinceDate;
   List<String> timeSlots;
   bool isOpened;
 
-  NewsCastResponse({
-    this.isOpened ,
-    this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format, this.releaseDate, this.audioTimeBlock715, this.shortAudioTitleBlock715, this.shortAudioFieldBlock715, this.shortAudioDescriptionBlock715, this.audioTitleBlock715, this.audioFieldBlock715, this.audioDescriptionBlock715, this.audioTimeBlock815, this.shortAudioTitleBlock815, this.shortAudioFieldBlock815, this.shortAudioDescriptionBlock815, this.audioTitleBlock815, this.audioFieldBlock815, this.audioDescriptionBlock815, this.audioTimeBlock1415, this.shortAudioTitleBlock1415, this.shortAudioFieldBlock1415, this.shortAudioDescriptionBlock1415, this.audioTitleBlock1415, this.audioFieldBlock1415, this.audioDescriptionBlock1415, this.audioTimeBlock1715, this.shortAudioTitleBlock1715, this.shortAudioFieldBlock1715, this.shortAudioDescriptionBlock1715, this.audioTitleBlock1715, this.audioFieldBlock1715, this.audioDescriptionBlock1715, this.audioTimeBlock1915, this.shortAudioTitleBlock1915, this.shortAudioFieldBlock1915, this.shortAudioDescriptionBlock1915, this.audioTitleBlock1915, this.audioFieldBlock1915, this.audioDescriptionBlock1915,
+  NewsCastResponse(
+      {this.isOpened,
+      this.id,
+      this.date,
+      this.dateGmt,
+      this.modified,
+      this.modifiedGmt,
+      this.slug,
+      this.status,
+      this.link,
+      this.title,
+      this.content,
+      this.excerpt,
+      this.author,
+      this.menuOrder,
+      this.format,
+      this.releaseDate,
+      this.audioTimeBlock715,
+      this.shortAudioTitleBlock715,
+      this.shortAudioFieldBlock715,
+      this.shortAudioDescriptionBlock715,
+      this.audioTitleBlock715,
+      this.audioFieldBlock715,
+      this.audioDescriptionBlock715,
+      this.audioTimeBlock815,
+      this.shortAudioTitleBlock815,
+      this.shortAudioFieldBlock815,
+      this.shortAudioDescriptionBlock815,
+      this.audioTitleBlock815,
+      this.audioFieldBlock815,
+      this.audioDescriptionBlock815,
+      this.audioTimeBlock1415,
+      this.shortAudioTitleBlock1415,
+      this.shortAudioFieldBlock1415,
+      this.shortAudioDescriptionBlock1415,
+      this.audioTitleBlock1415,
+      this.audioFieldBlock1415,
+      this.audioDescriptionBlock1415,
+      this.audioTimeBlock1715,
+      this.shortAudioTitleBlock1715,
+      this.shortAudioFieldBlock1715,
+      this.shortAudioDescriptionBlock1715,
+      this.audioTitleBlock1715,
+      this.audioFieldBlock1715,
+      this.audioDescriptionBlock1715,
+      this.audioTimeBlock1915,
+      this.shortAudioTitleBlock1915,
+      this.shortAudioFieldBlock1915,
+      this.shortAudioDescriptionBlock1915,
+      this.audioTitleBlock1915,
+      this.audioFieldBlock1915,
+      this.audioDescriptionBlock1915,
+      this.videoYoutubeKeyBlock715,
+      this.videoKwikMotionKeyBlock715,
+      this.videoYoutubeKeyBlock815,
+      this.videoKwikMotionKeyBlock815,
+      this.videoYoutubeKeyBlock1015,
+      this.videoKwikMotionKeyBlock1015,
+      this.videoYoutubeKeyBlock1415,
+      this.videoKwikMotionKeyBlock1415,
+      this.videoYoutubeKeyBlock1715,
+      this.videoKwikMotionKeyBlock1715,
+      this.videoYoutubeKeyBlock1915,
+      this.videoKwikMotionKeyBlock1915,
+      this.audioDescriptionBlock1015,
+      this.audioFieldBlock1015,
+      this.audioTimeBlock1015,
+      this.audioTitleBlock1015,
+      this.shortAudioDescriptionBlock1015,
+      this.shortAudioFieldBlock1015,
+      this.shortAudioTitleBlock1015,
 //    this.image,
-    this.humanDate, this.sinceDate, this.timeSlots});
+      this.humanDate,
+      this.sinceDate,
+      this.timeSlots});
 
   NewsCastResponse.fromJson(Map<String, dynamic> json) {
     isOpened = false;
@@ -95,24 +185,48 @@ class NewsCastResponse {
     audioTimeBlock1415 = json['audio_time_block_14_15'];
     shortAudioTitleBlock1415 = json['short_audio_title_block_14_15'];
     shortAudioFieldBlock1415 = json['short_audio_field_block_14_15'];
-    shortAudioDescriptionBlock1415 = json['short_audio_description_block_14_15'];
+    shortAudioDescriptionBlock1415 =
+        json['short_audio_description_block_14_15'];
     audioTitleBlock1415 = json['audio_title_block_14_15'];
     audioFieldBlock1415 = json['audio_field_block_14_15'];
     audioDescriptionBlock1415 = json['audio_description_block_14_15'];
     audioTimeBlock1715 = json['audio_time_block_17_15'];
     shortAudioTitleBlock1715 = json['short_audio_title_block_17_15'];
     shortAudioFieldBlock1715 = json['short_audio_field_block_17_15'];
-    shortAudioDescriptionBlock1715 = json['short_audio_description_block_17_15'];
+    shortAudioDescriptionBlock1715 =
+        json['short_audio_description_block_17_15'];
     audioTitleBlock1715 = json['audio_title_block_17_15'];
     audioFieldBlock1715 = json['audio_field_block_17_15'];
     audioDescriptionBlock1715 = json['audio_description_block_17_15'];
     audioTimeBlock1915 = json['audio_time_block_19_15'];
     shortAudioTitleBlock1915 = json['short_audio_title_block_19_15'];
     shortAudioFieldBlock1915 = json['short_audio_field_block_19_15'];
-    shortAudioDescriptionBlock1915 = json['short_audio_description_block_19_15'];
+    shortAudioDescriptionBlock1915 =
+        json['short_audio_description_block_19_15'];
     audioTitleBlock1915 = json['audio_title_block_19_15'];
     audioFieldBlock1915 = json['audio_field_block_19_15'];
     audioDescriptionBlock1915 = json['audio_description_block_19_15'];
+    videoYoutubeKeyBlock715 = json["video_youtube_key_block_7_15"];
+    videoKwikMotionKeyBlock715 = json["video_kwikMotion_key_block_7_15"];
+    videoYoutubeKeyBlock815 = json["video_youtube_key_block_8_15"];
+    videoKwikMotionKeyBlock815 = json["video_kwikMotion_key_block_8_15"];
+    videoYoutubeKeyBlock1015 = json["video_youtube_key_block_10_15"];
+    videoKwikMotionKeyBlock1015 = json["video_kwikMotion_key_block_10_15"];
+    videoYoutubeKeyBlock1415 = json["video_youtube_key_block_14_15"];
+    videoKwikMotionKeyBlock1415 = json["video_kwikMotion_key_block_14_15"];
+    videoYoutubeKeyBlock1715 = json["video_youtube_key_block_17_15"];
+    videoKwikMotionKeyBlock1715 = json["video_kwikMotion_key_block_17_15"];
+    videoYoutubeKeyBlock1915 = json["video_youtube_key_block_19_15"];
+    videoKwikMotionKeyBlock1915 = json["video_kwikMotion_key_block_19_15"];
+    audioTimeBlock1915 = json['audio_time_block_10_15'];
+    shortAudioTitleBlock1915 = json['short_audio_title_block_10_15'];
+    shortAudioFieldBlock1915 = json['short_audio_field_block_10_15'];
+    shortAudioDescriptionBlock1915 =
+        json['short_audio_description_block_10_15'];
+    audioTitleBlock1915 = json['audio_title_block_10_15'];
+    audioFieldBlock1915 = json['audio_field_block_10_15'];
+    audioDescriptionBlock1915 = json['audio_description_block_10_15'];
+
 //    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
@@ -139,35 +253,40 @@ class NewsCastResponse {
     data['audio_time_block_7_15'] = this.audioTimeBlock715;
     data['short_audio_title_block_7_15'] = this.shortAudioTitleBlock715;
     data['short_audio_field_block_7_15'] = this.shortAudioFieldBlock715;
-    data['short_audio_description_block_7_15'] = this.shortAudioDescriptionBlock715;
+    data['short_audio_description_block_7_15'] =
+        this.shortAudioDescriptionBlock715;
     data['audio_title_block_7_15'] = this.audioTitleBlock715;
     data['audio_field_block_7_15'] = this.audioFieldBlock715;
     data['audio_description_block_7_15'] = this.audioDescriptionBlock715;
     data['audio_time_block_8_15'] = this.audioTimeBlock815;
     data['short_audio_title_block_8_15'] = this.shortAudioTitleBlock815;
     data['short_audio_field_block_8_15'] = this.shortAudioFieldBlock815;
-    data['short_audio_description_block_8_15'] = this.shortAudioDescriptionBlock815;
+    data['short_audio_description_block_8_15'] =
+        this.shortAudioDescriptionBlock815;
     data['audio_title_block_8_15'] = this.audioTitleBlock815;
     data['audio_field_block_8_15'] = this.audioFieldBlock815;
     data['audio_description_block_8_15'] = this.audioDescriptionBlock815;
     data['audio_time_block_14_15'] = this.audioTimeBlock1415;
     data['short_audio_title_block_14_15'] = this.shortAudioTitleBlock1415;
     data['short_audio_field_block_14_15'] = this.shortAudioFieldBlock1415;
-    data['short_audio_description_block_14_15'] = this.shortAudioDescriptionBlock1415;
+    data['short_audio_description_block_14_15'] =
+        this.shortAudioDescriptionBlock1415;
     data['audio_title_block_14_15'] = this.audioTitleBlock1415;
     data['audio_field_block_14_15'] = this.audioFieldBlock1415;
     data['audio_description_block_14_15'] = this.audioDescriptionBlock1415;
     data['audio_time_block_17_15'] = this.audioTimeBlock1715;
     data['short_audio_title_block_17_15'] = this.shortAudioTitleBlock1715;
     data['short_audio_field_block_17_15'] = this.shortAudioFieldBlock1715;
-    data['short_audio_description_block_17_15'] = this.shortAudioDescriptionBlock1715;
+    data['short_audio_description_block_17_15'] =
+        this.shortAudioDescriptionBlock1715;
     data['audio_title_block_17_15'] = this.audioTitleBlock1715;
     data['audio_field_block_17_15'] = this.audioFieldBlock1715;
     data['audio_description_block_17_15'] = this.audioDescriptionBlock1715;
     data['audio_time_block_19_15'] = this.audioTimeBlock1915;
     data['short_audio_title_block_19_15'] = this.shortAudioTitleBlock1915;
     data['short_audio_field_block_19_15'] = this.shortAudioFieldBlock1915;
-    data['short_audio_description_block_19_15'] = this.shortAudioDescriptionBlock1915;
+    data['short_audio_description_block_19_15'] =
+        this.shortAudioDescriptionBlock1915;
     data['audio_title_block_19_15'] = this.audioTitleBlock1915;
     data['audio_field_block_19_15'] = this.audioFieldBlock1915;
     data['audio_description_block_19_15'] = this.audioDescriptionBlock1915;

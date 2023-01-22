@@ -3,11 +3,11 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 
 typedef OnClickCallBack = Function();
 
-class MenuItem extends StatelessWidget {
+class MenuButtonItem extends StatelessWidget {
   final String title;
   final OnClickCallBack onClick;
 
-  MenuItem({
+  MenuButtonItem({
     this.title,
     this.onClick,
   });

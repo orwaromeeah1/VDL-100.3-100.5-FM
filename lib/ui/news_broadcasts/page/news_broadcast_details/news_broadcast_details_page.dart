@@ -1,11 +1,12 @@
 import 'dart:developer';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart' ;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/models/news_broadcast_details_model.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
@@ -19,6 +20,7 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:share/share.dart';
 
 import '../../../../injection.dart';
+import '../../../NewsDetails/widgets/video_player.dart';
 
 class NewsBroadcastDetailsPage extends StatefulWidget {
   final NewsCastResponse newsCast;
@@ -31,8 +33,10 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
     @required this.timeSlutIndex,
     @required this.broadcasts,
     @required this.introductionAudioPlayer,
-  }) : assert(newsCast != null && timeSlutIndex != null
-      && broadcasts != null && introductionAudioPlayer !=null);
+  }) : assert(newsCast != null &&
+            timeSlutIndex != null &&
+            broadcasts != null &&
+            introductionAudioPlayer != null);
 
   @override
   _NewsBroadcastDetailsPageState createState() =>
@@ -47,7 +51,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   final _height = 100.0;
   NewsCastDetailsModel displayedNewsCast = new NewsCastDetailsModel();
   final _bloc = locator<NewsCastDetailsBloc>();
-
+  var video = "";
   AnimationController _animationController;
   AnimationController _fullAudioAnimationController;
 
@@ -81,8 +85,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
-    widget.introductionAudioPlayer.onDurationChanged.listen((Duration duration) {
-      if(mounted){
+    widget.introductionAudioPlayer.onDurationChanged
+        .listen((Duration duration) {
+      if (mounted) {
         setState(() {
           introductionAudioDuration = duration.inSeconds;
         });
@@ -90,7 +95,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     });
     widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-      if(mounted){
+      if (mounted) {
         setState(() {
           introductionTimeProgress = position.inSeconds;
         });
@@ -101,51 +106,47 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
     fullAudioPlayer.onDurationChanged.listen((Duration duration) {
-     if(mounted){
-       setState(() {
-         fullAudioDuration = duration.inSeconds;
-       });
-     }
+      if (mounted) {
+        setState(() {
+          fullAudioDuration = duration.inSeconds;
+        });
+      }
     });
     widget.introductionAudioPlayer.onAudioPositionChanged
         .listen((Duration position) async {
-     if(mounted){
-       setState(() {
-         introductionTimeProgress = position.inSeconds;
-       });
-     }
+      if (mounted) {
+        setState(() {
+          introductionTimeProgress = position.inSeconds;
+        });
+      }
     });
-    fullAudioPlayer.onAudioPositionChanged
-        .listen((Duration position) async {
-      if(mounted){
+    fullAudioPlayer.onAudioPositionChanged.listen((Duration position) async {
+      if (mounted) {
         setState(() {
           fullTimeProgress = position.inSeconds;
         });
       }
     });
 
-
-    widget.introductionAudioPlayer.onPlayerStateChanged.listen((  state) async {
-
-      if(widget.introductionAudioPlayer.state  == PlayerState.PAUSED){
-       if(mounted){
-         setState(() {
-           isPlaying = false;
-           _animationController.reverse();
-         });
-       }
+    widget.introductionAudioPlayer.onPlayerStateChanged.listen((state) async {
+      if (widget.introductionAudioPlayer.state == PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isPlaying = false;
+            _animationController.reverse();
+          });
+        }
       }
     });
 
-    fullAudioPlayer.onPlayerStateChanged.listen((  state) async {
-
-      if(fullAudioPlayer.state  == PlayerState.PAUSED){
-       if(mounted){
-         setState(() {
-           isFullAudioPlaying = false;
-           _fullAudioAnimationController.reverse();
-         });
-       }
+    fullAudioPlayer.onPlayerStateChanged.listen((state) async {
+      if (fullAudioPlayer.state == PlayerState.PAUSED) {
+        if (mounted) {
+          setState(() {
+            isFullAudioPlaying = false;
+            _fullAudioAnimationController.reverse();
+          });
+        }
       }
     });
 
@@ -222,16 +223,16 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       bloc: _bloc,
       listener: (context, state) {
         if (state is AudiosLoaded) {
-        if(mounted){
-          setState(() {
-            log('audios fully loaded');
-            isPlaying = false;
-            isFullAudioPlaying = false;
-            audiosLoaded = true;
-            introductionAudioUrl = state.introAudio.file.url;
-            fullAudioUrl = state.fullAudio.file.url;
-          });
-        }
+          if (mounted) {
+            setState(() {
+              log('audios fully loaded');
+              isPlaying = false;
+              isFullAudioPlaying = false;
+              audiosLoaded = true;
+              introductionAudioUrl = state.introAudio.file.url;
+              fullAudioUrl = state.fullAudio.file.url;
+            });
+          }
         }
       },
       child: screenUi(),
@@ -254,7 +255,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
-                    alignment: Alignment.topLeft, 
+                    alignment: Alignment.topLeft,
                     child: IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: Icon(
@@ -303,16 +304,16 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                             if(mounted){
-                               setState(() {
-                                 selectedIndex = index;
-                                 _animateToIndex(index);
-                                 _getContent();
-                                 _animationController.reverse();
-                                 _fullAudioAnimationController.reverse();
-                                 _fetchAudios();
-                               });
-                             }
+                              if (mounted) {
+                                setState(() {
+                                  selectedIndex = index;
+                                  _animateToIndex(index);
+                                  _getContent();
+                                  _animationController.reverse();
+                                  _fullAudioAnimationController.reverse();
+                                  _fetchAudios();
+                                });
+                              }
                             },
                             child: BroadcastCard(
                               isSelected: selectedIndex == index,
@@ -328,258 +329,283 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: 0),
                       children: [
-                        Card(
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        GlowingCircularButton(
-                                          size: 25,
-                                          color: ProjectColors.ThemeColor,
-                                          icon: audiosLoaded
-                                              ? AnimatedIcon(
-                                                  icon:
-                                                      AnimatedIcons.play_pause,
-                                                  progress:
-                                                      _animationController,
-                                                  size: 15,
-                                                  color: Colors.white,
-                                                )
-                                              : VdlProgressIndicator(
-                                                  size: 5,
-                                                  color: Colors.white,
+                        if (introductionAudioUrl != '')
+                          Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flex(
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          GlowingCircularButton(
+                                            size: 25,
+                                            color: ProjectColors.ThemeColor,
+                                            icon: audiosLoaded
+                                                ? AnimatedIcon(
+                                                    icon: AnimatedIcons
+                                                        .play_pause,
+                                                    progress:
+                                                        _animationController,
+                                                    size: 15,
+                                                    color: Colors.white,
+                                                  )
+                                                : VdlProgressIndicator(
+                                                    size: 5,
+                                                    color: Colors.white,
+                                                  ),
+                                            onClick: () {
+                                              !audiosLoaded
+                                                  ? log('')
+                                                  : _handleOnIntoPressed();
+                                            },
+                                            isGlowing: true,
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'مقدمة النشرة',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
                                                 ),
-                                          onClick: () {
-                                            !audiosLoaded
-                                                ? log('')
-                                                : _handleOnIntoPressed();
-                                          },
-                                          isGlowing: true,
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'مقدمة النشرة',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13,
                                               ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                SvgPicture.asset(
-                                                    'assets/icons/recording.svg'),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  getTimeString(
-                                                      introductionAudioDuration -
-                                                          introductionTimeProgress),
-                                                  style: TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Container(
-                                                  height: 10,
-                                                  width: width * 0.3,
-                                                  child: IgnorePointer(
-                                                    ignoring:
-                                                        introductionAudioDuration ==
-                                                            0,
-                                                    child: ProgressBar(
-                                                      thumbColor: green,
-                                                      progressBarColor: green,
-                                                      thumbRadius: 5,
-                                                      progress: Duration(
-                                                          seconds:
-                                                              introductionTimeProgress),
-                                                      buffered: Duration(
-                                                          seconds:
-                                                              introductionTimeProgress),
-                                                      total: Duration(
-                                                          seconds:
-                                                              introductionAudioDuration),
-                                                      timeLabelTextStyle:
-                                                          TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                      onSeek: (duration) {
-                                                        if (introductionAudioDuration !=
-                                                            0) {
-                                                          widget.introductionAudioPlayer
-                                                              .seek(duration);
-                                                        }
-                                                      },
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      'assets/icons/recording.svg'),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    getTimeString(
+                                                        introductionAudioDuration -
+                                                            introductionTimeProgress),
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Container(
+                                                    height: 10,
+                                                    width: width * 0.3,
+                                                    child: IgnorePointer(
+                                                      ignoring:
+                                                          introductionAudioDuration ==
+                                                              0,
+                                                      child: ProgressBar(
+                                                        thumbColor: green,
+                                                        progressBarColor: green,
+                                                        thumbRadius: 5,
+                                                        progress: Duration(
+                                                            seconds:
+                                                                introductionTimeProgress),
+                                                        buffered: Duration(
+                                                            seconds:
+                                                                introductionTimeProgress),
+                                                        total: Duration(
+                                                            seconds:
+                                                                introductionAudioDuration),
+                                                        timeLabelTextStyle:
+                                                            TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                        onSeek: (duration) {
+                                                          if (introductionAudioDuration !=
+                                                              0) {
+                                                            widget
+                                                                .introductionAudioPlayer
+                                                                .seek(duration);
+                                                          }
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Share.share(widget.newsCast.link);
+                                        },
+                                        child: Icon(Icons.share),
+                                      ),
+                                    ],
+                                  ),
+                                  if (displayedNewsCast.description != 'null')
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20),
+                                      child: Text(
+                                        '${displayedNewsCast.description}',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (fullAudioUrl != '')
+                          Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flex(
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          GlowingCircularButton(
+                                            size: 25,
+                                            color: ProjectColors.ThemeColor,
+                                            icon: audiosLoaded
+                                                ? AnimatedIcon(
+                                                    icon: AnimatedIcons
+                                                        .play_pause,
+                                                    progress:
+                                                        _fullAudioAnimationController,
+                                                    size: 15,
+                                                    color: Colors.white,
+                                                  )
+                                                : VdlProgressIndicator(
+                                                    size: 5,
+                                                    color: Colors.white,
+                                                  ),
+                                            onClick: () {
+                                              _handleOnFullAudioPressed();
+                                            },
+                                            isGlowing: true,
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'النشرة كاملة',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Share.share(widget.newsCast.link);
-                                      },
-                                      child: Icon(Icons.share),
-                                    ),
-                                  ],
-                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      'assets/icons/recording.svg'),
+                                                  Text(
+                                                    getTimeString(
+                                                        fullAudioDuration -
+                                                            fullTimeProgress),
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Container(
+                                                    height: 10,
+                                                    width: width * 0.3,
+                                                    child: IgnorePointer(
+                                                      ignoring:
+                                                          fullAudioDuration ==
+                                                              0,
+                                                      child: ProgressBar(
+                                                        thumbColor: green,
+                                                        progressBarColor: green,
+                                                        thumbRadius: 5,
+                                                        progress: Duration(
+                                                            seconds:
+                                                                fullTimeProgress),
+                                                        buffered: Duration(
+                                                            seconds:
+                                                                fullTimeProgress),
+                                                        total: Duration(
+                                                            seconds:
+                                                                fullAudioDuration),
+                                                        timeLabelTextStyle:
+                                                            TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                        onSeek: (duration) {
+                                                          if (fullAudioDuration !=
+                                                              0) {
+                                                            fullAudioPlayer
+                                                                .seek(duration);
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Share.share(widget.newsCast.link);
+                                        },
+                                        child: Icon(Icons.share),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (video != '')
+                          Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Column(
+                              children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
-                                  child:
-                                      Text('${displayedNewsCast.description}',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                      ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        GlowingCircularButton(
-                                          size: 25,
-                                          color: ProjectColors.ThemeColor,
-                                          icon: audiosLoaded
-                                              ? AnimatedIcon(
-                                                  icon:
-                                                      AnimatedIcons.play_pause,
-                                                  progress:
-                                                      _fullAudioAnimationController,
-                                                  size: 15,
-                                                  color: Colors.white,
-                                                )
-                                              : VdlProgressIndicator(
-                                                  size: 5,
-                                                  color: Colors.white,
-                                                ),
-                                          onClick: () {
-                                            _handleOnFullAudioPressed();
-                                          },
-                                          isGlowing: true,
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'النشرة كاملة',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13,
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                SvgPicture.asset(
-                                                    'assets/icons/recording.svg'),
-                                                Text(
-                                                  getTimeString(
-                                                      fullAudioDuration -
-                                                          fullTimeProgress),
-                                                  style: TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Container(
-                                                  height: 10,
-                                                  width: width * 0.3,
-                                                  child: IgnorePointer(
-                                                    ignoring:
-                                                        fullAudioDuration == 0,
-                                                    child: ProgressBar(
-                                                      thumbColor: green,
-                                                      progressBarColor: green,
-                                                      thumbRadius: 5,
-                                                      progress: Duration(
-                                                          seconds:
-                                                              fullTimeProgress),
-                                                      buffered: Duration(
-                                                          seconds:
-                                                              fullTimeProgress),
-                                                      total: Duration(
-                                                          seconds:
-                                                              fullAudioDuration),
-                                                      timeLabelTextStyle:
-                                                          TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                      onSeek: (duration) {
-                                                        if (fullAudioDuration !=
-                                                            0) {
-                                                          fullAudioPlayer
-                                                              .seek(duration);
-                                                        }
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Share.share(widget.newsCast.link);
-                                      },
-                                      child: Icon(Icons.share),
-                                    ),
-                                  ],
+                                  padding: const EdgeInsets.all(5),
+                                  child: VideoPlayer(
+                                    path: video,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        SizedBox(
+                          height: 50,
+                        )
                       ],
                     ),
                   ),
@@ -601,6 +627,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock715;
           introductionId = widget.newsCast.shortAudioFieldBlock715;
           fullAudioId = widget.newsCast.audioFieldBlock715;
+          video = widget.newsCast.videoKwikMotionKeyBlock1715;
           break;
         }
       case 1:
@@ -609,30 +636,48 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock815;
           introductionId = widget.newsCast.shortAudioFieldBlock815;
           fullAudioId = widget.newsCast.audioFieldBlock815;
+          video = widget.newsCast.videoKwikMotionKeyBlock815;
+
           break;
         }
       case 2:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1415;
-          introductionId = widget.newsCast.shortAudioFieldBlock1415;
-          fullAudioId = widget.newsCast.audioFieldBlock1415;
+              widget.newsCast.shortAudioDescriptionBlock1015;
+          introductionId = widget.newsCast.shortAudioFieldBlock1015;
+          fullAudioId = widget.newsCast.audioFieldBlock1015;
+          video = widget.newsCast.videoKwikMotionKeyBlock1015;
+
           break;
         }
       case 3:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1715;
-          introductionId = widget.newsCast.shortAudioFieldBlock1715;
-          fullAudioId = widget.newsCast.audioFieldBlock1715;
+              widget.newsCast.shortAudioDescriptionBlock1415;
+          introductionId = widget.newsCast.shortAudioFieldBlock1415;
+          fullAudioId = widget.newsCast.audioFieldBlock1415;
+          video = widget.newsCast.videoKwikMotionKeyBlock1415;
+
           break;
         }
       case 4:
         {
           displayedNewsCast.description =
+              widget.newsCast.shortAudioDescriptionBlock1715;
+          introductionId = widget.newsCast.shortAudioFieldBlock1715;
+          fullAudioId = widget.newsCast.audioFieldBlock1715;
+          video = widget.newsCast.videoKwikMotionKeyBlock1715;
+
+          break;
+        }
+      case 5:
+        {
+          displayedNewsCast.description =
               widget.newsCast.shortAudioDescriptionBlock1915;
           introductionId = widget.newsCast.shortAudioFieldBlock1915;
           fullAudioId = widget.newsCast.audioFieldBlock1915;
+          video = widget.newsCast.videoKwikMotionKeyBlock1915;
+
           break;
         }
     }
@@ -646,6 +691,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     await widget.introductionAudioPlayer.setUrl(introductionAudioUrl);
     widget.introductionAudioPlayer.resume();
   }
+
   resumeFull() async {
     await fullAudioPlayer.setReleaseMode(ReleaseMode.STOP);
     await fullAudioPlayer.setUrl(fullAudioUrl);
@@ -657,13 +703,14 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     await widget.introductionAudioPlayer.setUrl(
         introductionAudioUrl); // prepare the player with this audio but do not start playing
     await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result = await widget.introductionAudioPlayer.play(introductionAudioUrl);
+    int result =
+        await widget.introductionAudioPlayer.play(introductionAudioUrl);
     if (result == 1) {
       // success
     }
     widget.introductionAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      if(mounted){
+      if (mounted) {
         setState(() => {print(d)});
       }
     });
@@ -679,9 +726,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     }
     fullAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-     if(mounted){
-       setState(() => {print(d)});
-     }
+      if (mounted) {
+        setState(() => {print(d)});
+      }
     });
   }
 
@@ -719,42 +766,37 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   }
 
   void _handleOnIntoPressed() {
-   if(mounted){
-     setState(() {
-       isPlaying = !isPlaying;
-       if(isPlaying) {
-         _animationController.forward();
-         _fullAudioAnimationController.reverse();
-       }
-       else {
-         _animationController.reverse();
-       }
+    if (mounted) {
+      setState(() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+          _animationController.forward();
+          _fullAudioAnimationController.reverse();
+        } else {
+          _animationController.reverse();
+        }
 
-       if (introductionTimeProgress != 0 && isPlaying) {
-         pauseFullAudio();
-         resumeIntro();
-       } else if (isPlaying) {
-         pauseFullAudio();
-         playIntroduction();
-       } else {
-         pauseIntroduction();
-       }
-     });
-   }
-
-
+        if (introductionTimeProgress != 0 && isPlaying) {
+          pauseFullAudio();
+          resumeIntro();
+        } else if (isPlaying) {
+          pauseFullAudio();
+          playIntroduction();
+        } else {
+          pauseIntroduction();
+        }
+      });
+    }
   }
 
   void _handleOnFullAudioPressed() {
-    if(mounted){
+    if (mounted) {
       setState(() {
-
         isFullAudioPlaying = !isFullAudioPlaying;
-        if(isFullAudioPlaying) {
+        if (isFullAudioPlaying) {
           _fullAudioAnimationController.forward();
           _animationController.reverse();
-        }
-        else {
+        } else {
           _fullAudioAnimationController.reverse();
         }
 
@@ -769,8 +811,6 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         }
       });
     }
-
-
   }
 
   _fetchAudios() {

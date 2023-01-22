@@ -14,7 +14,6 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 
 import '../../../injection.dart';
 
-
 class NewsBroadcastsPage extends StatefulWidget {
   AudioPlayer introductionAudioPlayer;
   NewsBroadcastsPage({this.introductionAudioPlayer});
@@ -22,9 +21,9 @@ class NewsBroadcastsPage extends StatefulWidget {
   _NewsBroadcastsPageState createState() => _NewsBroadcastsPageState();
 }
 
-class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProviderStateMixin<NewsBroadcastsPage>{
+class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
+    with TickerProviderStateMixin<NewsBroadcastsPage> {
   double width;
-
 
   List<NewsCastResponse> newsCasts = [];
   final _bloc = locator<NewsCastBloc>();
@@ -70,9 +69,9 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
         });
   }
 
-  Widget screenUi(){
+  Widget screenUi() {
     return Scaffold(
-      body:Stack(
+      body: Stack(
         children: <Widget>[
           Positioned(
             top: 0,
@@ -80,7 +79,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
               height: 217,
               width: width,
               color: ProjectColors.BLACK,
-              padding: EdgeInsets.only(right: 30,top: 25),
+              padding: EdgeInsets.only(right: 30, top: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -102,7 +101,9 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
                         fontSize: 32,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(
                     'إضغط على النشرة التي تريد الإستماع إليها',
                     style: TextStyle(
@@ -117,74 +118,77 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage> with TickerProv
           new Container(
               margin: EdgeInsets.only(top: 186),
               alignment: Alignment.bottomCenter,
-              padding: new EdgeInsets.only(top: 0, right: 20.0, left: 20.0,bottom: 50),
-              child:ListView.builder(
+              padding: new EdgeInsets.only(
+                  top: 0, right: 20.0, left: 20.0, bottom: 50),
+              child: ListView.builder(
                   itemCount: newsCasts.length,
                   padding: EdgeInsets.only(top: 0),
                   shrinkWrap: true,
-                  itemBuilder:  (BuildContext context, int index){
-                    return
-                      Container(
-                        width: width*0.8,
-                        color: Colors.white,
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          children: [
-                            InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    newsCasts[index].isOpened = !newsCasts[index].isOpened;
-                                  });
-                                },
-                                child: Container(
-                                  width: width,
-                                  height: 55,
-                                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                  color: newsCasts[index].isOpened ? ProjectColors.ThemeColor : Colors.white,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${newsCasts[index].slug}',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: newsCasts[index].isOpened ? Colors.white : Colors.black,
-                                        ),
-                                      ),
-                                      Icon(
-                                        newsCasts[index].isOpened
-                                            ? Icons.keyboard_arrow_up
-                                            : Icons.keyboard_arrow_down,
-                                        color:newsCasts[index].isOpened
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: width * 0.8,
+                      color: Colors.white,
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                setState(() {
+                                  newsCasts[index].isOpened =
+                                      !newsCasts[index].isOpened;
+                                });
+                              },
+                              child: Container(
+                                width: width,
+                                height: 55,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 15),
+                                color: newsCasts[index].isOpened
+                                    ? ProjectColors.ThemeColor
+                                    : Colors.white,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${newsCasts[index].slug}',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: newsCasts[index].isOpened
                                             ? Colors.white
-                                            : ProjectColors.ThemeColor,
-                                      )
-                                    ],
-                                  ),
-                                )
-                            ),
-                            new AnimatedSize(
-                                vsync: this,
-                                duration: const Duration(milliseconds: 500),
-                                child: new ConstrainedBox(
-                                    constraints: newsCasts[index].isOpened
-                                        ? new BoxConstraints()
-                                        : new BoxConstraints(maxHeight: 0.0),
-                                    child:DaysNewsBroadcastsWidget(
-                                      broadcasts: newsCasts[index].timeSlots,
-                                      date: newsCasts[index].slug,
-                                      newsCast: newsCasts[index],
-                                      introductionAudioPlayer: widget.introductionAudioPlayer,
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                    Icon(
+                                      newsCasts[index].isOpened
+                                          ? Icons.keyboard_arrow_up
+                                          : Icons.keyboard_arrow_down,
+                                      color: newsCasts[index].isOpened
+                                          ? Colors.white
+                                          : ProjectColors.ThemeColor,
                                     )
-                                )
-                            ),
-                          ],
-                        ),
-                      );
-                  }
-              )
-          )
+                                  ],
+                                ),
+                              )),
+                          new AnimatedSize(
+                              vsync: this,
+                              duration: const Duration(milliseconds: 500),
+                              child: new ConstrainedBox(
+                                  constraints: newsCasts[index].isOpened
+                                      ? new BoxConstraints()
+                                      : new BoxConstraints(maxHeight: 0.0),
+                                  child: DaysNewsBroadcastsWidget(
+                                    broadcasts: newsCasts[index].timeSlots,
+                                    date: newsCasts[index].slug,
+                                    newsCast: newsCasts[index],
+                                    introductionAudioPlayer:
+                                        widget.introductionAudioPlayer,
+                                  ))),
+                        ],
+                      ),
+                    );
+                  }))
         ],
       ),
     );

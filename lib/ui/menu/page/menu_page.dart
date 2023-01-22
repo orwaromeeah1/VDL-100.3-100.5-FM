@@ -83,7 +83,7 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ),
               ),
-              MenuItem(
+              MenuButtonItem(
                 title: 'مقالات',
                 onClick: () {
                   pushNewScreen(
@@ -94,7 +94,7 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 },
               ),
-              MenuItem(
+              MenuButtonItem(
                 title: 'نشرة الاخبار',
                 onClick: () {
                   pushNewScreen(
@@ -107,7 +107,7 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 },
               ),
-//              MenuItem(
+//              MenuButtonItem(
 //                title: 'برامج تاريخية',
 //                onClick: () {
 //                  pushNewScreen(
@@ -118,7 +118,7 @@ class _MenuPageState extends State<MenuPage> {
 //                  );
 //                },
 //              ),
-              MenuItem(
+              MenuButtonItem(
                 title: 'من نحن',
                 onClick: () {
                   pushNewScreen(
@@ -129,7 +129,7 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 },
               ),
-              MenuItem(
+              MenuButtonItem(
                 title: 'اتصل بنا',
                 onClick: () {
                   pushNewScreen(

@@ -29,7 +29,7 @@ class ErrorScreen extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width / 2,
               color: ProjectColors.ThemeColor,
-              child: FlatButton(
+              child: MaterialButton(
                 onPressed: onRetry,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
