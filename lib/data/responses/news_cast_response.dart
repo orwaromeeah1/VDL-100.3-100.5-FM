@@ -218,14 +218,6 @@ class NewsCastResponse {
     videoKwikMotionKeyBlock1715 = json["video_kwikMotion_key_block_17_15"];
     videoYoutubeKeyBlock1915 = json["video_youtube_key_block_19_15"];
     videoKwikMotionKeyBlock1915 = json["video_kwikMotion_key_block_19_15"];
-    audioTimeBlock1915 = json['audio_time_block_10_15'];
-    shortAudioTitleBlock1915 = json['short_audio_title_block_10_15'];
-    shortAudioFieldBlock1915 = json['short_audio_field_block_10_15'];
-    shortAudioDescriptionBlock1915 =
-        json['short_audio_description_block_10_15'];
-    audioTitleBlock1915 = json['audio_title_block_10_15'];
-    audioFieldBlock1915 = json['audio_field_block_10_15'];
-    audioDescriptionBlock1915 = json['audio_description_block_10_15'];
 
 //    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];

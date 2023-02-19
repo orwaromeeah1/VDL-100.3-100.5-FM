@@ -89,7 +89,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/images/about_us.png'),
+                            image: AssetImage('assets/images/studio1.jpg'),
                             fit: BoxFit.cover)),
                   ),
                 ),
@@ -143,8 +143,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/about_us_2.png'),
+                                    image:
+                                        AssetImage('assets/images/studio2.jpg'),
                                     fit: BoxFit.cover)),
                           ),
                         ),

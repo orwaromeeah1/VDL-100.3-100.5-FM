@@ -329,7 +329,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: 0),
                       children: [
-                        if (introductionAudioUrl != '')
+                        if (introductionId != '')
                           Card(
                             elevation: 1,
                             shape: RoundedRectangleBorder(
@@ -466,7 +466,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                               ),
                             ),
                           ),
-                        if (fullAudioUrl != '')
+                        if (fullAudioId != '')
                           Card(
                             elevation: 1,
                             shape: RoundedRectangleBorder(
@@ -817,7 +817,11 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     audiosLoaded = false;
     stopFullAudio();
     stopIntroduction();
-    _bloc.add(
-        FetchAudios(introductionId: introductionId, fullAudioId: fullAudioId));
+    try {
+      _bloc.add(FetchAudios(
+          introductionId: introductionId, fullAudioId: fullAudioId));
+    } catch (e) {
+      print(e);
+    }
   }
 }
