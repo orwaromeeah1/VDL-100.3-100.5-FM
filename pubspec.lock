@@ -302,14 +302,14 @@ packages:
       name: flutter_widget_from_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0"
+    version: "0.6.2"
   flutter_widget_from_html_core:
     dependency: transitive
     description:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+1"
+    version: "0.6.2"
   fluttericon:
     dependency: "direct main"
     description:
@@ -344,14 +344,14 @@ packages:
       name: fwfh_cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0+2"
+    version: "0.6.1+2"
   fwfh_chewie:
     dependency: transitive
     description:
       name: fwfh_chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0+1"
+    version: "0.6.2"
   fwfh_just_audio:
     dependency: transitive
     description:
@@ -365,14 +365,7 @@ packages:
       name: fwfh_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0+1"
-  fwfh_text_style:
-    dependency: transitive
-    description:
-      name: fwfh_text_style
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.22.08+1"
+    version: "0.6.0+1"
   fwfh_url_launcher:
     dependency: transitive
     description:
@@ -984,4 +977,4 @@ packages:
     version: "2.0.7"
 sdks:
   dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=3.1.0-0"
+  flutter: ">=2.5.0"

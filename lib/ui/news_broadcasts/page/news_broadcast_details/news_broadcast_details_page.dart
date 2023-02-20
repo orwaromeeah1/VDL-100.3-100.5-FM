@@ -10,6 +10,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/models/news_broadcast_details_model.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
+import 'package:vdl/ui/NewsDetails/widgets/html_viewer.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_bloc.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_event.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_broadcas_details/news_broadcast_details_state.dart';
@@ -595,11 +596,13 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: VideoPlayer(
-                                    path: video,
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.all(5),
+                                    child: HtmlViewer(
+                                        html: '<iframe src="$video"></iframe>')
+                                    // VideoPlayer(
+                                    //   path: video,
+                                    // ),
+                                    ),
                               ],
                             ),
                           ),
@@ -627,7 +630,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock715;
           introductionId = widget.newsCast.shortAudioFieldBlock715;
           fullAudioId = widget.newsCast.audioFieldBlock715;
-          video = widget.newsCast.videoKwikMotionKeyBlock1715;
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock1715;
+          });
           break;
         }
       case 1:
@@ -636,8 +641,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock815;
           introductionId = widget.newsCast.shortAudioFieldBlock815;
           fullAudioId = widget.newsCast.audioFieldBlock815;
-          video = widget.newsCast.videoKwikMotionKeyBlock815;
-
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock815;
+          });
           break;
         }
       case 2:
@@ -646,7 +652,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock1015;
           introductionId = widget.newsCast.shortAudioFieldBlock1015;
           fullAudioId = widget.newsCast.audioFieldBlock1015;
-          video = widget.newsCast.videoKwikMotionKeyBlock1015;
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock1015;
+          });
 
           break;
         }
@@ -656,8 +664,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock1415;
           introductionId = widget.newsCast.shortAudioFieldBlock1415;
           fullAudioId = widget.newsCast.audioFieldBlock1415;
-          video = widget.newsCast.videoKwikMotionKeyBlock1415;
-
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock1415;
+          });
           break;
         }
       case 4:
@@ -666,8 +675,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock1715;
           introductionId = widget.newsCast.shortAudioFieldBlock1715;
           fullAudioId = widget.newsCast.audioFieldBlock1715;
-          video = widget.newsCast.videoKwikMotionKeyBlock1715;
-
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock1715;
+          });
           break;
         }
       case 5:
@@ -676,8 +686,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               widget.newsCast.shortAudioDescriptionBlock1915;
           introductionId = widget.newsCast.shortAudioFieldBlock1915;
           fullAudioId = widget.newsCast.audioFieldBlock1915;
-          video = widget.newsCast.videoKwikMotionKeyBlock1915;
-
+          setState(() {
+            video = widget.newsCast.videoKwikMotionKeyBlock1915;
+          });
           break;
         }
     }

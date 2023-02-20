@@ -67,6 +67,7 @@ dependencies:
   webview_flutter: ^2.0.10
   just_audio: ^0.9.31
   share: ^2.0.4
+
   just_audio_background: any
   #  google_mobile_ads: ^0.13.2
   #flutter_native_admob: ^2.1.0+3
@@ -80,7 +81,7 @@ dependencies:
       ref: feature/suamusica
   focus_detector: ^2.0.1
   flutter_inappwebview: ^5.3.2
-  flutter_widget_from_html: any
+  flutter_widget_from_html: ^0.6.2
 
  
 
