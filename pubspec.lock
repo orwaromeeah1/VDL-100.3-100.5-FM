@@ -271,7 +271,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.6.0+2"
+    version: "5.8.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -977,4 +977,4 @@ packages:
     version: "2.0.7"
 sdks:
   dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=2.5.0"
+  flutter: ">=3.0.0"
