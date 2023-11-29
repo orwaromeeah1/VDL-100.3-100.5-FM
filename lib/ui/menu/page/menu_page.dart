@@ -11,6 +11,7 @@ import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/ui/Aboutus/pages/about_us_page.dart';
 import 'package:vdl/ui/Articles/page/articles.dart';
 import 'package:vdl/ui/ContactUs/pages/contact_us_page.dart';
+import 'package:vdl/ui/TermsOfUse/terms_of_use.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
@@ -135,6 +136,17 @@ class _MenuPageState extends State<MenuPage> {
                   pushNewScreen(
                     context,
                     screen: ContactUsPage(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              MenuButtonItem(
+                title: 'شروط الإستخدام',
+                onClick: () {
+                  pushNewScreen(
+                    context,
+                    screen: TermsOfUsePage(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
