@@ -172,7 +172,9 @@ class _NewsPageState extends State<NewsPage>
                 showUpdateDialog(context);
               }
               if (state is Startup) {
-                categories = categories + state.homeModel.categories;
+                if (categories.length == 1) {
+                  categories = categories + state.homeModel.categories;
+                }
                 selectType(categories[0].id, 0, 0);
               }
               if (state is Loaded) {
