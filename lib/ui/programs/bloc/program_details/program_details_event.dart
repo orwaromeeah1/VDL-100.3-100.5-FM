@@ -5,10 +5,9 @@ abstract class ProgramDetailsEvent extends Equatable {
 }
 
 class FetchProgramDetails extends ProgramDetailsEvent {
- final int programId;
-  FetchProgramDetails({
-   this.programId,
-});
+  final int programId;
+  final bool isRadio;
+  FetchProgramDetails({this.programId, this.isRadio});
 
   @override
   List<Object> get props => [];

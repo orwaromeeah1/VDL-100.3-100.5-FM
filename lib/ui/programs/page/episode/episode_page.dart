@@ -26,12 +26,15 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 import '../../../../injection.dart';
+import '../../../NewsDetails/widgets/html_viewer.dart';
 
 class EpisodePage extends StatefulWidget {
   final int episodeId;
   final ProgramDetailsResponse program;
+  final String youtubeVideo;
 
-  EpisodePage({@required this.episodeId, @required this.program})
+  EpisodePage(
+      {@required this.episodeId, @required this.program, this.youtubeVideo})
       : assert(episodeId != null && program != null);
 
   @override
@@ -267,32 +270,41 @@ class _EpisodePageState extends State<EpisodePage>
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Text(
-                            '${Bidi.stripHtmlIfNeeded(widget.program.title)}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: Text(
+                              '${Bidi.stripHtmlIfNeeded(widget.program.title)}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
                             ),
                           ),
-                          Text(
-                            '${Bidi.stripHtmlIfNeeded(episode.title)}',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 20,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: Text(
+                              '${Bidi.stripHtmlIfNeeded(episode.title)}',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Icon(
-                                Icons.watch_later,
-                                color: ProjectColors.ThemeColor,
-                              ),
-                              Text('${episode.time}'),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                Icon(
+                                  Icons.watch_later,
+                                  color: ProjectColors.ThemeColor,
+                                ),
+                                Text('${episode.time}'),
+                              ],
+                            ),
                           ),
                           SizedBox(
                             height: 20,
@@ -434,6 +446,7 @@ class _EpisodePageState extends State<EpisodePage>
                                   path: 'https://embed.kwikmotion.com/Embed/' +
                                       episode.video,
                                 )
+
                               // Padding(
                               //     padding: const EdgeInsets.only(
                               //         right: 19.0,
@@ -462,18 +475,46 @@ class _EpisodePageState extends State<EpisodePage>
                               //     ),
                               //   )
                               : Container(),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'باقي الحلقات',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                          if (widget.youtubeVideo != '')
+                            Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: HtmlViewer(
+                                          html:
+                                              '<iframe src="https://www.youtube.com/embed/${widget.youtubeVideo}"></iframe>')
+                                      // VideoPlayer(
+                                      //   path: video,
+                                      // ),
+                                      ),
+                                ],
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'باقي الحلقات',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
+
                           ListView.builder(
                               shrinkWrap: true,
                               itemCount: episodes.length,
                               physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.zero,
                               itemBuilder: (BuildContext context, int index) {
                                 return widget.episodeId == episodes[index].id
                                     ? Container()

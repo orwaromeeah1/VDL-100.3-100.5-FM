@@ -11,6 +11,7 @@ class EpisodeCard extends StatelessWidget {
   final String title;
   final String audioLink;
   final String videoLink;
+  final String youtubelink;
   final int id;
   final ProgramDetailsResponse program;
   final bool containsAudio;
@@ -24,22 +25,24 @@ class EpisodeCard extends StatelessWidget {
     this.image,
     this.videoLink,
     this.id,
+    this.youtubelink,
     this.program,
     this.containsAudio,
     this.containsVideo,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context)=>EpisodePage(
-              episodeId: id,
-              program: program,
-            ))
-        );
+            MaterialPageRoute(
+                builder: (context) => EpisodePage(
+                      episodeId: id,
+                      program: program,
+                      youtubeVideo: youtubelink,
+                    )));
       },
       child: Container(
         height: 175,
@@ -54,9 +57,9 @@ class EpisodeCard extends StatelessWidget {
             child: Row(
               children: [
                 CachedNetworkImage(
-                  width:MediaQuery.of(context).size.width*0.3 ,
+                  width: MediaQuery.of(context).size.width * 0.3,
                   height: 100,
-                  imageUrl:  '$image',
+                  imageUrl: '$image',
                   imageBuilder: (context, imageProvider) => Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.symmetric(horizontal: 25),
@@ -68,13 +71,15 @@ class EpisodeCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width*0.5,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       child: Text(
                         '$episodeNumber - $date',
                         style: TextStyle(
@@ -84,7 +89,7 @@ class EpisodeCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width*0.53,
+                      width: MediaQuery.of(context).size.width * 0.53,
                       child: Text(
                         '$title',
                         style: TextStyle(
@@ -93,46 +98,50 @@ class EpisodeCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                       Container(
-
-                        width: MediaQuery.of(context).size.width*0.5,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           containsAudio
-                              ?  Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                               Icon(Icons.headset,color: ProjectColors.BLUE,),
-                                Text(
-                                  'استمع الآن',
-                                  style: TextStyle(
-                                    color: ProjectColors.BLUE,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            )
-                            :Container(),
-                        containsVideo
-                            ?Flex(
-                             direction: Axis.horizontal,
-                             children: [
-                               Icon(Icons.play_arrow,color: ProjectColors.ThemeColor,),
-                               Text(
-                                 'شاهد الآن',
-                                 style: TextStyle(
-                                   color: ProjectColors.ThemeColor,
-                           fontSize: 10,
-                                 ),
-                               ),
-                             ],
-                           )
-                            :Container(),
-                          ],
-                        ),
+                              ? Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Icon(
+                                      Icons.headset,
+                                      color: ProjectColors.BLUE,
+                                    ),
+                                    Text(
+                                      'استمع الآن',
+                                      style: TextStyle(
+                                        color: ProjectColors.BLUE,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                          containsVideo
+                              ? Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Icon(
+                                      Icons.play_arrow,
+                                      color: ProjectColors.ThemeColor,
+                                    ),
+                                    Text(
+                                      'شاهد الآن',
+                                      style: TextStyle(
+                                        color: ProjectColors.ThemeColor,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
                       ),
-
+                    ),
                   ],
                 )
               ],

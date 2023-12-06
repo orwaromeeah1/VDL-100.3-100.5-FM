@@ -291,11 +291,19 @@ class Repository {
     return result;
   }
 
-  Future<ProgramDetailsResponse> getProgramDetails(int programId) async {
-    dynamic response = await _client.get(
-      Urls.PROGRAMS + '$programId',
-    );
-    return ProgramDetailsResponse.fromJson(response);
+  Future<ProgramDetailsResponse> getProgramDetails(
+      int programId, bool isRadio) async {
+    if (isRadio) {
+      dynamic response = await _client.get(
+        Urls.PROGRAMS + '$programId',
+      );
+      return ProgramDetailsResponse.fromJson(response);
+    } else {
+      dynamic response = await _client.get(
+        Urls.PROGRAMS + '$programId?format=webtv',
+      );
+      return ProgramDetailsResponse.fromJson(response);
+    }
   }
 
   Future<List<SearchResponse>> search(String searchQuery) async {
@@ -334,6 +342,16 @@ class Repository {
     dynamic response = await _client.get(
       Urls.PROGRAMS_SCHEDULE +
           '?currentScheduleWeekDay=$day&currentScheduleMonthDay=$dayNum',
+    );
+
+    return ProgramSchedule.fromJson(response);
+  }
+
+  Future<List<ProgramSchedule>> getWebProgramsSchedule(
+      String day, int dayNum) async {
+    dynamic response = await _client.get(
+      Urls.PROGRAMS_SCHEDULE +
+          '?currentScheduleWeekDay=$day&currentScheduleMonthDay=$dayNum&format=webtv',
     );
 
     return ProgramSchedule.fromJson(response);

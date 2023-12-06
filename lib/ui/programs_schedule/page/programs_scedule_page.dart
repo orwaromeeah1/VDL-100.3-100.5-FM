@@ -26,18 +26,19 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
   double width;
   List<DayModel> currentMonthDays = [];
   int selectedDay = DateTime.now().day;
-  int totalDays =0;
-  List<ProgramSchedule> programSchedule = [];
+  int totalDays = 0;
 
+  bool isSetToRadio = true;
   final _bloc = locator<ProgramsScheduleBloc>();
 
   @override
   void initState() {
     super.initState();
     currentMonthDays = DateHelper.getDays();
-    totalDays = DateHelper.daysInMonth( DateTime.now());
+    totalDays = DateHelper.daysInMonth(DateTime.now());
     _bloc.add(FetchProgramsSchedule(
-        dayNum: selectedDay, day: currentMonthDays[(selectedDay-1)%totalDays].name));
+        dayNum: selectedDay,
+        day: currentMonthDays[(selectedDay - 1) % totalDays].name));
   }
 
   @override
@@ -56,7 +57,7 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
           Positioned(
             top: 0,
             child: Container(
-              height: 175,
+              height: 220,
               width: width,
               color: ProjectColors.BLACK,
               padding: EdgeInsets.only(top: 50),
@@ -64,6 +65,10 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  ScheduleTypePicker(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     DateHelper.getMonthNameInArabic(DateTime.now().month) +
                         ' ' +
@@ -72,6 +77,9 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                         color: Colors.grey,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   daysSlider(),
                 ],
@@ -90,7 +98,6 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
                   );
                 }
                 if (state is ProgramsScheduleLoaded) {
-                  programSchedule = state.programsSchedule;
                   return screenUi();
                 }
 
@@ -119,30 +126,85 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
     );
   }
 
+  Widget ScheduleTypePicker() {
+    return Container(
+      height: 40,
+      width: 250,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isSetToRadio = true;
+              });
+            },
+            child: Container(
+              height: 40,
+              width: isSetToRadio ? 150 : 100,
+              child: Center(
+                  child: Text(
+                isSetToRadio ? 'جدول برامج الإذاعة' : 'الإذاعة',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              )),
+              decoration: BoxDecoration(
+                  color: isSetToRadio
+                      ? ProjectColors.ThemeColor
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(50)),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isSetToRadio = false;
+              });
+            },
+            child: Container(
+              height: 40,
+              width: isSetToRadio ? 100 : 150,
+              child: Center(
+                  child: Text(
+                isSetToRadio ? 'WebTV' : 'جدول برامج ال WebTV',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              )),
+              decoration: BoxDecoration(
+                  color: isSetToRadio
+                      ? Colors.transparent
+                      : ProjectColors.ThemeColor,
+                  borderRadius: BorderRadius.circular(50)),
+            ),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(50)),
+    );
+  }
+
   Widget screenUi() {
+    List<ProgramSchedule> programsSchedule =
+        isSetToRadio ? _bloc.programsSchedule : _bloc.WebProgramsSchedule;
     return Container(
       width: width,
-      margin: EdgeInsets.only(top: 175, bottom: 50),
+      margin: EdgeInsets.only(top: 220, bottom: 50),
       child: ListView.builder(
-          itemCount: programSchedule.length,
+          padding: EdgeInsets.only(top: 10),
+          itemCount: programsSchedule.length,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProgramDetailsPage()));
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: ProgramScheduleCard(
-                  name: '${programSchedule[index].title}',
-                  duration: '${programSchedule[index].time}',
-                  id: programSchedule[index].id,
-                  link: programSchedule[index].link,
-                  image: '${programSchedule[index].image}',
-                ),
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: ProgramScheduleCard(
+                isDisplayingNow: programsSchedule[index].active,
+                isRadio: isSetToRadio,
+                name: '${programsSchedule[index].title}',
+                duration: '${programsSchedule[index].time}',
+                id: programsSchedule[index].id,
+                link: programsSchedule[index].link,
+                image: '${programsSchedule[index].image}',
               ),
             );
           }),
@@ -158,12 +220,14 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             setState(() {
               selectedDay--;
             });
-            log('jmnjmn'+(selectedDay%totalDays).toString());
+            log('jmnjmn' + (selectedDay % totalDays).toString());
             _bloc.add(FetchProgramsSchedule(
-                dayNum: selectedDay==0? totalDays:
-                                        selectedDay==totalDays? selectedDay
-                                                                :selectedDay%totalDays,
-                day: currentMonthDays[(selectedDay-1)%totalDays].name));
+                dayNum: selectedDay == 0
+                    ? totalDays
+                    : selectedDay == totalDays
+                        ? selectedDay
+                        : selectedDay % totalDays,
+                day: currentMonthDays[(selectedDay - 1) % totalDays].name));
           },
           child: Container(
             height: 35,
@@ -258,12 +322,14 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             setState(() {
               selectedDay++;
             });
-            log('jmnjmnnn'+(selectedDay%totalDays).toString());
+            log('jmnjmnnn' + (selectedDay % totalDays).toString());
             _bloc.add(FetchProgramsSchedule(
-                dayNum: selectedDay==0? totalDays:
-                selectedDay==totalDays? selectedDay
-                    :selectedDay%totalDays,
-                day: currentMonthDays[(selectedDay-1)%totalDays].name));
+                dayNum: selectedDay == 0
+                    ? totalDays
+                    : selectedDay == totalDays
+                        ? selectedDay
+                        : selectedDay % totalDays,
+                day: currentMonthDays[(selectedDay - 1) % totalDays].name));
           },
           child: Container(
             height: 35,

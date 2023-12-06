@@ -12,17 +12,18 @@ class ProgramScheduleCard extends StatelessWidget {
   String link;
   final int id;
   final String name;
+  final bool isRadio;
   final bool isDisplayingNow;
 
-  ProgramScheduleCard({
-    this.name,
-    this.image,
-    this.duration,
-    this.id,
-    this.link,
-    //TODO : show something if program is displaying now
-    this.isDisplayingNow: false,
-  });
+  ProgramScheduleCard(
+      {this.name,
+      this.image,
+      this.duration,
+      this.id,
+      this.link,
+      //TODO : show something if program is displaying now
+      this.isDisplayingNow: false,
+      this.isRadio});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class ProgramScheduleCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => ProgramDetailsPage(
+                          isRadioTv: isRadio,
                           programId: id,
                         )))
             : null;
@@ -91,14 +93,28 @@ class ProgramScheduleCard extends StatelessWidget {
                         Text(
                           '$name',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13
-                          ),
+                              fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                       ],
                     ),
                   ],
                 ),
+                if (isDisplayingNow)
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'يعرض الان',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 17,

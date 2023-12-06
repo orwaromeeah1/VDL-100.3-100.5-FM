@@ -21,30 +21,32 @@ class EpisodeResponse {
   Image image;
   String humanDate;
   String sinceDate;
+  String youtube_key;
 
   EpisodeResponse(
       {this.id,
-        this.date,
-        this.dateGmt,
-        this.modified,
-        this.modifiedGmt,
-        this.slug,
-        this.status,
-        this.link,
-        this.title,
-        this.content,
-        this.excerpt,
-        this.author,
-        this.menuOrder,
-        this.format,
-        this.chooseProgram,
-        this.episodeDescription,
-        this.time,
-        this.audio,
-        this.video,
-        this.image,
-        this.humanDate,
-        this.sinceDate});
+      this.date,
+      this.dateGmt,
+      this.modified,
+      this.modifiedGmt,
+      this.slug,
+      this.status,
+      this.link,
+      this.title,
+      this.content,
+      this.excerpt,
+      this.author,
+      this.menuOrder,
+      this.format,
+      this.chooseProgram,
+      this.episodeDescription,
+      this.time,
+      this.audio,
+      this.video,
+      this.image,
+      this.humanDate,
+      this.sinceDate,
+      this.youtube_key});
 
   EpisodeResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -69,6 +71,7 @@ class EpisodeResponse {
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
+    youtube_key = json['youtube_video_key'];
   }
 
   Map<String, dynamic> toJson() {
