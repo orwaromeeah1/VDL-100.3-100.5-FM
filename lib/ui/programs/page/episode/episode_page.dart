@@ -32,9 +32,13 @@ class EpisodePage extends StatefulWidget {
   final int episodeId;
   final ProgramDetailsResponse program;
   final String youtubeVideo;
+  final Episodes episode;
 
   EpisodePage(
-      {@required this.episodeId, @required this.program, this.youtubeVideo})
+      {@required this.episodeId,
+      @required this.program,
+      this.youtubeVideo,
+      this.episode})
       : assert(episodeId != null && program != null);
 
   @override
@@ -45,7 +49,7 @@ class _EpisodePageState extends State<EpisodePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   double width;
   final _bloc = locator<EpisodeBloc>();
-  EpisodeResponse episode = new EpisodeResponse();
+  //EpisodeResponse episode = new EpisodeResponse();
   AnimationController _animationController;
   bool isPlaying = false;
   Duration duration;
@@ -67,7 +71,7 @@ class _EpisodePageState extends State<EpisodePage>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    _bloc.add(FetchEpisode(episodeId: widget.episodeId));
+    _bloc.add(FetchEpisode(episode: widget.episode));
     super.initState();
     episodes = widget.program.episodes;
     _animationController =
@@ -138,21 +142,20 @@ class _EpisodePageState extends State<EpisodePage>
         bloc: _bloc,
         builder: (context, EpisodeState state) {
           if (state is EpisodeEmpty) {
-            _bloc.add(FetchEpisode(episodeId: widget.episodeId));
+            _bloc.add(FetchEpisode(episode: widget.episode));
           }
           if (state is EpisodeError) {
             return ErrorScreen(
-              onRetry: () =>
-                  _bloc.add(FetchEpisode(episodeId: widget.episodeId)),
-            );
+                onRetry: () =>
+                    _bloc.add(FetchEpisode(episode: widget.episode)));
           }
           if (state is EpisodeLoaded) {
-            episode = state.episode;
-            containsVideo = (episode.video != "");
+            ;
+            containsVideo = (widget.episode.video != "");
 
             if (containsVideo) {
               _youtubeController = YoutubePlayerController(
-                initialVideoId: _getYoutubeId(episode.video),
+                initialVideoId: _getYoutubeId(widget.episode.video),
                 params: YoutubePlayerParams(
                   startAt: Duration(seconds: 30),
                   showControls: true,
@@ -160,7 +163,7 @@ class _EpisodePageState extends State<EpisodePage>
                 ),
               );
             }
-            _bloc.add(FetchAudio(audioKey: episode.audio));
+            _bloc.add(FetchAudio(audioKey: widget.episode.audio));
             return screenUi();
           }
 
@@ -193,19 +196,26 @@ class _EpisodePageState extends State<EpisodePage>
                       width: width,
                       child: Stack(
                         children: [
-                          CachedNetworkImage(
-                            imageUrl: '${episode.image.original}',
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: EdgeInsets.symmetric(horizontal: 25),
-                              decoration: BoxDecoration(
+                          Container(
+                            decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                                    image: NetworkImage(
+                                        widget.episode.image.medium),
+                                    fit: BoxFit.cover)),
                           ),
+                          // CachedNetworkImage(
+                          //   imageUrl: '${episode.image.original}',
+                          //   imageBuilder: (context, imageProvider) => Container(
+                          //     width: MediaQuery.of(context).size.width,
+                          //     padding: EdgeInsets.symmetric(horizontal: 25),
+                          //     decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //         image: imageProvider,
+                          //         fit: BoxFit.cover,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           Positioned(
                               left: 10,
                               top: 40,
@@ -243,7 +253,7 @@ class _EpisodePageState extends State<EpisodePage>
                           size: 50,
                           color: Colors.white,
                           onClick: () {
-                            Share.share(episode.link);
+                            Share.share(widget.episode.link);
                           },
                           iconImage: FilePath.SHARE,
                         ),
@@ -283,7 +293,7 @@ class _EpisodePageState extends State<EpisodePage>
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: Text(
-                              '${Bidi.stripHtmlIfNeeded(episode.title)}',
+                              '${Bidi.stripHtmlIfNeeded(widget.episode.title)}',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 20,
@@ -302,7 +312,7 @@ class _EpisodePageState extends State<EpisodePage>
                                   Icons.watch_later,
                                   color: ProjectColors.ThemeColor,
                                 ),
-                                Text('${episode.time}'),
+                                Text('${widget.episode.time}'),
                               ],
                             ),
                           ),
@@ -444,7 +454,7 @@ class _EpisodePageState extends State<EpisodePage>
                           containsVideo
                               ? VideoPlayer(
                                   path: 'https://embed.kwikmotion.com/Embed/' +
-                                      episode.video,
+                                      widget.episode.video,
                                 )
 
                               // Padding(
@@ -475,7 +485,8 @@ class _EpisodePageState extends State<EpisodePage>
                               //     ),
                               //   )
                               : Container(),
-                          if (widget.youtubeVideo != '')
+                          if (widget.youtubeVideo != null &&
+                              widget.youtubeVideo != '')
                             Card(
                               elevation: 1,
                               shape: RoundedRectangleBorder(
@@ -495,43 +506,43 @@ class _EpisodePageState extends State<EpisodePage>
                                 ],
                               ),
                             ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'باقي الحلقات',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(right: 8.0),
+                          //   child: Align(
+                          //     alignment: Alignment.centerRight,
+                          //     child: Text(
+                          //       'باقي الحلقات',
+                          //       style: TextStyle(
+                          //           fontSize: 20, fontWeight: FontWeight.bold),
+                          //     ),
+                          //   ),
+                          // ),
 
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: episodes.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemBuilder: (BuildContext context, int index) {
-                                return widget.episodeId == episodes[index].id
-                                    ? Container()
-                                    : EpisodeCard(
-                                        image:
-                                            '${episodes[index].image.original}',
-                                        date: '${episodes[index].humanDate}',
-                                        title: '${episodes[index].title}',
-                                        episodeNumber: 'الحلقة ${index + 1}',
-                                        id: widget.program.episodes[index].id,
-                                        program: widget.program,
-                                        containsVideo: widget.program
-                                            .episodes[index].containVideo,
-                                        containsAudio: widget.program
-                                            .episodes[index].containAudio,
-                                      );
-                              }),
+                          // ListView.builder(
+                          //     shrinkWrap: true,
+                          //     itemCount: episodes.length,
+                          //     physics: NeverScrollableScrollPhysics(),
+                          //     padding: EdgeInsets.zero,
+                          //     itemBuilder: (BuildContext context, int index) {
+                          //       return widget.episodeId == episodes[index].id
+                          //           ? Container()
+                          //           : EpisodeCard(
+                          //               image:
+                          //                   '${episodes[index].image.original}',
+                          //               date: '${episodes[index].humanDate}',
+                          //               title: '${episodes[index].title}',
+                          //               episodeNumber: 'الحلقة ${index + 1}',
+                          //               id: widget.program.episodes[index].id,
+                          //               program: widget.program,
+                          //               containsVideo: widget.program
+                          //                   .episodes[index].containVideo,
+                          //               containsAudio: widget.program
+                          //                   .episodes[index].containAudio,
+                          //             );
+                          //     }),
                           SizedBox(height: 50),
                         ],
                       ),

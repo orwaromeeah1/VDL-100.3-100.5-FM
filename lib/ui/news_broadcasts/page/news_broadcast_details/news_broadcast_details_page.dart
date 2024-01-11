@@ -673,7 +673,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       case 2:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1015;
+              widget.newsCast.short_audio_description_block_10_15;
           introductionId = widget.newsCast.shortAudioFieldBlock1015;
           fullAudioId = widget.newsCast.audioFieldBlock1015;
           setState(() {
@@ -710,7 +710,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       case 5:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1915;
+              widget.newsCast.short_audio_description_block_19_15;
           introductionId = widget.newsCast.shortAudioFieldBlock1915;
           fullAudioId = widget.newsCast.audioFieldBlock1915;
           setState(() {

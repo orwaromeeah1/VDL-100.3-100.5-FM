@@ -9,8 +9,7 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
   final Repository repository;
 
   @override
-  EpisodeBloc(EpisodeState initialState, this.repository)
-      : super(initialState);
+  EpisodeBloc(EpisodeState initialState, this.repository) : super(initialState);
 
   @override
   EpisodeState get initialState => EpisodeEmpty();
@@ -21,8 +20,8 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
       yield EpisodeLoading();
       try {
 
-        EpisodeResponse episode = await repository.getEpisodeDetails(event.episodeId);
-        yield EpisodeLoaded(episode: episode);
+        //EpisodeResponse episode = await repository.getEpisodeDetails(event.e);
+        yield EpisodeLoaded(episode: event.episode);
       } catch (_) {
         yield EpisodeError();
       }
@@ -30,8 +29,9 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
 
     if (event is FetchAudio) {
       try {
-        AudioResponseModel audio = await repository.getAudioModel(event.audioKey);
-        yield AudioLoaded(audio:audio);
+        AudioResponseModel audio =
+            await repository.getAudioModel(event.audioKey);
+        yield AudioLoaded(audio: audio);
       } catch (_) {
         yield AudioError();
       }

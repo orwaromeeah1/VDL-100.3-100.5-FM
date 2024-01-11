@@ -8,6 +8,7 @@ class EpisodeCard extends StatelessWidget {
   final String episodeNumber;
   final String date;
   final String image;
+  final Episodes episode;
   final String title;
   final String audioLink;
   final String videoLink;
@@ -17,19 +18,19 @@ class EpisodeCard extends StatelessWidget {
   final bool containsAudio;
   final containsVideo;
 
-  EpisodeCard({
-    this.date,
-    this.audioLink,
-    this.episodeNumber,
-    this.title,
-    this.image,
-    this.videoLink,
-    this.id,
-    this.youtubelink,
-    this.program,
-    this.containsAudio,
-    this.containsVideo,
-  });
+  EpisodeCard(
+      {this.date,
+      this.audioLink,
+      this.episodeNumber,
+      this.title,
+      this.image,
+      this.videoLink,
+      this.id,
+      this.youtubelink,
+      this.program,
+      this.containsAudio,
+      this.containsVideo,
+      this.episode});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class EpisodeCard extends StatelessWidget {
                 builder: (context) => EpisodePage(
                       episodeId: id,
                       program: program,
+                      episode: episode,
                       youtubeVideo: youtubelink,
                     )));
       },
@@ -88,6 +90,9 @@ class EpisodeCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.53,
                       child: Text(
@@ -97,6 +102,9 @@ class EpisodeCard extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 5,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.5,

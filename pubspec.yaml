@@ -41,7 +41,7 @@ dependencies:
   flutter_card_swipper: ^0.4.0
   flutter_switch: ^0.0.2
 
-  cached_network_image: any
+
   audioplayers: ^0.19.1
   
   audio_video_progress_bar: ^0.6.1
@@ -80,6 +80,7 @@ dependencies:
       path: packages/google_mobile_ads
       ref: feature/suamusica
   focus_detector: ^2.0.1
+
   flutter_inappwebview: ^5.8.0
   flutter_widget_from_html: ^0.6.2
 

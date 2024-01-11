@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vdl/data/responses/program_details_response.dart';
 
 abstract class EpisodeEvent extends Equatable {
   const EpisodeEvent();
@@ -8,16 +9,15 @@ abstract class EpisodeEvent extends Equatable {
 }
 
 class FetchEpisode extends EpisodeEvent {
-  final int episodeId;
+  final Episodes episode;
   FetchEpisode({
-    this.episodeId,
+    this.episode,
   });
-
 }
+
 class FetchAudio extends EpisodeEvent {
   final String audioKey;
   FetchAudio({
     this.audioKey,
   });
-
 }

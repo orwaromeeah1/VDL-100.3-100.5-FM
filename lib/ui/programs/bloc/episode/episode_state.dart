@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/models/aduio_response_model.dart';
 import 'package:vdl/data/responses/episode_response.dart';
-
+import 'package:vdl/data/responses/program_details_response.dart';
 
 class EpisodeState extends Equatable {
   const EpisodeState();
@@ -16,7 +16,7 @@ class EpisodeEmpty extends EpisodeState {}
 class EpisodeLoading extends EpisodeState {}
 
 class EpisodeLoaded extends EpisodeState {
-  final EpisodeResponse episode;
+  final Episodes episode;
 
   const EpisodeLoaded({@required this.episode}) : assert(episode != null);
 
@@ -24,14 +24,11 @@ class EpisodeLoaded extends EpisodeState {
   List<Object> get props => [episode];
 }
 
-
 class EpisodeError extends EpisodeState {}
-
 
 class AudioLoading extends EpisodeState {}
 
 class AudioLoaded extends EpisodeState {
-
   final AudioResponseModel audio;
 
   AudioLoaded({this.audio});

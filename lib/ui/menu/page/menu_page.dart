@@ -213,6 +213,15 @@ class _MenuPageState extends State<MenuPage> {
                         child: SocialButton(
                           tag: 1,
                         )),
+                    SizedBox(
+                      width: 13,
+                    ),
+                    GestureDetector(
+                        onTap: () => _launchURL(
+                            'https://www.youtube.com/@VoiceOfLebanon100.5'),
+                        child: SocialButton(
+                          tag: 4,
+                        )),
                   ],
                 ),
               )

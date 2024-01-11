@@ -366,7 +366,9 @@ class Repository {
       dynamic response = await _client.getTweetsMethod(
           Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
       timeline = tweetsFromJson(response);
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   ////

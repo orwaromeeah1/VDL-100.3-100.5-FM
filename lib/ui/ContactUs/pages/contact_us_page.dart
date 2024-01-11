@@ -153,7 +153,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                     Container(
                                       width: 163,
                                       child: Text(
-                                        '76 611 005',
+                                        '76611005',
                                         style: TextStyle(
                                           fontSize: 17,
                                           color: Colors.white,

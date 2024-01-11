@@ -229,7 +229,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                   ))),
                       child: Container(
                         child: ProgramCard(
-                          image: '${programs[index].image.original}',
+                          image: '${programs[index].image.large}',
                           category:
                               '${programs[index].categories.category.name}',
                           name: '${programs[index].title}',
