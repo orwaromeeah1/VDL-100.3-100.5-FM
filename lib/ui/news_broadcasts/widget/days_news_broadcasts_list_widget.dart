@@ -88,13 +88,18 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Text(
-                                  'استمع الآن',
-                                  style: TextStyle(
-                                    color: ProjectColors.ThemeColor,
-                                    fontSize: 13,
-                                  ),
-                                ),
+                                hasVideo(index)
+                                    ? Icon(
+                                        Icons.play_arrow,
+                                        color: ProjectColors.ThemeColor,
+                                      )
+                                    : Text(
+                                        'استمع الآن',
+                                        style: TextStyle(
+                                          color: ProjectColors.ThemeColor,
+                                          fontSize: 13,
+                                        ),
+                                      ),
                               ],
                             )
                           : Container(),
@@ -117,6 +122,71 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
     double i = double.parse(s2);
     double currentHour = DateTime.now().hour.toDouble();
     return i < currentHour;
+  }
+
+  bool hasVideo(int index) {
+    switch (index) {
+      case 0:
+        {
+          if (newsCast.videoKwikMotionKeyBlock715 != '' ||
+              newsCast.videoYoutubeKeyBlock715 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+      case 1:
+        {
+          if (newsCast.videoKwikMotionKeyBlock815 != '' ||
+              newsCast.videoYoutubeKeyBlock815 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+      case 2:
+        {
+          if (newsCast.videoKwikMotionKeyBlock1015 != '' ||
+              newsCast.videoYoutubeKeyBlock1015 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+      case 3:
+        {
+          if (newsCast.videoKwikMotionKeyBlock1415 != '' ||
+              newsCast.videoYoutubeKeyBlock1415 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+      case 4:
+        {
+          if (newsCast.videoKwikMotionKeyBlock1715 != '' ||
+              newsCast.videoYoutubeKeyBlock1715 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+      case 5:
+        {
+          if (newsCast.videoKwikMotionKeyBlock1915 != '' ||
+              newsCast.videoYoutubeKeyBlock1915 != '') {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+        }
+    }
   }
 
   bool isDayBeforeNow(String date, String now) {
