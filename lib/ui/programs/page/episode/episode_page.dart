@@ -163,12 +163,13 @@ class _EpisodePageState extends State<EpisodePage>
                 ),
               );
             }
-            _bloc.add(FetchAudio(audioKey: widget.episode.audio));
-            return screenUi();
+            if (state.episode.audio != '')
+              _bloc.add(FetchAudio(audioKey: widget.episode.audio));
+            return screenUi(state.episode.audio == '');
           }
 
           if (state is AudioLoaded) {
-            return screenUi();
+            return screenUi(false);
           }
           if (state is EpisodeLoading) {
             return LoadingScreen();
@@ -180,7 +181,7 @@ class _EpisodePageState extends State<EpisodePage>
         });
   }
 
-  Widget screenUi() {
+  Widget screenUi(bool hideAudio) {
     return Scaffold(
       body: Container(
         width: width,
@@ -320,134 +321,140 @@ class _EpisodePageState extends State<EpisodePage>
                             height: 20,
                           ),
 
-                          BlocListener(
-                            bloc: _bloc,
-                            listener: (context, state) {
-                              if (state is AudioLoaded) {
-                                setState(() {
-                                  log('audios fully loaded');
-                                  isPlaying = false;
-                                  isPlaying = false;
-                                  audioLoaded = true;
-                                  audioUrl = state.audio.file.url;
-                                });
-                              }
-                            },
-                            child: Container(
-                              height: 100,
-                              width: width * 0.9,
-                              padding: EdgeInsets.only(top: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(14),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.14),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 0),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 20.0, bottom: 20),
-                                        child: GlowingCircularButton(
-                                          size: 30,
-                                          color: ProjectColors.ThemeColor,
-                                          icon: audioLoaded
-                                              ? AnimatedIcon(
-                                                  icon:
-                                                      AnimatedIcons.play_pause,
-                                                  progress:
-                                                      _animationController,
-                                                  size: 15,
-                                                  color: Colors.white,
-                                                )
-                                              : VdlProgressIndicator(
-                                                  size: 5,
-                                                  color: Colors.white,
-                                                ),
-                                          onClick: () {
-                                            _handleOnPressed();
-                                          },
-                                          isGlowing: true,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'استمع للحلقة',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                          if (!hideAudio)
+                            BlocListener(
+                              bloc: _bloc,
+                              listener: (context, state) {
+                                if (state is AudioLoaded) {
+                                  setState(() {
+                                    log('audios fully loaded');
+                                    isPlaying = false;
+                                    isPlaying = false;
+                                    audioLoaded = true;
+                                    audioUrl = state.audio.file.url;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                height: 100,
+                                width: width * 0.9,
+                                padding: EdgeInsets.only(top: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.14),
+                                      blurRadius: 10,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Flex(
+                                      direction: Axis.horizontal,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 20.0, bottom: 20),
+                                          child: GlowingCircularButton(
+                                            size: 30,
+                                            color: ProjectColors.ThemeColor,
+                                            icon: audioLoaded
+                                                ? AnimatedIcon(
+                                                    icon: AnimatedIcons
+                                                        .play_pause,
+                                                    progress:
+                                                        _animationController,
+                                                    size: 15,
+                                                    color: Colors.white,
+                                                  )
+                                                : VdlProgressIndicator(
+                                                    size: 5,
+                                                    color: Colors.white,
+                                                  ),
+                                            onClick: () {
+                                              _handleOnPressed();
+                                            },
+                                            isGlowing: true,
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                  'assets/icons/recording.svg'),
-                                              SizedBox(
-                                                width: 5,
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'استمع للحلقة',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                              Text(
-                                                getTimeString(audioDuration -
-                                                    timeProgress),
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              Container(
-                                                height: 10,
-                                                width: width * 0.3,
-                                                child: IgnorePointer(
-                                                  ignoring: audioDuration == 0,
-                                                  child: ProgressBar(
-                                                    thumbColor: green,
-                                                    progressBarColor: green,
-                                                    thumbRadius: 5,
-                                                    progress: Duration(
-                                                        seconds: timeProgress),
-                                                    buffered: Duration(
-                                                        seconds: timeProgress),
-                                                    total: Duration(
-                                                        seconds: audioDuration),
-                                                    timeLabelTextStyle:
-                                                        TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                    onSeek: (duration) {
-                                                      if (audioDuration != 0) {
-                                                        audioPlayer
-                                                            .seek(duration);
-                                                      }
-                                                    },
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/icons/recording.svg'),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  getTimeString(audioDuration -
+                                                      timeProgress),
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Container(
+                                                  height: 10,
+                                                  width: width * 0.3,
+                                                  child: IgnorePointer(
+                                                    ignoring:
+                                                        audioDuration == 0,
+                                                    child: ProgressBar(
+                                                      thumbColor: green,
+                                                      progressBarColor: green,
+                                                      thumbRadius: 5,
+                                                      progress: Duration(
+                                                          seconds:
+                                                              timeProgress),
+                                                      buffered: Duration(
+                                                          seconds:
+                                                              timeProgress),
+                                                      total: Duration(
+                                                          seconds:
+                                                              audioDuration),
+                                                      timeLabelTextStyle:
+                                                          TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                      onSeek: (duration) {
+                                                        if (audioDuration !=
+                                                            0) {
+                                                          audioPlayer
+                                                              .seek(duration);
+                                                        }
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
                           SizedBox(height: 20),
 
                           // youtube vedio

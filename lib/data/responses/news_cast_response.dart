@@ -76,6 +76,12 @@ class NewsCastResponse {
   String short_video_youtube_key_block_19_15;
   String short_audio_description_block_10_15;
   String short_audio_description_block_19_15;
+  String short_video_kwikMotion_key_block_7_15;
+  String short_video_kwikMotion_key_block_8_15;
+  String short_video_kwikMotion_key_block_10_15;
+  String short_video_kwikMotion_key_block_14_15;
+  String short_video_kwikMotion_key_block_17_15;
+  String short_video_kwikMotion_key_block_19_15;
 //  Image image;
   String humanDate;
   String sinceDate;
@@ -249,6 +255,18 @@ class NewsCastResponse {
         json['short_audio_description_block_10_15'];
     short_audio_description_block_19_15 =
         json['short_audio_description_block_19_15'];
+    short_video_kwikMotion_key_block_10_15 =
+        json['short_video_kwikMotion_key_block_10_15'];
+    short_video_kwikMotion_key_block_7_15 =
+        json['short_video_kwikMotion_key_block_7_15'];
+    short_video_kwikMotion_key_block_8_15 =
+        json['short_video_kwikMotion_key_block_8_15'];
+    short_video_kwikMotion_key_block_14_15 =
+        json['short_video_kwikMotion_key_block_14_15'];
+    short_video_kwikMotion_key_block_17_15 =
+        json['short_video_kwikMotion_key_block_17_15'];
+    short_video_kwikMotion_key_block_19_15 =
+        json['short_video_kwikMotion_key_block_19_15'];
 
 //    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     humanDate = json['human_date'];

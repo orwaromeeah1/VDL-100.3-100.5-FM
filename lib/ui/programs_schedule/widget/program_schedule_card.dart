@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +7,10 @@ import 'package:share/share.dart';
 import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
+
+import '../../live_broadcast/page/live_audio/live_audio_android_page.dart';
+import '../../live_broadcast/page/live_audio/live_audio_page.dart';
+import '../../live_broadcast/page/live_video/live_video_page.dart';
 
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
@@ -29,15 +35,27 @@ class ProgramScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        id != 0
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProgramDetailsPage(
-                          isRadioTv: isRadio,
-                          programId: id,
-                        )))
-            : null;
+        if (isDisplayingNow && isRadio) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Platform.isAndroid
+                      ? AndroidLiveAudioPage()
+                      : LiveAudioPage()));
+        } else if (isDisplayingNow && !isRadio) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LiveVideoPage()));
+        } else {
+          id != 0
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => ProgramDetailsPage(
+                            isRadioTv: isRadio,
+                            programId: id,
+                          )))
+              : null;
+        }
       },
       child: Container(
         color: Colors.transparent,
