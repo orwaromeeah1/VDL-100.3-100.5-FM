@@ -81,6 +81,12 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                           ? Flex(
                               direction: Axis.horizontal,
                               children: [
+                                hasVideo(index)
+                                    ? Icon(
+                                        Icons.play_arrow,
+                                        color: ProjectColors.ThemeColor,
+                                      )
+                                    : Container(),
                                 Icon(
                                   Icons.headset,
                                   color: ProjectColors.ThemeColor,
@@ -88,18 +94,6 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                hasVideo(index)
-                                    ? Icon(
-                                        Icons.play_arrow,
-                                        color: ProjectColors.ThemeColor,
-                                      )
-                                    : Text(
-                                        'استمع الآن',
-                                        style: TextStyle(
-                                          color: ProjectColors.ThemeColor,
-                                          fontSize: 13,
-                                        ),
-                                      ),
                               ],
                             )
                           : Container(),
