@@ -109,8 +109,7 @@ class ProgramCard extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
-                              fontWeight: FontWeight.bold
-                          ),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

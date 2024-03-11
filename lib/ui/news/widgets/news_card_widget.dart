@@ -62,8 +62,7 @@ class NewsCardWidget extends StatelessWidget {
                       image: DecorationImage(
                           image: this.newsModel.image.large == null
                               ? AssetImage('assets/images/Lebanon.jpg')
-                              : CachedNetworkImageProvider(
-                                  this.newsModel.image.large),
+                              : NetworkImage(this.newsModel.image.large),
                           fit: BoxFit.cover),
                       //  DecorationImage(
                       //     image: AssetImage("assets/images/Lebanon.jpg"),

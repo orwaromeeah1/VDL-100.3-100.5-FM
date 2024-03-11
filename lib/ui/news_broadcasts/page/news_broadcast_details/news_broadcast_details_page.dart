@@ -53,6 +53,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   NewsCastDetailsModel displayedNewsCast = new NewsCastDetailsModel();
   final _bloc = locator<NewsCastDetailsBloc>();
   var video = "";
+  var youtubeVideo = '';
   AnimationController _animationController;
   AnimationController _fullAudioAnimationController;
 
@@ -71,7 +72,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   int fullTimeProgress = 0;
   int introductionAudioDuration = 0;
   int fullAudioDuration = 0;
-
+  String shortMotionVideo = '';
   String introductionId = '';
   String fullAudioId = '';
 
@@ -587,6 +588,46 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                               ),
                             ),
                           ),
+                        if (youtubeVideo != '')
+                          Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: HtmlViewer(
+                                        html:
+                                            '<iframe src="https://www.youtube.com/embed/$youtubeVideo"></iframe>')
+                                    // VideoPlayer(
+                                    //   path: video,
+                                    // ),
+                                    ),
+                              ],
+                            ),
+                          ),
+                        if (shortMotionVideo != '')
+                          Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: HtmlViewer(
+                                        html:
+                                            '<iframe src="https://embed.kwikmotion.com/Embed/${shortMotionVideo}"></iframe>')
+                                    // VideoPlayer(
+                                    //   path: video,
+                                    // ),
+                                    ),
+                              ],
+                            ),
+                          ),
                         if (video != '')
                           Card(
                             elevation: 1,
@@ -623,6 +664,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
 
   _getContent() {
+    video = "";
+    youtubeVideo = "";
     switch (selectedIndex) {
       case 0:
         {
@@ -631,8 +674,12 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           introductionId = widget.newsCast.shortAudioFieldBlock715;
           fullAudioId = widget.newsCast.audioFieldBlock715;
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock1715;
+            video = widget.newsCast.videoKwikMotionKeyBlock715;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_7_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_7_15;
           });
+
           break;
         }
       case 1:
@@ -643,17 +690,23 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           fullAudioId = widget.newsCast.audioFieldBlock815;
           setState(() {
             video = widget.newsCast.videoKwikMotionKeyBlock815;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_8_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_8_15;
           });
           break;
         }
       case 2:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1015;
+              widget.newsCast.short_audio_description_block_10_15;
           introductionId = widget.newsCast.shortAudioFieldBlock1015;
           fullAudioId = widget.newsCast.audioFieldBlock1015;
           setState(() {
             video = widget.newsCast.videoKwikMotionKeyBlock1015;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_10_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_10_15;
           });
 
           break;
@@ -666,6 +719,9 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           fullAudioId = widget.newsCast.audioFieldBlock1415;
           setState(() {
             video = widget.newsCast.videoKwikMotionKeyBlock1415;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_14_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_14_15;
           });
           break;
         }
@@ -677,17 +733,23 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
           fullAudioId = widget.newsCast.audioFieldBlock1715;
           setState(() {
             video = widget.newsCast.videoKwikMotionKeyBlock1715;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_17_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_17_15;
           });
           break;
         }
       case 5:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1915;
+              widget.newsCast.short_audio_description_block_19_15;
           introductionId = widget.newsCast.shortAudioFieldBlock1915;
           fullAudioId = widget.newsCast.audioFieldBlock1915;
           setState(() {
             video = widget.newsCast.videoKwikMotionKeyBlock1915;
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_19_15;
+            shortMotionVideo =
+                widget.newsCast.short_video_kwikMotion_key_block_19_15;
           });
           break;
         }

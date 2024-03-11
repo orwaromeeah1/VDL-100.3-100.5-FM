@@ -76,6 +76,7 @@ class Repository {
   Future<void> getMenus() async {
     try {
       //  String token = await getToken();
+
       String response = await _client.getMethods(Urls.MENUS, "");
       menus = menusFromJson(response);
     } catch (e) {
@@ -127,11 +128,17 @@ class Repository {
 
   ///
   ///   All news
-  Future<void> getNewsCategories(int page) async {
+  Future<void> getNewsCategories() async {
     //  String token = await getToken();
     String response =
-        await _client.getMethods(Urls.News_Categories + "/?page=$page", "");
+        await _client.getMethods(Urls.News_Categories + "/?page=1", "");
     categories = categories + newsCategoriesFromJson(response);
+    String response2 =
+        await _client.getMethods(Urls.News_Categories + "/?page=2", "");
+    categories = categories + newsCategoriesFromJson(response2);
+    String response3 =
+        await _client.getMethods(Urls.News_Categories + "/?page=3", "");
+    categories = categories + newsCategoriesFromJson(response3);
   }
 
   ///
@@ -169,10 +176,7 @@ class Repository {
     await Future.wait([
       getAllNews(1),
       getMenus(),
-      getNewsCategories(1),
-      getNewsCategories(2),
-      getNewsCategories(3),
-      getNewsCategories(4),
+      getNewsCategories(),
       getSpecialReports(1),
       getStartUpArticles(1),
       getNewsCasts(),
@@ -287,11 +291,19 @@ class Repository {
     return result;
   }
 
-  Future<ProgramDetailsResponse> getProgramDetails(int programId) async {
-    dynamic response = await _client.get(
-      Urls.PROGRAMS + '$programId',
-    );
-    return ProgramDetailsResponse.fromJson(response);
+  Future<ProgramDetailsResponse> getProgramDetails(
+      int programId, bool isRadio) async {
+    if (isRadio) {
+      dynamic response = await _client.get(
+        Urls.PROGRAMS + '$programId',
+      );
+      return ProgramDetailsResponse.fromJson(response);
+    } else {
+      dynamic response = await _client.get(
+        Urls.PROGRAMS + '$programId?format=webtv',
+      );
+      return ProgramDetailsResponse.fromJson(response);
+    }
   }
 
   Future<List<SearchResponse>> search(String searchQuery) async {
@@ -335,6 +347,16 @@ class Repository {
     return ProgramSchedule.fromJson(response);
   }
 
+  Future<List<ProgramSchedule>> getWebProgramsSchedule(
+      String day, int dayNum) async {
+    dynamic response = await _client.get(
+      Urls.PROGRAMS_SCHEDULE +
+          '?currentScheduleWeekDay=$day&currentScheduleMonthDay=$dayNum&format=webtv',
+    );
+
+    return ProgramSchedule.fromJson(response);
+  }
+
   ////
   ///
   ///
@@ -344,7 +366,9 @@ class Repository {
       dynamic response = await _client.getTweetsMethod(
           Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
       timeline = tweetsFromJson(response);
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   ////

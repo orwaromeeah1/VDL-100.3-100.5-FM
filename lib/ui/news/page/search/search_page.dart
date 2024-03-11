@@ -145,13 +145,12 @@ class _SearchPageState extends State<SearchPage> {
                   child: ListView.builder(
                       itemBuilder: (context, int index) => SearchCardWidget(
                           title: searchResult[index].title,
-                          image: searchResult[index].image.original,
+                          image: searchResult[index].image.thumbnail,
                           date: searchResult[index].humanDate,
                           category:
                               searchResult[index].categories.category.name,
-
                           id: searchResult[index].id),
-                        itemCount: searchResult.length)),
+                      itemCount: searchResult.length)),
         ],
       ),
     );

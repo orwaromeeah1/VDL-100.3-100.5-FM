@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
@@ -6,36 +8,54 @@ import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
+import '../../live_broadcast/page/live_audio/live_audio_android_page.dart';
+import '../../live_broadcast/page/live_audio/live_audio_page.dart';
+import '../../live_broadcast/page/live_video/live_video_page.dart';
+
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
   final String duration;
   String link;
   final int id;
   final String name;
+  final bool isRadio;
   final bool isDisplayingNow;
 
-  ProgramScheduleCard({
-    this.name,
-    this.image,
-    this.duration,
-    this.id,
-    this.link,
-    //TODO : show something if program is displaying now
-    this.isDisplayingNow: false,
-  });
+  ProgramScheduleCard(
+      {this.name,
+      this.image,
+      this.duration,
+      this.id,
+      this.link,
+      //TODO : show something if program is displaying now
+      this.isDisplayingNow: false,
+      this.isRadio});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        id != 0
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProgramDetailsPage(
-                          programId: id,
-                        )))
-            : null;
+        if (isDisplayingNow && isRadio) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Platform.isAndroid
+                      ? AndroidLiveAudioPage()
+                      : LiveAudioPage()));
+        } else if (isDisplayingNow && !isRadio) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LiveVideoPage()));
+        } else {
+          id != 0
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => ProgramDetailsPage(
+                            isRadioTv: isRadio,
+                            programId: id,
+                          )))
+              : null;
+        }
       },
       child: Container(
         color: Colors.transparent,
@@ -91,14 +111,28 @@ class ProgramScheduleCard extends StatelessWidget {
                         Text(
                           '$name',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13
-                          ),
+                              fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                       ],
                     ),
                   ],
                 ),
+                if (isDisplayingNow)
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'يعرض الان',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 17,

@@ -182,6 +182,7 @@ class Episodes {
   bool containAudio;
   String video;
   bool containVideo;
+  String youtubeKey;
 
   Episodes(
       {this.id,
@@ -203,7 +204,8 @@ class Episodes {
       this.audio,
       this.containAudio,
       this.video,
-      this.containVideo});
+      this.containVideo,
+      this.youtubeKey});
 
   Episodes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -226,6 +228,7 @@ class Episodes {
     containAudio = json['contain_audio'];
     video = json['video'];
     containVideo = json['contain_video'];
+    youtubeKey = json['youtube_video_key'];
   }
 
   Map<String, dynamic> toJson() {

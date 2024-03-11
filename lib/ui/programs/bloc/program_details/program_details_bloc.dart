@@ -4,7 +4,8 @@ import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_event.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_state.dart';
 
-class ProgramDetailsBloc extends Bloc<ProgramDetailsEvent, ProgramDetailsState> {
+class ProgramDetailsBloc
+    extends Bloc<ProgramDetailsEvent, ProgramDetailsState> {
   final Repository repository;
 
   @override
@@ -15,12 +16,14 @@ class ProgramDetailsBloc extends Bloc<ProgramDetailsEvent, ProgramDetailsState> 
   ProgramDetailsState get initialState => ProgramDetailsEmpty();
 
   @override
-  Stream<ProgramDetailsState> mapEventToState(ProgramDetailsEvent event) async* {
+  Stream<ProgramDetailsState> mapEventToState(
+      ProgramDetailsEvent event) async* {
     if (event is FetchProgramDetails) {
       yield ProgramDetailsLoading();
 //      try {
 
-      ProgramDetailsResponse program = await repository.getProgramDetails(event.programId);
+      ProgramDetailsResponse program = await repository.getProgramDetails(
+          event.programId, event.isRadio ?? false);
       yield ProgramDetailsLoaded(program: program);
 //      } catch (_) {
 //        yield ProgramDetailsError();

@@ -172,7 +172,9 @@ class _NewsPageState extends State<NewsPage>
                 showUpdateDialog(context);
               }
               if (state is Startup) {
-                categories = categories + state.homeModel.categories;
+                if (categories.length == 1) {
+                  categories = categories + state.homeModel.categories;
+                }
                 selectType(categories[0].id, 0, 0);
               }
               if (state is Loaded) {
@@ -604,10 +606,13 @@ class _NewsPageState extends State<NewsPage>
                   padding: const EdgeInsets.only(right: 19.0, top: 30),
                   child: Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/images/twitter.svg',
-                        height: 21,
-                        width: 17,
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: SvgPicture.asset(
+                          FilePath.TWITTER,
+                          height: 21,
+                          width: 17,
+                        ),
                       ),
                       SizedBox(
                         width: 8,

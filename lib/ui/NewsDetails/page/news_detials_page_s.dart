@@ -636,6 +636,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                       Container(
                         height: 400,
                         child: Swiper(
+                          autoplay: false,
+                          loop: false,
                           itemHeight: 330,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
