@@ -16,6 +16,7 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/ui/shared_widget/try_again_widget.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
+import '../../../data/models/news_model.dart';
 import '../../../injection.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -68,8 +69,8 @@ class _NotificationPageState extends State<NotificationPage> {
         });
   }
 
-  Widget screenUI(List<LiveNotificationModel> notifications,
-      NotificationState notificationState) {
+  Widget screenUI(
+      List<NewsModel> notifications, NotificationState notificationState) {
     return Scaffold(
         backgroundColor: backgroundGrey,
         body: Column(

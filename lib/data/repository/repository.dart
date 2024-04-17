@@ -398,14 +398,12 @@ class Repository {
 
   ///
   ///Menus
-  Future<List<LiveNotificationModel>> getLiveNotifications(int page) async {
+  Future<List<NewsModel>> getLiveNotifications(int page) async {
     try {
       //  String token = await getToken();
-      String response = await _client.getMethods(
-          Urls.LIVE_NOTIFICATIONS + "?per_page=20&page=$page", "");
-      return List<LiveNotificationModel>.from(convert
-          .jsonDecode(response)
-          .map((x) => LiveNotificationModel.fromJson(x)));
+      String response =
+          await _client.getMethods(Urls.LIVE_NOTIFICATIONS + "&page=$page", "");
+      return allNewsFromJson(response);
     } catch (e) {
       print(e);
     }

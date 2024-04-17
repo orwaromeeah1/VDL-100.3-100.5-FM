@@ -4,12 +4,14 @@ import 'package:vdl/data/models/notification_model.dart';
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
+import '../../../data/models/news_model.dart';
+
 class NotificationCardWidget extends StatelessWidget {
   const NotificationCardWidget({
     Key key,
     this.notificationModel,
   }) : super(key: key);
-  final LiveNotificationModel notificationModel;
+  final NewsModel notificationModel;
 
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)

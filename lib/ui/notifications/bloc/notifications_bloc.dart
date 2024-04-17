@@ -4,11 +4,13 @@ import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/ui/notifications/bloc/notifications_event.dart';
 import 'package:vdl/ui/notifications/bloc/notifications_state.dart';
 
+import '../../../data/models/news_model.dart';
+
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(NotificationState initialState, this.repo)
       : super(initialState);
   final Repository repo;
-  List<LiveNotificationModel> notifications = [];
+  List<NewsModel> notifications = [];
   @override
   Stream<NotificationState> mapEventToState(NotificationEvent event) async* {
     if (event is FetchNotificationPage) {
@@ -18,8 +20,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         yield LoadingNextPage(notifications);
       }
       try {
-        List<LiveNotificationModel> data =
-            await repo.getLiveNotifications(event.page);
+        List<NewsModel> data = await repo.getLiveNotifications(event.page);
         notifications = notifications + data;
         yield Loaded(notifications);
       } catch (e) {

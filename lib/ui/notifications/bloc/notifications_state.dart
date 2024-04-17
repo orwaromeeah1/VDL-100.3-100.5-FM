@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/models/notification_model.dart';
 
+import '../../../data/models/news_model.dart';
+
 class NotificationState extends Equatable {
   @override
   List<Object> get props => [];
@@ -9,13 +11,13 @@ class NotificationState extends Equatable {
 class Loading extends NotificationState {}
 
 class LoadingNextPage extends NotificationState {
-  final List<LiveNotificationModel> notifications;
+  final List<NewsModel> notifications;
 
   LoadingNextPage(this.notifications);
 }
 
 class Loaded extends NotificationState {
-  final List<LiveNotificationModel> notifications;
+  final List<NewsModel> notifications;
 
   Loaded(this.notifications);
 }
