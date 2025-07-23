@@ -7,10 +7,9 @@ buildscript {
   
     }
     dependencies {
-       
-       classpath 'com.android.tools.build:gradle:4.1.0'
+       classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.10'
+       classpath 'com.google.gms:google-services:4.3.10'
 
     }
 }
@@ -20,6 +19,17 @@ allprojects {
         google()
         jcenter()
     }
+ 
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.google.android.play') {
+                if (details.requested.name == 'core' || details.requested.name == 'core-ktx') {
+                    details.useTarget 'com.google.android.play:app-update:2.1.0'
+                }
+            }
+        }
+    
+}
 }
 
 rootProject.buildDir = '../build'
