@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:vdl/data/models/news_category.dart';
+import 'package:vdl/utils/project_colors/project_color.dart';
+
+class tabBarCell extends StatelessWidget {
+  final NewsCategoryModel? cat;
+  tabBarCell({
+    Key? key,
+    this.cat,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: 25,
+            child: Text(cat?.name ?? '',
+                style: TextStyle(
+                    fontFamily: "TheSans",
+                    color: (cat?.selected ?? false) ? green : black,
+                    fontWeight: (cat?.selected ?? false)
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    fontSize: 14)),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            color: (cat?.selected ?? false) ? green : Colors.white,
+            height: 3,
+            width: 55,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class NewsType {
+  bool? selected;
+  String? name;
+
+  NewsType({this.selected, this.name});
+}

@@ -1,0 +1,38 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.google.android.play') {
+                if (details.requested.name == 'core' || details.requested.name == 'core-ktx') {
+                    details.useTarget 'com.google.android.play:app-update:2.1.0'
+                }
+            }
+        }
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")
+}
+
+subprojects {
+    plugins.withId("com.android.library") {
+        def manifestFile = file("src/main/AndroidManifest.xml")
+        if (manifestFile.exists()) {
+            def pkg = new groovy.xml.XmlParser().parse(manifestFile).@package
+            if (pkg && android.namespace.getOrNull() == null) {
+                android.namespace.set(pkg)
+            }
+        }
+    }
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.layout.buildDirectory
+}

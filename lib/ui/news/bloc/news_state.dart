@@ -1,0 +1,42 @@
+import 'package:equatable/equatable.dart';
+import 'package:vdl/data/models/homeModel.dart';
+
+class NewsState extends Equatable {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class Loading extends NewsState {}
+
+class Loaded extends NewsState {
+  final HomeModel homeModel;
+  final bool resetPage;
+  Loaded(this.homeModel, this.resetPage);
+}
+
+class Startup extends NewsState {
+  final HomeModel homeModel;
+  Startup(this.homeModel);
+}
+
+class FetchingCategoryNews extends NewsState {
+  final HomeModel homeModel;
+
+  FetchingCategoryNews(this.homeModel);
+}
+
+class FetchingNextPage extends NewsState {
+  final HomeModel homeModel;
+  FetchingNextPage(this.homeModel);
+}
+
+class MoveingToTop extends NewsState {
+  final HomeModel homeModel;
+
+  MoveingToTop(this.homeModel);
+}
+
+class NoInternetConnection extends NewsState {}
+
+class ShowUpdatePopup extends NewsState {}
