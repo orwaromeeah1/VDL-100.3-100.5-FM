@@ -46,3 +46,9 @@ app.*.map.json
 /android/app/release
 CLAUDE.md
 /CLAUDE.md
+
+# Secrets — never commit real credentials
+lib/utils/secrets/app_keys.dart
+lib/utils/secrets/twitterKeys.dart
+android/app/google-services.json
+android/key.properties
