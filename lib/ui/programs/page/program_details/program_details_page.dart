@@ -6,11 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:html/parser.dart';
-
-// import 'package:intl/intl.dart';
-import 'package:share/share.dart';
-import 'package:vdl/core/Manager.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_bloc.dart';
 import 'package:vdl/ui/programs/bloc/program_details/program_details_event.dart';
@@ -25,8 +21,8 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import '../../../../injection.dart';
 
 class ProgramDetailsPage extends StatefulWidget {
-  final int programId;
-  final bool isRadioTv;
+  final int? programId;
+  final bool? isRadioTv;
 
   ProgramDetailsPage({this.programId, this.isRadioTv});
 
@@ -35,8 +31,8 @@ class ProgramDetailsPage extends StatefulWidget {
 }
 
 class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
-  double width;
-  ProgramDetailsResponse program;
+  late double width;
+  late ProgramDetailsResponse program;
   final _bloc = locator<ProgramDetailsBloc>();
 
   @override
@@ -46,7 +42,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
     super.initState();
   }
 
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = true;
 
@@ -126,7 +122,6 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 
   Widget screenUiWithSliver() {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Container(
       child: CustomScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -160,7 +155,7 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                           ),
                           child: Container(
                             child: HtmlWidget(
-                              program.programInfoDescription.trim(),
+                              (program.programInfoDescription ?? '').trim(),
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -237,26 +232,24 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
                         ),
                         ListView.builder(
                             shrinkWrap: true,
-                            itemCount: program.episodes.length > 30
+                            itemCount: (program.episodes?.length ?? 0) > 30
                                 ? 30
-                                : program.episodes.length,
+                                : (program.episodes?.length ?? 0),
                             padding: EdgeInsets.zero,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
+                              final ep = program.episodes![index];
                               return EpisodeCard(
-                                episode: program.episodes[index],
-                                youtubelink: program.episodes[index].youtubeKey,
-                                image:
-                                    '${program.episodes[index].image.thumbnail}',
-                                date: '${program.episodes[index].humanDate}',
-                                title: '${program.episodes[index].title}',
+                                episode: ep,
+                                youtubelink: ep.youtubeKey,
+                                image: '${ep.image?.thumbnail}',
+                                date: '${ep.humanDate}',
+                                title: '${ep.title}',
                                 episodeNumber: 'الحلقة ${index + 1}',
-                                id: program.episodes[index].id,
+                                id: ep.id,
                                 program: program,
-                                containsAudio:
-                                    program.episodes[index].containAudio,
-                                containsVideo:
-                                    program.episodes[index].containVideo,
+                                containsAudio: ep.containAudio,
+                                containsVideo: ep.containVideo,
                               );
                             }),
                         SizedBox(height: 50),
@@ -280,11 +273,11 @@ class _ProgramDetailsPageState extends State<ProgramDetailsPage> {
 
 class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   double expandedHeight;
-  ProgramDetailsResponse program;
-  bool viewAudio;
-  final VoidCallback hndlAudio;
+  ProgramDetailsResponse? program;
+  bool? viewAudio;
+  final VoidCallback? hndlAudio;
   MyDynamicHeader(
-      {@required this.expandedHeight,
+      {required this.expandedHeight,
       this.program,
       this.viewAudio,
       this.hndlAudio});
@@ -292,8 +285,6 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    var width = MediaQuery.of(context).size.width;
-
     var height = MediaQuery.of(context).size.height;
 
     return Stack(
@@ -334,7 +325,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
           ),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: CachedNetworkImageProvider(program.image.medium),
+                image: CachedNetworkImageProvider(program!.image?.medium ?? ''),
                 fit: BoxFit.cover),
           ),
         ),
@@ -350,7 +341,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    Share.share(program.link);
+                    Share.share(program!.link ?? '');
                   },
                   child: Container(
                     height: 48,
@@ -375,10 +366,10 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 SizedBox(
                   width: 9,
                 ),
-                viewAudio
+                (viewAudio ?? false)
                     ? InkWell(
                         onTap: () {
-                          hndlAudio();
+                          hndlAudio?.call();
                         },
                         child: CircleAvatar(
                           radius: 32,

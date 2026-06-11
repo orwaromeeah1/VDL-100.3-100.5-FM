@@ -7,12 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:vdl/data/models/homeModel.dart';
 import 'package:vdl/data/models/news_category.dart';
-import 'package:vdl/data/models/news_model.dart';
-import 'package:vdl/data/repository/repository.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/Articles/widgets/article_card_widget.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
@@ -21,18 +19,15 @@ import 'package:vdl/ui/news/bloc/news_state.dart';
 import 'package:vdl/ui/news/page/search/search_page.dart';
 import 'package:vdl/ui/news/widgets/live_stream_widget.dart';
 import 'package:vdl/ui/news/widgets/news_card_widget.dart';
-import 'package:vdl/ui/news/widgets/news_list_widget.dart';
 import 'package:vdl/ui/news/widgets/podcasts_widget.dart';
 import 'package:vdl/ui/news/widgets/special_reporst_widget.dart';
 import 'package:vdl/ui/news/widgets/tab_bar_cell.dart';
 import 'package:vdl/ui/news/widgets/twitter_card.dart';
 import 'package:vdl/ui/news/widgets/update_dialog.dart';
-import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
 import 'package:vdl/ui/news_broadcasts/widget/days_news_broadcasts_list_widget.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
-import 'package:vdl/ui/shared_widget/try_again_widget.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -40,11 +35,9 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class NewsPage extends StatefulWidget {
-  AudioPlayer introductionAudioPlayer;
+  final AudioPlayer introductionAudioPlayer;
 
-  NewsPage(AudioPlayer introductionAudioPlayer) {
-    this.introductionAudioPlayer = introductionAudioPlayer;
-  }
+  const NewsPage(this.introductionAudioPlayer, {Key? key}) : super(key: key);
   @override
   _NewsPageState createState() => _NewsPageState();
 }
@@ -100,56 +93,63 @@ class _NewsPageState extends State<NewsPage>
     NewsCategoryModel(name: "كل الاخبار", id: 0)
   ];
 
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Create the ad objects and load ads.
-    if (_bannerAd == null)
+    if (!_bannerAdIsLoaded) {
       _bannerAd = BannerAd(
           size: AdSize.largeBanner,
           adUnitId: AdState.bannerAdUnitId,
           listener: BannerAdListener(
             onAdLoaded: (Ad ad) {
-              print('$BannerAd loaded.');
               setState(() {
                 _bannerAdIfailed = false;
                 _bannerAdIsLoaded = true;
               });
             },
             onAdFailedToLoad: (Ad ad, LoadAdError error) {
-              print('$BannerAd failedToLoad: $error');
-              _bannerAdIfailed = true;
-              _bannerAdIsLoaded = true;
+              setState(() {
+                _bannerAdIfailed = true;
+                _bannerAdIsLoaded = true;
+              });
               ad.dispose();
             },
             onAdOpened: (Ad ad) => print('$BannerAd onAdOpened.'),
             onAdClosed: (Ad ad) => print('$BannerAd onAdClosed.'),
           ),
           request: AdRequest());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundGrey,
-        body: BlocConsumer(
+        body: BlocConsumer<NewsBloc, NewsState>(
             bloc: _bloc,
             builder: (context, state) {
               if (state is Loaded ||
                   state is FetchingCategoryNews ||
                   state is FetchingNextPage ||
-                  state is MoveToTop) {
+                  state is MoveingToTop) {
                 if (!isSpeacialReports &&
-                    _bannerAd != null &&
                     !_bannerAdIsLoaded) _bannerAd.load();
+
+                final homeModel = (state is Loaded)
+                    ? state.homeModel
+                    : (state is FetchingCategoryNews)
+                        ? state.homeModel
+                        : (state is FetchingNextPage)
+                            ? state.homeModel
+                            : (state as MoveingToTop).homeModel;
 
                 return Stack(
                   children: [
-                    newsScreenLoaded(context, state.homeModel, state),
+                    newsScreenLoaded(context, homeModel, state),
                     LiveStreamWidget()
                   ],
                 );
@@ -173,7 +173,7 @@ class _NewsPageState extends State<NewsPage>
               }
               if (state is Startup) {
                 if (categories.length == 1) {
-                  categories = categories + state.homeModel.categories;
+                  categories = categories + (state.homeModel.categories ?? []);
                 }
                 selectType(categories[0].id, 0, 0);
               }
@@ -214,7 +214,7 @@ class _NewsPageState extends State<NewsPage>
         return true;
       },
       child: RefreshIndicator(
-        onRefresh: () {
+        onRefresh: () async {
           page = 1;
           specialReportsPage = 1;
           articlesPage = 1;
@@ -263,7 +263,7 @@ class _NewsPageState extends State<NewsPage>
                                           children: [
                                             InkWell(
                                               onTap: () {
-                                                pushNewScreen(
+                                                PersistentNavBarNavigator.pushNewScreen(
                                                   context,
                                                   screen: NotificationPage(),
                                                   withNavBar: true,
@@ -285,7 +285,7 @@ class _NewsPageState extends State<NewsPage>
                                               width: 10,
                                             ),
                                             GestureDetector(
-                                              onTap: () => pushNewScreen(
+                                              onTap: () => PersistentNavBarNavigator.pushNewScreen(
                                                 context,
                                                 screen: SearchPage(),
                                                 withNavBar: true,
@@ -336,7 +336,7 @@ class _NewsPageState extends State<NewsPage>
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              setState(() => {pageIndex = 1});
+                                              setState(() {pageIndex = 1;});
                                             },
                                             child: Text(
                                               'تقارير خاصة',
@@ -354,7 +354,7 @@ class _NewsPageState extends State<NewsPage>
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              setState(() => {pageIndex = 2});
+                                              setState(() {pageIndex = 2;});
                                             },
                                             child: Text(
                                               'مقالات',
@@ -372,7 +372,7 @@ class _NewsPageState extends State<NewsPage>
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              setState(() => {pageIndex = 3});
+                                              setState(() {pageIndex = 3;});
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -403,7 +403,7 @@ class _NewsPageState extends State<NewsPage>
                                           child:
                                               ScrollablePositionedList.builder(
                                             scrollDirection: Axis.horizontal,
-                                            itemCount: model.categories.length,
+                                            itemCount: (model.categories ?? []).length,
                                             itemBuilder: (context, index) =>
                                                 InkWell(
                                                     onTap: () => selectType(
@@ -451,14 +451,14 @@ class _NewsPageState extends State<NewsPage>
         children: [
           Container(
               child: LimitedBox(
-            maxHeight: (model.articles.length * 145.5 + 50).toDouble(),
+            maxHeight: ((model.articles ?? []).length * 145.5 + 50).toDouble(),
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => ArticleCardWidget(
-                      model: model.articles[index],
+                      model: (model.articles ?? [])[index],
                     ),
-                itemCount: model.articles.length),
+                itemCount: (model.articles ?? []).length),
           )),
           state is FetchingNextPage
               ? Container(
@@ -494,13 +494,14 @@ class _NewsPageState extends State<NewsPage>
                 const EdgeInsets.only(left: 8.0, right: 8, bottom: 10, top: 15),
             child: Container(
                 child: LimitedBox(
-                    maxHeight: (model.newsCasts.length * 145.5 + 50).toDouble(),
+                    maxHeight: ((model.newsCasts ?? []).length * 145.5 + 50).toDouble(),
                     child: ListView.builder(
-                        itemCount: model.newsCasts.length,
+                        itemCount: (model.newsCasts ?? []).length,
                         padding: EdgeInsets.only(top: 0),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
+                          final newsCasts = model.newsCasts ?? [];
                           return Container(
                             width: MediaQuery.of(context).size.width * 0.8,
                             color: Colors.white,
@@ -510,8 +511,8 @@ class _NewsPageState extends State<NewsPage>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        model.newsCasts[index].isOpened =
-                                            !model.newsCasts[index].isOpened;
+                                        newsCasts[index].isOpened =
+                                            !(newsCasts[index].isOpened ?? false);
                                       });
                                     },
                                     child: Container(
@@ -519,7 +520,7 @@ class _NewsPageState extends State<NewsPage>
                                       height: 55,
                                       padding: EdgeInsets.symmetric(
                                           vertical: 10, horizontal: 15),
-                                      color: model.newsCasts[index].isOpened
+                                      color: (newsCasts[index].isOpened ?? false)
                                           ? ProjectColors.ThemeColor
                                           : Colors.white,
                                       child: Row(
@@ -527,22 +528,21 @@ class _NewsPageState extends State<NewsPage>
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            '${model.newsCasts[index].slug}',
+                                            '${newsCasts[index].slug}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
-                                              color: model
-                                                      .newsCasts[index].isOpened
+                                              color: (newsCasts[index].isOpened ?? false)
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
                                           ),
                                           Icon(
-                                            model.newsCasts[index].isOpened
+                                            (newsCasts[index].isOpened ?? false)
                                                 ? Icons.keyboard_arrow_up
                                                 : Icons.keyboard_arrow_down,
                                             color:
-                                                model.newsCasts[index].isOpened
+                                                (newsCasts[index].isOpened ?? false)
                                                     ? Colors.white
                                                     : ProjectColors.ThemeColor,
                                           )
@@ -550,19 +550,18 @@ class _NewsPageState extends State<NewsPage>
                                       ),
                                     )),
                                 new AnimatedSize(
-                                    vsync: this,
                                     duration: const Duration(milliseconds: 500),
                                     child: new ConstrainedBox(
                                         constraints:
-                                            model.newsCasts[index].isOpened
+                                            (newsCasts[index].isOpened ?? false)
                                                 ? new BoxConstraints()
                                                 : new BoxConstraints(
                                                     maxHeight: 0.0),
                                         child: DaysNewsBroadcastsWidget(
                                           broadcasts:
-                                              model.newsCasts[index].timeSlots,
-                                          date: model.newsCasts[index].slug,
-                                          newsCast: model.newsCasts[index],
+                                              newsCasts[index].timeSlots ?? [],
+                                          date: newsCasts[index].slug ?? '',
+                                          newsCast: newsCasts[index],
                                           introductionAudioPlayer:
                                               widget.introductionAudioPlayer,
                                         ))),
@@ -599,7 +598,7 @@ class _NewsPageState extends State<NewsPage>
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          if (model.timeline.data.isNotEmpty)
+          if ((model.timeline?.data ?? []).isNotEmpty)
             Column(
               children: [
                 Padding(
@@ -639,9 +638,9 @@ class _NewsPageState extends State<NewsPage>
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) => twitterCard(
-                                    tweet: model.timeline.data[index],
+                                    tweet: (model.timeline?.data ?? [])[index],
                                   ),
-                              itemCount: model.timeline.data.length)),
+                              itemCount: (model.timeline?.data ?? []).length)),
                     ],
                   ),
                 ),
@@ -699,30 +698,17 @@ class _NewsPageState extends State<NewsPage>
 //                                          ),
 
                       LimitedBox(
-                        maxHeight: 400 * model.news.length.toDouble() + 50,
+                        maxHeight: 400 * (model.news ?? []).length.toDouble() + 50,
                         child: Container(
                           child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) => index != 1
                                   ? NewsCardWidget(
-                                      newsModel: model.news[index],
+                                      newsModel: (model.news ?? [])[index],
                                     )
                                   : Column(
                                       children: [
-                                        // Container(
-                                        //   height: 330,
-                                        //   padding: EdgeInsets.all(10),
-                                        //   margin: EdgeInsets.only(bottom: 20.0),
-                                        //   child: NativeAdmob(
-                                        //     // Your ad unit id
-                                        //     adUnitID:
-                                        //         'ca-app-pub-3940256099942544/8135179316',
-                                        //     numberAds: 3,
-                                        //     controller: _adController,
-                                        //     type: NativeAdmobType.full,
-                                        //   ),
-                                        // ),
                                         !_bannerAdIsLoaded
                                             ? LoadingIndicator()
                                             : _bannerAdIfailed
@@ -742,11 +728,11 @@ class _NewsPageState extends State<NewsPage>
                                                       ),
                                                     )),
                                         NewsCardWidget(
-                                          newsModel: model.news[index],
+                                          newsModel: (model.news ?? [])[index],
                                         ),
                                       ],
                                     ),
-                              itemCount: model.news.length),
+                              itemCount: (model.news ?? []).length),
                         ),
                       ),
                       state is FetchingNextPage
@@ -798,13 +784,13 @@ class _NewsPageState extends State<NewsPage>
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
-          height: 142 * model.specialReports.length.toDouble() + 50,
+          height: 142 * (model.specialReports ?? []).length.toDouble() + 50,
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => SpecialReportsCard(
-                    newsModel: model.specialReports[index],
+                    newsModel: (model.specialReports ?? [])[index],
                   ),
-              itemCount: model.specialReports.length)),
+              itemCount: (model.specialReports ?? []).length)),
       state is FetchingNextPage
           ? Container(
               color: Colors.transparent,

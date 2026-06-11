@@ -12,7 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
@@ -26,16 +26,15 @@ import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 //
 class NewsPageDetails extends StatefulWidget {
   final int newsId;
-  String tag;
+  final String? tag;
 
   final bool isSpecial;
   NewsPageDetails(
-      {Key key, @required this.newsId, this.tag, @required this.isSpecial})
+      {Key? key, required this.newsId, this.tag, required this.isSpecial})
       : super(key: key);
 
   @override
@@ -45,18 +44,17 @@ class NewsPageDetails extends StatefulWidget {
 class _NewsPageDetailsState extends State<NewsPageDetails>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   final _bloc = locator<NewsDetailsBloc>();
-  AnimationController _animationController;
+  late AnimationController _animationController;
   bool isPlaying = false;
   bool hasAudio = true;
-  Duration duration;
+  Duration? duration;
   Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   bool viewYoutube = false;
   String audioUrl = "";
 //  BannerAd banner;
   String youtubeUrl = "";
-////YoutubePlayer
-  YoutubePlayerController _youtubeController;
+  String? _youtubeEmbedUrl;
 
   /// Optional
   int timeProgress = 0;
@@ -84,14 +82,18 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     }
   }
 
-  void _launchURL(String _url) async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL(String _url) async {
+    final uri = Uri.parse(_url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $_url';
+    }
+  }
 
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = false;
-  @override
   Future loadBanner() async {
     await _bannerAd.load();
   }
@@ -144,7 +146,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       }
     });
 
-    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+    audioPlayer.onPositionChanged.listen((Duration position) async {
       if (mounted) {
         setState(() {
           timeProgress = position.inSeconds;
@@ -153,7 +155,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
     });
 
     audioPlayer.onPlayerStateChanged.listen((state) async {
-      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+      if (audioPlayer.state == Player.PlayerState.paused) {
         if (mounted) {
           setState(() {
             isPlaying = false;
@@ -163,7 +165,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
       }
     });
 
-    audioPlayer.onPlayerCompletion.listen((event) {
+    audioPlayer.onPlayerComplete.listen((event) {
       if (mounted) {
         setState(() {
           audioPlayer.seek(Duration(seconds: 0));
@@ -184,34 +186,33 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
 
   /// Compulsory
   playMusic() async {
-    await audioPlayer.setUrl(
-        audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    int result = await audioPlayer.play(audioUrl);
-    if (result == 1) {
-      // success
-    }
+    await audioPlayer.setSource(Player.UrlSource(
+        audioUrl)); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.play(Player.UrlSource(audioUrl));
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       if (mounted) {
-        setState(() => {print(d)});
+        setState(() {
+          print(d);
+        });
       }
     });
   }
 
   /// Compulsory
   pauseMusic() async {
-    int result = await audioPlayer.pause();
+    await audioPlayer.pause();
   }
 
   resume() async {
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    await audioPlayer.setUrl(audioUrl);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.setSource(Player.UrlSource(audioUrl));
     audioPlayer.resume();
   }
 
   stopMusic() async {
-    int result = await audioPlayer.stop();
+    await audioPlayer.stop();
   }
 
   String getTimeString(int seconds) {
@@ -238,46 +239,37 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
             },
             listener: (context, state) {
               if (!audioLoaded && state is Loaded) {
-                if (state.newsModel.audio != "") {
+                if ((state.newsModel.audio ?? '') != "") {
                   audioLoaded = true;
 
-                  _bloc.add(FetchAudio(state.newsModel.audio));
+                  _bloc.add(FetchAudio(state.newsModel.audio ?? ''));
                 }
 
                 if (state.newsModel.youtube != null ||
                     state.newsModel.video != null) {
                   setState(() {
-                    String youtubeid;
-                    if (state.newsModel.video != null &&
-                        state.newsModel.video != '' &&
-                        state.newsModel.video.contains('https')) {
+                    String? youtubeid;
+                    if ((state.newsModel.video ?? '') != '' &&
+                        (state.newsModel.video ?? '').contains('https')) {
                       viewYoutube = true;
-                      youtubeid = getYoutubeId(state.newsModel.video);
+                      youtubeid = getYoutubeId(state.newsModel.video ?? '');
                     }
-                    if (state.newsModel.youtube != null &&
-                        state.newsModel.youtube != '') {
+                    if ((state.newsModel.youtube ?? '') != '') {
                       viewYoutube = true;
-                      youtubeid = getYoutubeId(state.newsModel.youtube);
+                      youtubeid = getYoutubeId(state.newsModel.youtube ?? '');
                     }
-                    _youtubeController = YoutubePlayerController(
-                      initialVideoId: youtubeid,
-                      params: YoutubePlayerParams(
-                        startAt: Duration(seconds: 30),
-                        showControls: true,
-                        showFullscreenButton: true,
-                      ),
-                    );
+                    _youtubeEmbedUrl =
+                        'https://www.youtube.com/embed/${youtubeid ?? ''}';
                   });
                 }
               } else if (state is AudioLoaded) {
-                audioUrl = state.audio.file.url;
+                audioUrl = state.audio.file?.url ?? '';
               }
             }));
   }
 
   Widget LoadedScreen(BuildContext context, Loaded state) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Container(
       child: CustomScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -371,7 +363,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                               Container(
                                                 child: Text(
                                                   Manager.removeAllHtmlTags(
-                                                      state.newsModel.title),
+                                                      state.newsModel.title ??
+                                                          ''),
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -467,7 +460,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                               right: 19.0, top: 17, left: 19),
                           child: Container(
                             child: Text(
-                              state.newsModel.humanDate,
+                              state.newsModel.humanDate ?? '',
                               style: TextStyle(
                                   color: black.withOpacity(0.41), fontSize: 13),
                             ),
@@ -478,7 +471,8 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                               right: 19.0, top: 4, left: 19),
                           child: Container(
                             child: Text(
-                              Manager.removeAllHtmlTags(state.newsModel.title),
+                              Manager.removeAllHtmlTags(
+                                  state.newsModel.title ?? ''),
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
@@ -491,17 +485,15 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                     right: 19.0, top: 9, left: 19, bottom: 10),
                                 child: Column(
                                   children: [
-                                    YoutubePlayerIFrame(
-                                      controller: _youtubeController,
-                                      aspectRatio: 16 / 9,
-                                    ),
+                                    VideoPlayer(path: _youtubeEmbedUrl),
                                     SizedBox(
                                       height: 10,
                                     ),
                                     InkWell(
                                         onTap: () {
                                           _launchURL(
-                                              state.newsModel.youtube.trim());
+                                              (state.newsModel.youtube ?? '')
+                                                  .trim());
                                         },
                                         child: Text(
                                           'View in Youtube',
@@ -513,12 +505,11 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                               )
                             : Container(),
 
-                        if (state.newsModel.kwikmotion != null &&
-                            state.newsModel.kwikmotion != "")
+                        if ((state.newsModel.kwikmotion ?? '') != "")
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: VideoPlayer(
-                              path: state.newsModel.kwikmotion,
+                              path: state.newsModel.kwikmotion ?? '',
                             ),
                           ),
 
@@ -553,10 +544,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                               right: 19.0, top: 9, left: 19, bottom: 20),
                           child: Container(
                             child: HtmlWidget(
-                              state.newsModel.content,
-                              webViewMediaPlaybackAlwaysAllow: true,
-                              webView: true,
-                              webViewJs: true,
+                              state.newsModel.content ?? '',
                             ),
                             //Html(data: state.newsModel.content),
                             //     Text(
@@ -585,29 +573,21 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
-                                      child: state.newsModel.link == null
-                                          ? Text(
-                                              'No Brand Brief',
-                                              style: TextStyle(
+                                      child: InkWell(
+                                        onTap: () {
+                                          _launchURL(
+                                              state.newsModel.link ?? '');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            state.newsModel.link ?? '',
+                                            style: TextStyle(
                                                 fontSize: 13,
-                                              ),
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                _launchURL(
-                                                    state.newsModel.link);
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  state.newsModel.link,
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.blue),
-                                                ),
-                                              ),
-                                            ),
+                                                color: Colors.blue),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -616,7 +596,7 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                     ),
                   ],
                 )),
-            state.newsModel.relatedArticles.isEmpty
+            (state.newsModel.relatedArticles ?? []).isEmpty
                 ? Container()
                 : Column(
                     children: [
@@ -645,12 +625,12 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
                                   const EdgeInsets.only(top: 10.0, bottom: 24),
                               child: NewsCardWidget(
                                 newsModel: newsModelFromRelatedArticle(
-                                  state.newsModel.relatedArticles[index],
+                                  state.newsModel.relatedArticles![index],
                                 ),
                               ),
                             );
                           },
-                          itemCount: state.newsModel.relatedArticles.length,
+                          itemCount: state.newsModel.relatedArticles!.length,
                           pagination: SwiperPagination(
                               builder: DotSwiperPaginationBuilder(
                                   color: Colors.grey,
@@ -697,7 +677,6 @@ class _NewsPageDetailsState extends State<NewsPageDetails>
 
 String getYoutubeId(String link) {
   try {
-    var youtubeid = "";
     if (link.contains('&')) {
       return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
     } else if (link.contains('?')) {
@@ -712,20 +691,18 @@ String getYoutubeId(String link) {
 
 class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   double expandedHeight;
-  Loaded state;
+  Loaded? state;
   bool viewAudio;
-  final VoidCallback hndlAudio;
+  final VoidCallback? hndlAudio;
   MyDynamicHeader(
-      {@required this.expandedHeight,
+      {required this.expandedHeight,
       this.state,
-      @required this.viewAudio,
+      required this.viewAudio,
       this.hndlAudio});
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    var width = MediaQuery.of(context).size.width;
-
     var height = MediaQuery.of(context).size.height;
     return Stack(
       clipBehavior: Clip.none,
@@ -765,8 +742,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
           ),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image:
-                    CachedNetworkImageProvider(state.newsModel.image.original),
+                image: CachedNetworkImageProvider(
+                    state!.newsModel.image?.original ?? ''),
                 fit: BoxFit.cover),
           ),
         ),
@@ -782,7 +759,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    Share.share(state.newsModel.link);
+                    Share.share(state!.newsModel.link ?? '');
                   },
                   child: Container(
                     height: 48,
@@ -810,7 +787,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 viewAudio
                     ? InkWell(
                         onTap: () {
-                          hndlAudio();
+                          hndlAudio?.call();
                         },
                         child: CircleAvatar(
                           radius: 32,

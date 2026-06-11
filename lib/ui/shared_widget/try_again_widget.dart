@@ -28,7 +28,7 @@ typedef RetryCallBack = void Function();
 class TryAgain extends StatelessWidget {
   final RetryCallBack onRetry;
 
-  TryAgain({this.onRetry});
+  TryAgain({required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

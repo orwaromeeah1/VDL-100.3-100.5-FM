@@ -8,8 +8,8 @@ class MenuButtonItem extends StatelessWidget {
   final OnClickCallBack onClick;
 
   MenuButtonItem({
-    this.title,
-    this.onClick,
+    required this.title,
+    required this.onClick,
   });
 
   @override

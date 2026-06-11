@@ -1,10 +1,10 @@
 class ProgramSchedule {
-  String time;
-  String image;
-  String title;
-  bool active;
-  String link;
-  int id;
+  String? time;
+  String? image;
+  String? title;
+  bool? active;
+  String? link;
+  int? id;
 
   ProgramSchedule(
       {this.time, this.image, this.title, this.active, this.link, this.id});

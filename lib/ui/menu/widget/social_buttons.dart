@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
@@ -7,8 +7,8 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 class SocialButton extends StatelessWidget {
   final int tag;
   const SocialButton({
-    Key key,
-    this.tag,
+    Key? key,
+    required this.tag,
   }) : super(key: key);
 
   @override
@@ -24,12 +24,12 @@ class SocialButton extends StatelessWidget {
               )
             : Icon(
                 tag == 1
-                    ? FontAwesome.facebook
+                    ? FontAwesomeIcons.facebook
                     : tag == 2
-                        ? FontAwesome.instagram
+                        ? FontAwesomeIcons.instagram
                         : tag == 3
-                            ? FontAwesome.twitter
-                            : FontAwesome.youtube_play,
+                            ? FontAwesomeIcons.twitter
+                            : FontAwesomeIcons.youtube,
                 color: green,
               ),
       ),

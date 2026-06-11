@@ -5,20 +5,20 @@ import 'package:vdl/ui/programs/page/episode/episode_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class EpisodeCard extends StatelessWidget {
-  final String episodeNumber;
-  final String date;
-  final String image;
-  final Episodes episode;
-  final String title;
-  final String audioLink;
-  final String videoLink;
-  final String youtubelink;
-  final int id;
-  final ProgramDetailsResponse program;
-  final bool containsAudio;
+  final String? episodeNumber;
+  final String? date;
+  final String? image;
+  final Episodes? episode;
+  final String? title;
+  final String? audioLink;
+  final String? videoLink;
+  final String? youtubelink;
+  final int? id;
+  final ProgramDetailsResponse? program;
+  final bool? containsAudio;
   final containsVideo;
 
-  EpisodeCard(
+  const EpisodeCard(
       {this.date,
       this.audioLink,
       this.episodeNumber,
@@ -40,9 +40,9 @@ class EpisodeCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => EpisodePage(
-                      episodeId: id,
-                      program: program,
-                      episode: episode,
+                      episodeId: id!,
+                      program: program!,
+                      episode: episode!,
                       youtubeVideo: youtubelink,
                     )));
       },
@@ -111,7 +111,7 @@ class EpisodeCard extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          containsAudio
+                          (containsAudio ?? false)
                               ? Flex(
                                   direction: Axis.horizontal,
                                   children: [
@@ -129,7 +129,7 @@ class EpisodeCard extends StatelessWidget {
                                   ],
                                 )
                               : Container(),
-                          containsVideo
+                          (containsVideo ?? false)
                               ? Flex(
                                   direction: Axis.horizontal,
                                   children: [

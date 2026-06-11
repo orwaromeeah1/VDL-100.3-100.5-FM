@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:update_available/update_available.dart';
@@ -10,89 +9,102 @@ import 'package:vdl/ui/news/bloc/news_state.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final Repository repo;
-
-  NewsBloc(NewsState initialState, this.repo) : super(initialState);
   List<NewsModel> viewedNews = [];
-  HomeModel homeModel;
+  late HomeModel homeModel;
   bool dismessdLive = false;
-  @override
-  Stream<NewsState> mapEventToState(NewsEvent event) async* {
-    if (event is FetchData) {
-      try {
-        yield Loading();
-        homeModel = await repo.getHomeData();
-        viewedNews = homeModel.news;
-        yield Startup(homeModel);
 
-        bool canBeUpdated = await checkForUpdate();
-        if (canBeUpdated) {
-          yield ShowUpdatePopup();
-          yield Startup(homeModel);
-        }
-      } catch (e) {
-        print(e);
-        yield NoInternetConnection();
+  NewsBloc(this.repo) : super(NewsState()) {
+    on<FetchData>(_onFetchData);
+    on<FetchCategoryNews>(_onFetchCategoryNews);
+    on<FetchSpecialReportsPages>(_onFetchSpecialReportsPages);
+    on<MoveToTop>(_onMoveToTop);
+    on<FetchArticles>(_onFetchArticles);
+  }
+
+  Future<void> _onFetchData(
+      FetchData event, Emitter<NewsState> emit) async {
+    try {
+      emit(Loading());
+      homeModel = await repo.getHomeData();
+      viewedNews = homeModel.news ?? [];
+      emit(Startup(homeModel));
+
+      bool canBeUpdated = await checkForUpdate();
+      if (canBeUpdated) {
+        emit(ShowUpdatePopup());
+        emit(Startup(homeModel));
       }
+    } catch (e) {
+      print(e);
+      emit(NoInternetConnection());
     }
-    if (event is FetchCategoryNews) {
-      try {
-        if (event.page == 1) {
-          yield FetchingCategoryNews(homeModel);
-          homeModel.news =
-              await repo.getNewsByCategory(event.page, event.catId);
+  }
 
-          viewedNews = homeModel.news;
-          yield Loaded(homeModel, true);
-        } else {
-          yield FetchingNextPage(homeModel);
-          List<NewsModel> extra =
-              await repo.getNewsByCategory(event.page, event.catId);
-          homeModel.news = homeModel.news + extra;
-          yield Loaded(homeModel, false);
-        }
-      } catch (e) {
-        print(e);
-        yield Loaded(homeModel, false);
+  Future<void> _onFetchCategoryNews(
+      FetchCategoryNews event, Emitter<NewsState> emit) async {
+    try {
+      if (event.page == 1) {
+        emit(FetchingCategoryNews(homeModel));
+        homeModel.news =
+            await repo.getNewsByCategory(event.page, event.catId);
+
+        viewedNews = homeModel.news ?? [];
+        emit(Loaded(homeModel, true));
+      } else {
+        emit(FetchingNextPage(homeModel));
+        List<NewsModel> extra =
+            await repo.getNewsByCategory(event.page, event.catId);
+        homeModel.news = (homeModel.news ?? []) + extra;
+        emit(Loaded(homeModel, false));
       }
-    } else if (event is FetchSpecialReportsPages) {
-      try {
-        yield FetchingNextPage(homeModel);
-        List<NewsModel> specialReportsNextPage =
-            await repo.getSpecialReports(event.page);
-        homeModel.specialReports =
-            homeModel.specialReports + specialReportsNextPage;
-        yield Loaded(homeModel, false);
-      } catch (e) {
-        print(e);
-        yield Loaded(homeModel, false);
-      }
-    } else if (event is MoveToTop) {
-      yield MoveingToTop(homeModel);
-      yield Loaded(homeModel, false);
-    } else if (event is FetchArticles) {
-      try {
-        yield FetchingNextPage(homeModel);
-        List<NewsModel> articles = await repo.getArticles(event.page);
-        homeModel.articles = homeModel.articles + articles;
-        yield Loaded(homeModel, false);
-      } catch (e) {
-        print(e);
-        yield Loaded(homeModel, false);
-      }
+    } catch (e) {
+      print(e);
+      emit(Loaded(homeModel, false));
+    }
+  }
+
+  Future<void> _onFetchSpecialReportsPages(
+      FetchSpecialReportsPages event, Emitter<NewsState> emit) async {
+    try {
+      emit(FetchingNextPage(homeModel));
+      List<NewsModel> specialReportsNextPage =
+          await repo.getSpecialReports(event.page);
+      homeModel.specialReports =
+          (homeModel.specialReports ?? []) + specialReportsNextPage;
+      emit(Loaded(homeModel, false));
+    } catch (e) {
+      print(e);
+      emit(Loaded(homeModel, false));
+    }
+  }
+
+  Future<void> _onMoveToTop(
+      MoveToTop event, Emitter<NewsState> emit) async {
+    emit(MoveingToTop(homeModel));
+    emit(Loaded(homeModel, false));
+  }
+
+  Future<void> _onFetchArticles(
+      FetchArticles event, Emitter<NewsState> emit) async {
+    try {
+      emit(FetchingNextPage(homeModel));
+      List<NewsModel> articles = await repo.getArticles(event.page);
+      homeModel.articles = (homeModel.articles ?? []) + articles;
+      emit(Loaded(homeModel, false));
+    } catch (e) {
+      print(e);
+      emit(Loaded(homeModel, false));
     }
   }
 
   Future<bool> checkForUpdate() async {
     try {
-      Availability updateAvailability = await getUpdateAvailability();
-
-      final text = updateAvailability.fold(
-        available: () => true,
-        notAvailable: () => false,
-        unknown: () => false,
-      );
-
-      return text;
+      final updateAvailability = await getUpdateAvailability();
+      return switch (updateAvailability) {
+        UpdateAvailable() => true,
+        NoUpdateAvailable() => false,
+        UnknownAvailability() => false,
+      };
     } catch (e) {
       return false;
     }

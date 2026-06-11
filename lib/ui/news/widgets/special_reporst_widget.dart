@@ -1,26 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class SpecialReportsCard extends StatelessWidget {
-  final NewsModel newsModel;
+  final NewsModel? newsModel;
   const SpecialReportsCard({
-    Key key,
+    Key? key,
     this.newsModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => pushNewScreen(
+      onTap: () => PersistentNavBarNavigator.pushNewScreen(
         context,
         screen: NewsPageDetails(
           isSpecial: true,
-          newsId: this.newsModel.id,
+          newsId: this.newsModel?.id ?? 0,
         ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -48,7 +48,7 @@ class SpecialReportsCard extends StatelessWidget {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: CachedNetworkImageProvider(
-                              this.newsModel.image.medium),
+                              this.newsModel?.image?.medium ?? ''),
                           fit: BoxFit.cover)),
                 ),
               ),
@@ -62,7 +62,7 @@ class SpecialReportsCard extends StatelessWidget {
                     children: [
                       Container(
                         child: Text(
-                          this.newsModel.humanDate,
+                          this.newsModel?.humanDate ?? '',
                           style: TextStyle(
                               fontSize: 12, color: black.withOpacity(0.41)),
                         ),
@@ -72,7 +72,7 @@ class SpecialReportsCard extends StatelessWidget {
                       ),
                       Container(
                         child: Text(
-                          Manager.removeAllHtmlTags(this.newsModel.title),
+                          Manager.removeAllHtmlTags(this.newsModel?.title ?? ''),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

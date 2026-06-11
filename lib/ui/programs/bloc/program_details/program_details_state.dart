@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 
@@ -17,7 +16,7 @@ class ProgramDetailsLoading extends ProgramDetailsState {}
 class ProgramDetailsLoaded extends ProgramDetailsState {
   final ProgramDetailsResponse program;
 
-  const ProgramDetailsLoaded({@required this.program}) : assert(program != null);
+  const ProgramDetailsLoaded({required this.program});
 
   @override
   List<Object> get props => [program];

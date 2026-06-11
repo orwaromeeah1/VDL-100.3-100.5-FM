@@ -27,18 +27,18 @@ class NewsCategoryModel {
     this.news,
   });
 
-  int id;
-  int count;
-  bool selected;
-  String description;
-  String link;
-  String name;
-  String slug;
-  String taxonomy;
-  int parent;
-  List<dynamic> meta;
+  int? id;
+  int? count;
+  bool? selected;
+  String? description;
+  String? link;
+  String? name;
+  String? slug;
+  String? taxonomy;
+  int? parent;
+  List<dynamic>? meta;
   dynamic mobileAppTitle;
-  String news;
+  String? news;
 
   factory NewsCategoryModel.fromJson(Map<String, dynamic> json) =>
       NewsCategoryModel(
@@ -64,7 +64,7 @@ class NewsCategoryModel {
         "slug": slug,
         "taxonomy": taxonomy,
         "parent": parent,
-        "meta": List<dynamic>.from(meta.map((x) => x)),
+        "meta": meta != null ? List<dynamic>.from(meta!.map((x) => x)) : null,
         "mobile_app_title": mobileAppTitle,
         "news": news,
       };

@@ -6,17 +6,17 @@ class GlowingCircularButton extends StatelessWidget {
   final OnClickCallBack onClick;
   final double size;
   final Color color;
-  final Widget icon;
+  final Widget? icon;
   final bool isGlowing;
   final String iconImage;
 
   GlowingCircularButton({
-    this.onClick,
-    this.size,
-    this.color,
+    required this.onClick,
+    required this.size,
+    required this.color,
     this.icon,
-    this.isGlowing: false,
-    this.iconImage: '',
+    this.isGlowing = false,
+    this.iconImage = '',
   });
 
   @override

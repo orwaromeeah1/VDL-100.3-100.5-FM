@@ -7,9 +7,9 @@ class BroadcastCard extends StatelessWidget {
   final String time;
 
   BroadcastCard({
-    this.time,
-    this.isAvailable,
-    this.isSelected,
+    required this.time,
+    required this.isAvailable,
+    required this.isSelected,
   });
 
   @override

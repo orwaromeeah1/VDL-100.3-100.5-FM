@@ -1,6 +1,6 @@
 
 class NewsCastDetailsModel{
-  String description;
+  String? description;
 
   NewsCastDetailsModel({
     this.description,

@@ -29,21 +29,21 @@ class LiveNotificationModel {
     this.sinceDate,
   });
 
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
 
-  String link;
-  String title;
-  String content;
-  int menuOrder;
+  String? link;
+  String? title;
+  String? content;
+  int? menuOrder;
   dynamic excerpt;
-  Image image;
-  String humanDate;
-  String sinceDate;
+  Image? image;
+  String? humanDate;
+  String? sinceDate;
 
   factory LiveNotificationModel.fromJson(Map<String, dynamic> json) =>
       LiveNotificationModel(
@@ -64,20 +64,20 @@ class LiveNotificationModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "date": date == null ? null : date,
-        "date_gmt": dateGmt == null ? null : dateGmt,
-        "modified": modified == null ? null : modified,
-        "modified_gmt": modifiedGmt == null ? null : modifiedGmt,
-        "slug": slug == null ? null : slug,
-        "link": link == null ? null : link,
-        "title": title == null ? null : title,
-        "content": content == null ? null : content,
-        "menu_order": menuOrder == null ? null : menuOrder,
+        "id": id,
+        "date": date,
+        "date_gmt": dateGmt,
+        "modified": modified,
+        "modified_gmt": modifiedGmt,
+        "slug": slug,
+        "link": link,
+        "title": title,
+        "content": content,
+        "menu_order": menuOrder,
         "excerpt": excerpt,
-        "image": image == null ? null : image.toJson(),
-        "human_date": humanDate == null ? null : humanDate,
-        "since_date": sinceDate == null ? null : sinceDate,
+        "image": image?.toJson(),
+        "human_date": humanDate,
+        "since_date": sinceDate,
       };
 }
 

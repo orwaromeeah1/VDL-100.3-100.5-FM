@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/responses/search_response.dart';
 
@@ -19,7 +18,7 @@ class NewPageLoading extends SearchState {}
 class SearchLoaded extends SearchState {
   final List<SearchResponse> searchResult;
 
-  const SearchLoaded({@required this.searchResult}) : assert(searchResult != null);
+  const SearchLoaded({required this.searchResult});
 
   @override
   List<Object> get props => [searchResult];
@@ -27,7 +26,7 @@ class SearchLoaded extends SearchState {
 class SearchNextPageLoaded extends SearchState {
   final SearchResponse searchResult;
 
-  const SearchNextPageLoaded({@required this.searchResult}) : assert(searchResult != null);
+  const SearchNextPageLoaded({required this.searchResult});
 
   @override
   List<Object> get props => [searchResult];

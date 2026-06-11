@@ -1,7 +1,7 @@
 
 class Credentials{
-  String key;
-  String secret;
+  String? key;
+  String? secret;
 
   Credentials({
     this.key,

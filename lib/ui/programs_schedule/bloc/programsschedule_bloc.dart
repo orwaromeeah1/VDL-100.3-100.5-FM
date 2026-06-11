@@ -1,9 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
 import 'package:vdl/data/repository/repository.dart';
-import 'package:vdl/ui/programs/bloc/programs/programs_event.dart';
-import 'package:vdl/ui/programs/bloc/programs/programs_state.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_event.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_state.dart';
 
@@ -13,28 +10,22 @@ class ProgramsScheduleBloc
   List<ProgramSchedule> programsSchedule = [];
   List<ProgramSchedule> WebProgramsSchedule = [];
 
-  @override
-  ProgramsScheduleBloc(ProgramsScheduleState initialState, this.repository)
-      : super(initialState);
+  ProgramsScheduleBloc(this.repository) : super(ProgramsScheduleEmpty()) {
+    on<FetchProgramsSchedule>(_onFetchProgramsSchedule);
+  }
 
-  @override
-  ProgramsScheduleState get initialState => ProgramsScheduleEmpty();
+  Future<void> _onFetchProgramsSchedule(
+      FetchProgramsSchedule event, Emitter<ProgramsScheduleState> emit) async {
+    emit(ProgramsScheduleLoading());
+    try {
+      await Future.wait([
+        getRadioSchedule(event.day ?? '', event.dayNum ?? 0),
+        getWebSchedule(event.day ?? '', event.dayNum ?? 0)
+      ]);
 
-  @override
-  Stream<ProgramsScheduleState> mapEventToState(
-      ProgramsScheduleEvent event) async* {
-    if (event is FetchProgramsSchedule) {
-      yield ProgramsScheduleLoading();
-      try {
-        await Future.wait([
-          getRadioSchedule(event.day, event.dayNum),
-          getWebSchedule(event.day, event.dayNum)
-        ]);
-
-        yield ProgramsScheduleLoaded(programsSchedule: programsSchedule);
-      } catch (_) {
-        yield ProgramsScheduleError();
-      }
+      emit(ProgramsScheduleLoaded(programsSchedule: programsSchedule));
+    } catch (_) {
+      emit(ProgramsScheduleError());
     }
   }
 

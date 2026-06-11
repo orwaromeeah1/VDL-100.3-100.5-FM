@@ -6,28 +6,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_card_swipper/flutter_card_swiper.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/Article_details_bloc.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_event.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_state.dart';
-import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/ads_manager/ad_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ArticleDetailsPage extends StatefulWidget {
   final int id;
-  const ArticleDetailsPage({Key key, @required this.id}) : super(key: key);
+  const ArticleDetailsPage({Key? key, required this.id}) : super(key: key);
 
   @override
   _ArticleDetailsPageState createState() => _ArticleDetailsPageState();
@@ -35,11 +31,11 @@ class ArticleDetailsPage extends StatefulWidget {
 
 class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  AnimationController _animationController;
+  late AnimationController _animationController;
   bool isPlaying = false;
   final _bloc = locator<ArticleDetailsBloc>();
 //  BannerAd banner;
-  Duration duration;
+  Duration? duration;
   Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
 
   bool audioLoaded = false;
@@ -75,7 +71,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       }
     });
 
-    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+    audioPlayer.onPositionChanged.listen((Duration position) async {
       if (mounted) {
         setState(() {
           timeProgress = position.inSeconds;
@@ -84,7 +80,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     });
 
     audioPlayer.onPlayerStateChanged.listen((state) async {
-      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+      if (audioPlayer.state == Player.PlayerState.paused) {
         if (mounted) {
           setState(() {
             isPlaying = false;
@@ -94,7 +90,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       }
     });
 
-    audioPlayer.onPlayerCompletion.listen((event) {
+    audioPlayer.onPlayerComplete.listen((event) {
       if (mounted) {
         setState(() {
           audioPlayer.seek(Duration(seconds: 0));
@@ -125,34 +121,31 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
   }
 
   playMusic() async {
-    await audioPlayer.setUrl(
-        audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    int result = await audioPlayer.play(audioUrl);
-    if (result == 1) {
-      // success
-    }
+    await audioPlayer.setSource(
+        Player.UrlSource(audioUrl)); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.play(Player.UrlSource(audioUrl));
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       if (mounted) {
-        setState(() => {print(d)});
+        setState(() {print(d);});
       }
     });
   }
 
   /// Compulsory
   pauseMusic() async {
-    int result = await audioPlayer.pause();
+    await audioPlayer.pause();
   }
 
   resume() async {
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    await audioPlayer.setUrl(audioUrl);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.setSource(Player.UrlSource(audioUrl));
     audioPlayer.resume();
   }
 
   stopMusic() async {
-    int result = await audioPlayer.stop();
+    await audioPlayer.stop();
   }
 
   String getTimeString(int seconds) {
@@ -171,7 +164,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
     super.dispose();
   }
 
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _bannerAdIsLoaded = false;
   bool _bannerAdIfailed = false;
   @override
@@ -217,12 +210,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
       },
       listener: (context, state) {
         if (!audioLoaded && state is Loaded) {
-          if (state.article.audio != "") {
+          if ((state.article.audio ?? '') != "") {
             audioLoaded = true;
-            _bloc.add(FetchAudio(state.article.audio));
+            _bloc.add(FetchAudio(state.article.audio ?? ''));
           }
         } else if (state is AudioLoaded) {
-          audioUrl = state.audio.file.url;
+          audioUrl = state.audio.file?.url ?? '';
         }
       },
     ));
@@ -280,7 +273,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                     children: <Widget>[
                                       InkWell(
                                         onTap: () {
-                                          Share.share(article.link);
+                                          Share.share(article.link ?? '');
                                         },
                                         child: Container(
                                           height: 48,
@@ -339,11 +332,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                     width: 102,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(51),
-                                        image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                article
-                                                    .selectAuthor.image.medium),
-                                            fit: BoxFit.cover)),
+                                        image: article.selectAuthor?.image?.medium != null
+                                            ? DecorationImage(
+                                                image: CachedNetworkImageProvider(
+                                                    article.selectAuthor!.image!.medium!),
+                                                fit: BoxFit.cover)
+                                            : null),
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -351,7 +345,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                   Row(
                                     children: [
                                       Icon(
-                                        MaterialIcons.format_quote,
+                                        Icons.format_quote,
                                         color: blue,
                                         size: 30,
                                       ),
@@ -359,7 +353,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                         width: 10,
                                       ),
                                       Text(
-                                        article.selectAuthor.name ??
+                                        article.selectAuthor?.name ??
                                             "لا يوجد اسم ",
                                         style: TextStyle(
                                           color: blue,
@@ -432,7 +426,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                                             Container(
                                               child: Text(
                                                 Manager.removeAllHtmlTags(
-                                                    article.title),
+                                                    article.title ?? ''),
                                                 maxLines: 2,
                                                 textAlign: TextAlign.right,
                                                 overflow: TextOverflow.ellipsis,
@@ -523,7 +517,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                             right: 19.0, top: 17, left: 19),
                         child: Container(
                           child: Text(
-                            article.humanDate,
+                            article.humanDate ?? '',
                             style: TextStyle(
                                 color: black.withOpacity(0.41),
                                 fontWeight: FontWeight.bold,
@@ -536,7 +530,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                             right: 19.0, top: 4, left: 19),
                         child: Container(
                           child: Text(
-                            Manager.removeAllHtmlTags(article.title),
+                            Manager.removeAllHtmlTags(article.title ?? ''),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
@@ -560,7 +554,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage>
                         padding: const EdgeInsets.only(
                             bottom: 19, right: 19.0, top: 9, left: 19),
                         child: Container(
-                          child: HtmlWidget(article.content),
+                          child: HtmlWidget(article.content ?? ''),
                           //  Text(
                           //   Manager.removeAllHtmlTags(article.content),
                           //   style: TextStyle(fontSize: 15),

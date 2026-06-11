@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_bloc.dart';
-import 'package:vdl/ui/live_broadcast/bloc/live_podcast_event.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_state.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
@@ -18,20 +17,22 @@ class BackGroundAndroidAudioPlayer {
 }
 
 class AndroidLiveAudioPage extends StatefulWidget {
-  bool isPlaying = false;
+  const AndroidLiveAudioPage({Key? key}) : super(key: key);
+
   @override
   _AndroidLiveAudioPageState createState() => _AndroidLiveAudioPageState();
 }
 
 class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  double width;
+  bool isPlaying = false;
+  late double width;
   String audioUrl = "https://l3.itworkscdn.net/itwaudio/9054/stream";
-  double height;
-  AnimationController _animationController;
+  late double height;
+  late AnimationController _animationController;
 
   bool hasAudio = true;
-  Duration duration;
+  Duration? duration;
   bool audioLoaded = false;
   bool viewYoutube = false;
   final bloc = locator<LivePodcastBloc>();
@@ -59,14 +60,14 @@ class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
       if (player.player.playing) {
         if (mounted) {
           setState(() {
-            widget.isPlaying = true;
+            isPlaying = true;
             _animationController.forward();
           });
         }
       } else {
         if (mounted) {
           setState(() {
-            widget.isPlaying = false;
+            isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -76,14 +77,14 @@ class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
       if (player.player.playing) {
         if (mounted) {
           setState(() {
-            widget.isPlaying = true;
+            isPlaying = true;
             _animationController.forward();
           });
         }
       } else {
         if (mounted) {
           setState(() {
-            widget.isPlaying = false;
+            isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -101,7 +102,7 @@ class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
         if (state is PodcastStoped) {
           setState(() {
             player.player.stop();
-            widget.isPlaying = false;
+            isPlaying = false;
             _animationController.reverse();
           });
         }
@@ -256,12 +257,12 @@ class _AndroidLiveAudioPageState extends State<AndroidLiveAudioPage>
   void _handleOnPressed() {
     if (mounted) {
       setState(() {
-        widget.isPlaying = !widget.isPlaying;
-        widget.isPlaying
+        isPlaying = !isPlaying;
+        isPlaying
             ? _animationController.forward()
             : _animationController.reverse();
 
-        if (widget.isPlaying) {
+        if (isPlaying) {
           player.player.play();
         } else {
           player.player.stop();

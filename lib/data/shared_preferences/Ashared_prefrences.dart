@@ -5,5 +5,5 @@ abstract class ASharedPrefs {
   Future<void> setToken(String token);
   Future<bool> islogedIn();
   Future<void> logout();
-  Future<String> getToken();
+  Future<String?> getToken();
 }

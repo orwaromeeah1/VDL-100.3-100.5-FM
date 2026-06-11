@@ -3,11 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_card_swipper/flutter_card_swiper.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:vdl/data/models/notification_model.dart';
-import 'package:vdl/ui/news/widgets/news_card_widget.dart';
 import 'package:vdl/ui/notifications/bloc/notifications_bloc.dart';
 import 'package:vdl/ui/notifications/bloc/notifications_event.dart';
 import 'package:vdl/ui/notifications/bloc/notifications_state.dart';
@@ -20,7 +16,7 @@ import '../../../data/models/news_model.dart';
 import '../../../injection.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key key}) : super(key: key);
+  const NotificationPage({Key? key}) : super(key: key);
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -44,8 +40,6 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return BlocConsumer(
         bloc: bloc,
         builder: (context, state) {
@@ -58,7 +52,7 @@ class _NotificationPageState extends State<NotificationPage> {
           if (state is Loading) {
             return LoadingScreen();
           }
-          return TryAgain();
+          return TryAgain(onRetry: () => bloc.add(FetchNotificationPage(1)));
         },
         listener: (context, state) {
           if (state is Loaded) {

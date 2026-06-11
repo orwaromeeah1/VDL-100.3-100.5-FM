@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PodcastsWidet extends StatefulWidget {
-  const PodcastsWidet({Key key}) : super(key: key);
+  const PodcastsWidet({Key? key}) : super(key: key);
 
   @override
   _PodcastsWidetState createState() => _PodcastsWidetState();

@@ -8,26 +8,20 @@ class ProgramDetailsBloc
     extends Bloc<ProgramDetailsEvent, ProgramDetailsState> {
   final Repository repository;
 
-  @override
-  ProgramDetailsBloc(ProgramDetailsState initialState, this.repository)
-      : super(initialState);
+  ProgramDetailsBloc(this.repository) : super(ProgramDetailsEmpty()) {
+    on<FetchProgramDetails>(_onFetchProgramDetails);
+  }
 
-  @override
-  ProgramDetailsState get initialState => ProgramDetailsEmpty();
-
-  @override
-  Stream<ProgramDetailsState> mapEventToState(
-      ProgramDetailsEvent event) async* {
-    if (event is FetchProgramDetails) {
-      yield ProgramDetailsLoading();
+  Future<void> _onFetchProgramDetails(
+      FetchProgramDetails event, Emitter<ProgramDetailsState> emit) async {
+    emit(ProgramDetailsLoading());
 //      try {
 
-      ProgramDetailsResponse program = await repository.getProgramDetails(
-          event.programId, event.isRadio ?? false);
-      yield ProgramDetailsLoaded(program: program);
+    ProgramDetailsResponse program = await repository.getProgramDetails(
+        event.programId ?? 0, event.isRadio ?? false);
+    emit(ProgramDetailsLoaded(program: program));
 //      } catch (_) {
-//        yield ProgramDetailsError();
+//        emit(ProgramDetailsError());
 //      }
-    }
   }
 }

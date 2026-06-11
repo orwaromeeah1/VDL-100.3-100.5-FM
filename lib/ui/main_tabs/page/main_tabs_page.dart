@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_bloc.dart';
 import 'package:vdl/ui/live_broadcast/bloc/live_podcast_event.dart';
@@ -18,33 +16,36 @@ import 'package:vdl/ui/programs_schedule/page/programs_scedule_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class MainTabsPage extends StatefulWidget {
-  AudioPlayer introductionAudioPlayer = new AudioPlayer();
-  MenuPage menuPage;
-  NewsPage newsPage;
-  List<Widget> _pages;
+  const MainTabsPage({Key? key}) : super(key: key);
 
-  MainTabsPage() {
-    menuPage = new MenuPage(introductionAudioPlayer);
-    newsPage = new NewsPage(introductionAudioPlayer);
-    _pages = [
-      newsPage,
-      ProgramsPage(),
-      LiveBroadcastPage(),
-      ProgramsSchedulePage(),
-      menuPage,
-      // see the SettingsPage class
-    ];
-  }
   @override
   _MainTabsPageState createState() => _MainTabsPageState();
 }
 
 class _MainTabsPageState extends State<MainTabsPage> {
   AudioPlayer audioPlayer = locator<AudioPlayer>();
+  final AudioPlayer introductionAudioPlayer = AudioPlayer();
+  late MenuPage menuPage;
+  late NewsPage newsPage;
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    menuPage = MenuPage(introductionAudioPlayer);
+    newsPage = NewsPage(introductionAudioPlayer);
+    _pages = [
+      newsPage,
+      ProgramsPage(),
+      LiveBroadcastPage(),
+      ProgramsSchedulePage(),
+      menuPage,
+    ];
+  }
 
   /// Compulsory
   pauseMusic() async {
-    int result = await audioPlayer.pause();
+    await audioPlayer.pause();
   }
 
   PersistentTabController _controller =
@@ -55,7 +56,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         onSelectedTabPressWhenNoScreensPushed: () {
           locator<NewsBloc>().add(MoveToTop());
           audioPlayer.pause();
-          widget.introductionAudioPlayer.pause();
+          introductionAudioPlayer.pause();
         },
         icon: Icon(Icons.home_rounded),
         iconSize: 27,
@@ -84,7 +85,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
         icon: Icon(
-          FlutterIcons.calendar_alt_faw5,
+          FontAwesomeIcons.calendarAlt,
         ),
         activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
@@ -93,7 +94,7 @@ class _MainTabsPageState extends State<MainTabsPage> {
       PersistentBottomNavBarItem(
         iconSize: 27,
         textStyle: TextStyle(fontSize: 10),
-        icon: Icon(Ionicons.md_menu),
+        icon: Icon(Icons.menu),
         activeColorPrimary: Colors.grey.withOpacity(0.4),
         activeColorSecondary: ProjectColors.ThemeColor,
         title: 'قائمة',
@@ -111,22 +112,22 @@ class _MainTabsPageState extends State<MainTabsPage> {
             audioPlayer.pause();
             // locator<BackGroundAudioPlayer>().player.stop();
             // locator<BackGroundAndroidAudioPlayer>().player.stop();
-            widget.introductionAudioPlayer.pause();
+            introductionAudioPlayer.pause();
             locator<LivePodcastBloc>().add(StopLiveAudio());
           });
         },
         controller: _controller,
-        screens: widget._pages,
+        screens: _pages,
         items: _navBarsItems(),
         navBarHeight: 70,
-        confineInSafeArea: true,
+        confineToSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
-        hideNavigationBarWhenKeyboardShows: true,
-        popAllScreensOnTapOfSelectedTab: true,
+        hideNavigationBarWhenKeyboardAppears: true,
+        popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
         navBarStyle: NavBarStyle.style6,
-        padding: NavBarPadding.only(top: 15),
+        padding: const EdgeInsets.only(top: 15),
         decoration: NavBarDecoration(
             boxShadow: [
               BoxShadow(
@@ -153,8 +154,8 @@ class _MainTabsPageState extends State<MainTabsPage> {
 
   @override
   void dispose() {
-    widget.introductionAudioPlayer.release();
-    widget.introductionAudioPlayer.dispose();
+    introductionAudioPlayer.release();
+    introductionAudioPlayer.dispose();
     super.dispose();
   }
 }

@@ -7,7 +7,7 @@ class Manager {
     //here goes the function
 
     final document = parse(htmlText);
-    final String parsedString = parse(document.body.text).documentElement.text;
+    final String parsedString = parse(document.body?.text ?? '').documentElement?.text ?? '';
 
     return parsedString;
   }

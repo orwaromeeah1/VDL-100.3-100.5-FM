@@ -1,27 +1,27 @@
 class EpisodeResponse {
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
-  String status;
-  String link;
-  String title;
-  String content;
-  String excerpt;
-  int author;
-  int menuOrder;
-  String format;
-  List<int> chooseProgram;
-  String episodeDescription;
-  String time;
-  String audio;
-  String video;
-  Image image;
-  String humanDate;
-  String sinceDate;
-  String youtube_key;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
+  String? status;
+  String? link;
+  String? title;
+  String? content;
+  String? excerpt;
+  int? author;
+  int? menuOrder;
+  String? format;
+  List<int>? chooseProgram;
+  String? episodeDescription;
+  String? time;
+  String? audio;
+  String? video;
+  Image? image;
+  String? humanDate;
+  String? sinceDate;
+  String? youtube_key;
 
   EpisodeResponse(
       {this.id,
@@ -95,20 +95,18 @@ class EpisodeResponse {
     data['time'] = this.time;
     data['audio'] = this.audio;
     data['video'] = this.video;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
-    data['human_date'] = this.humanDate;
+    data['image'] = this.image?.toJson();
+      data['human_date'] = this.humanDate;
     data['since_date'] = this.sinceDate;
     return data;
   }
 }
 
 class Image {
-  String original;
-  String large;
-  String medium;
-  String thumbnail;
+  String? original;
+  String? large;
+  String? medium;
+  String? thumbnail;
 
   Image({this.original, this.large, this.medium, this.thumbnail});
 

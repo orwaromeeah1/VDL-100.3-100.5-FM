@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/models/news_broadcast_details_model.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
@@ -18,10 +17,9 @@ import 'package:vdl/ui/news_broadcasts/widget/broadcast_card.dart';
 import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../injection.dart';
-import '../../../NewsDetails/widgets/video_player.dart';
 
 class NewsBroadcastDetailsPage extends StatefulWidget {
   final NewsCastResponse newsCast;
@@ -30,14 +28,11 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
   final AudioPlayer introductionAudioPlayer;
 
   NewsBroadcastDetailsPage({
-    @required this.newsCast,
-    @required this.timeSlutIndex,
-    @required this.broadcasts,
-    @required this.introductionAudioPlayer,
-  }) : assert(newsCast != null &&
-            timeSlutIndex != null &&
-            broadcasts != null &&
-            introductionAudioPlayer != null);
+    required this.newsCast,
+    required this.timeSlutIndex,
+    required this.broadcasts,
+    required this.introductionAudioPlayer,
+  });
 
   @override
   _NewsBroadcastDetailsPageState createState() =>
@@ -46,7 +41,7 @@ class NewsBroadcastDetailsPage extends StatefulWidget {
 
 class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  double width;
+  late double width;
   int selectedIndex = 0;
   final _controller = ScrollController();
   final _height = 100.0;
@@ -54,12 +49,12 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   final _bloc = locator<NewsCastDetailsBloc>();
   var video = "";
   var youtubeVideo = '';
-  AnimationController _animationController;
-  AnimationController _fullAudioAnimationController;
+  late AnimationController _animationController;
+  late AnimationController _fullAudioAnimationController;
 
   bool isPlaying = false;
   bool isFullAudioPlaying = false;
-  Duration duration;
+  Duration? duration;
 //  AudioPlayer introductionAudioPlayer =new AudioPlayer();
   AudioPlayer fullAudioPlayer = locator<AudioPlayer>();
 
@@ -95,7 +90,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         });
       }
     });
-    widget.introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onPositionChanged
         .listen((Duration position) async {
       if (mounted) {
         setState(() {
@@ -114,7 +109,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         });
       }
     });
-    widget.introductionAudioPlayer.onAudioPositionChanged
+    widget.introductionAudioPlayer.onPositionChanged
         .listen((Duration position) async {
       if (mounted) {
         setState(() {
@@ -122,7 +117,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
         });
       }
     });
-    fullAudioPlayer.onAudioPositionChanged.listen((Duration position) async {
+    fullAudioPlayer.onPositionChanged.listen((Duration position) async {
       if (mounted) {
         setState(() {
           fullTimeProgress = position.inSeconds;
@@ -131,7 +126,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     });
 
     widget.introductionAudioPlayer.onPlayerStateChanged.listen((state) async {
-      if (widget.introductionAudioPlayer.state == PlayerState.PAUSED) {
+      if (widget.introductionAudioPlayer.state == PlayerState.paused) {
         if (mounted) {
           setState(() {
             isPlaying = false;
@@ -142,7 +137,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
     });
 
     fullAudioPlayer.onPlayerStateChanged.listen((state) async {
-      if (fullAudioPlayer.state == PlayerState.PAUSED) {
+      if (fullAudioPlayer.state == PlayerState.paused) {
         if (mounted) {
           setState(() {
             isFullAudioPlaying = false;
@@ -152,7 +147,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       }
     });
 
-    fullAudioPlayer.onPlayerCompletion.listen((event) {
+    fullAudioPlayer.onPlayerComplete.listen((event) {
       if (mounted) {
         setState(() {
           fullAudioPlayer.seek(Duration(seconds: 0));
@@ -161,7 +156,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       }
     });
 
-    widget.introductionAudioPlayer.onPlayerCompletion.listen((event) {
+    widget.introductionAudioPlayer.onPlayerComplete.listen((event) {
       if (mounted) {
         setState(() {
           widget.introductionAudioPlayer.seek(Duration(seconds: 0));
@@ -231,8 +226,8 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
               isPlaying = false;
               isFullAudioPlaying = false;
               audiosLoaded = true;
-              introductionAudioUrl = state.introAudio.file.url;
-              fullAudioUrl = state.fullAudio.file.url;
+              introductionAudioUrl = state.introAudio.file?.url ?? '';
+              fullAudioUrl = state.fullAudio.file?.url ?? '';
             });
           }
         }
@@ -447,7 +442,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          Share.share(widget.newsCast.link);
+                                          Share.share(widget.newsCast.link ?? '');
                                         },
                                         child: Icon(Icons.share),
                                       ),
@@ -578,7 +573,7 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          Share.share(widget.newsCast.link);
+                                          Share.share(widget.newsCast.link ?? '');
                                         },
                                         child: Icon(Icons.share),
                                       ),
@@ -670,14 +665,14 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       case 0:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock715;
-          introductionId = widget.newsCast.shortAudioFieldBlock715;
-          fullAudioId = widget.newsCast.audioFieldBlock715;
+              widget.newsCast.shortAudioDescriptionBlock715 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock715 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock715 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock715;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_7_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock715 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_7_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_7_15;
+                widget.newsCast.short_video_kwikMotion_key_block_7_15 ?? '';
           });
 
           break;
@@ -685,28 +680,28 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       case 1:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock815;
-          introductionId = widget.newsCast.shortAudioFieldBlock815;
-          fullAudioId = widget.newsCast.audioFieldBlock815;
+              widget.newsCast.shortAudioDescriptionBlock815 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock815 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock815 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock815;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_8_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock815 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_8_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_8_15;
+                widget.newsCast.short_video_kwikMotion_key_block_8_15 ?? '';
           });
           break;
         }
       case 2:
         {
           displayedNewsCast.description =
-              widget.newsCast.short_audio_description_block_10_15;
-          introductionId = widget.newsCast.shortAudioFieldBlock1015;
-          fullAudioId = widget.newsCast.audioFieldBlock1015;
+              widget.newsCast.short_audio_description_block_10_15 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock1015 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock1015 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock1015;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_10_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock1015 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_10_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_10_15;
+                widget.newsCast.short_video_kwikMotion_key_block_10_15 ?? '';
           });
 
           break;
@@ -714,42 +709,42 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
       case 3:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1415;
-          introductionId = widget.newsCast.shortAudioFieldBlock1415;
-          fullAudioId = widget.newsCast.audioFieldBlock1415;
+              widget.newsCast.shortAudioDescriptionBlock1415 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock1415 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock1415 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock1415;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_14_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock1415 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_14_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_14_15;
+                widget.newsCast.short_video_kwikMotion_key_block_14_15 ?? '';
           });
           break;
         }
       case 4:
         {
           displayedNewsCast.description =
-              widget.newsCast.shortAudioDescriptionBlock1715;
-          introductionId = widget.newsCast.shortAudioFieldBlock1715;
-          fullAudioId = widget.newsCast.audioFieldBlock1715;
+              widget.newsCast.shortAudioDescriptionBlock1715 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock1715 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock1715 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock1715;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_17_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock1715 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_17_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_17_15;
+                widget.newsCast.short_video_kwikMotion_key_block_17_15 ?? '';
           });
           break;
         }
       case 5:
         {
           displayedNewsCast.description =
-              widget.newsCast.short_audio_description_block_19_15;
-          introductionId = widget.newsCast.shortAudioFieldBlock1915;
-          fullAudioId = widget.newsCast.audioFieldBlock1915;
+              widget.newsCast.short_audio_description_block_19_15 ?? '';
+          introductionId = widget.newsCast.shortAudioFieldBlock1915 ?? '';
+          fullAudioId = widget.newsCast.audioFieldBlock1915 ?? '';
           setState(() {
-            video = widget.newsCast.videoKwikMotionKeyBlock1915;
-            youtubeVideo = widget.newsCast.short_video_youtube_key_block_19_15;
+            video = widget.newsCast.videoKwikMotionKeyBlock1915 ?? '';
+            youtubeVideo = widget.newsCast.short_video_youtube_key_block_19_15 ?? '';
             shortMotionVideo =
-                widget.newsCast.short_video_kwikMotion_key_block_19_15;
+                widget.newsCast.short_video_kwikMotion_key_block_19_15 ?? '';
           });
           break;
         }
@@ -760,66 +755,59 @@ class _NewsBroadcastDetailsPageState extends State<NewsBroadcastDetailsPage>
   }
 
   resumeIntro() async {
-    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    await widget.introductionAudioPlayer.setUrl(introductionAudioUrl);
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    await widget.introductionAudioPlayer.setSource(UrlSource(introductionAudioUrl));
     widget.introductionAudioPlayer.resume();
   }
 
   resumeFull() async {
-    await fullAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    await fullAudioPlayer.setUrl(fullAudioUrl);
+    await fullAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    await fullAudioPlayer.setSource(UrlSource(fullAudioUrl));
     fullAudioPlayer.resume();
   }
 
   /// Compulsory
   playIntroduction() async {
-    await widget.introductionAudioPlayer.setUrl(
-        introductionAudioUrl); // prepare the player with this audio but do not start playing
-    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result =
-        await widget.introductionAudioPlayer.play(introductionAudioUrl);
-    if (result == 1) {
-      // success
-    }
+    await widget.introductionAudioPlayer.setSource(
+        UrlSource(introductionAudioUrl)); // prepare the player with this audio but do not start playing
+    await widget.introductionAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    await widget.introductionAudioPlayer.play(UrlSource(introductionAudioUrl));
     widget.introductionAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       if (mounted) {
-        setState(() => {print(d)});
+        setState(() {print(d);});
       }
     });
   }
 
   playFullAudio() async {
-    await fullAudioPlayer.setUrl(
-        fullAudioUrl); // prepare the player with this audio but do not start playing
-    await fullAudioPlayer.setReleaseMode(ReleaseMode.STOP);
-    int result = await fullAudioPlayer.play(fullAudioUrl);
-    if (result == 1) {
-      // success
-    }
+    await fullAudioPlayer.setSource(
+        UrlSource(fullAudioUrl)); // prepare the player with this audio but do not start playing
+    await fullAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    await fullAudioPlayer.play(UrlSource(fullAudioUrl));
     fullAudioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
       if (mounted) {
-        setState(() => {print(d)});
+        setState(() {print(d);});
       }
     });
   }
 
   /// Compulsory
   pauseIntroduction() async {
-    int result = await widget.introductionAudioPlayer.pause();
+    await widget.introductionAudioPlayer.pause();
   }
 
   stopIntroduction() async {
-    int result = await widget.introductionAudioPlayer.stop();
+    await widget.introductionAudioPlayer.stop();
   }
 
   pauseFullAudio() async {
-    int result = await fullAudioPlayer.pause();
+    await fullAudioPlayer.pause();
   }
 
   stopFullAudio() async {
-    int result = await fullAudioPlayer.stop();
+    await fullAudioPlayer.stop();
   }
 
   String getTimeString(int seconds) {

@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/widgets.dart';
-import 'package:share/share.dart';
-import 'package:vdl/ui/live_broadcast/widget/live_stream_button.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
@@ -15,21 +13,21 @@ import '../../live_broadcast/page/live_video/live_video_page.dart';
 class ProgramScheduleCard extends StatelessWidget {
   final String image;
   final String duration;
-  String link;
+  final String link;
   final int id;
   final String name;
   final bool isRadio;
   final bool isDisplayingNow;
 
   ProgramScheduleCard(
-      {this.name,
-      this.image,
-      this.duration,
-      this.id,
-      this.link,
+      {required this.name,
+      required this.image,
+      required this.duration,
+      required this.id,
+      required this.link,
       //TODO : show something if program is displaying now
-      this.isDisplayingNow: false,
-      this.isRadio});
+      this.isDisplayingNow = false,
+      required this.isRadio});
 
   @override
   Widget build(BuildContext context) {

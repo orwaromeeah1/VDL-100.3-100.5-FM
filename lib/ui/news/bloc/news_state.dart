@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/models/homeModel.dart';
-import 'package:vdl/data/models/menus_model.dart';
 
 class NewsState extends Equatable {
   @override

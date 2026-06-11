@@ -9,16 +9,15 @@ class NewsBroadcastPlayer extends StatelessWidget {
   final String description;
 
   NewsBroadcastPlayer({
-    this.audioLink,
-    this.duration,
-    this.description:'',
-    this.title,
+    required this.audioLink,
+    required this.duration,
+    this.description = '',
+    required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    Card(
+    return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0),
@@ -87,7 +86,7 @@ class NewsBroadcastPlayer extends StatelessWidget {
                   '${description}'
               ),
             )
-                :Container,
+                : Container(),
           ],
         ),
       ),

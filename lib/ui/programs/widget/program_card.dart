@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class ProgramCard extends StatelessWidget {
   final String category;
   final String date;
 
-  ProgramCard({this.name, this.date, this.image, this.category});
+  ProgramCard({required this.name, required this.date, required this.image, required this.category});
 
   @override
   Widget build(BuildContext context) {

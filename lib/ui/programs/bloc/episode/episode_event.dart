@@ -11,13 +11,13 @@ abstract class EpisodeEvent extends Equatable {
 class FetchEpisode extends EpisodeEvent {
   final Episodes episode;
   FetchEpisode({
-    this.episode,
+    required this.episode,
   });
 }
 
 class FetchAudio extends EpisodeEvent {
   final String audioKey;
   FetchAudio({
-    this.audioKey,
+    required this.audioKey,
   });
 }

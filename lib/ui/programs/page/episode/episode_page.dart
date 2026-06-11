@@ -1,19 +1,16 @@
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart' as Player;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vdl/data/responses/episode_response.dart';
 import 'package:vdl/data/responses/program_details_response.dart';
 import 'package:vdl/ui/NewsDetails/widgets/video_player.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_bloc.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_event.dart';
 import 'package:vdl/ui/programs/bloc/episode/episode_state.dart';
-import 'package:vdl/ui/programs/widget/episode_card.dart';
 import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
 import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
@@ -21,9 +18,8 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 import 'package:intl/intl.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 
 import '../../../../injection.dart';
 import '../../../NewsDetails/widgets/html_viewer.dart';
@@ -31,15 +27,14 @@ import '../../../NewsDetails/widgets/html_viewer.dart';
 class EpisodePage extends StatefulWidget {
   final int episodeId;
   final ProgramDetailsResponse program;
-  final String youtubeVideo;
+  final String? youtubeVideo;
   final Episodes episode;
 
   EpisodePage(
-      {@required this.episodeId,
-      @required this.program,
+      {required this.episodeId,
+      required this.program,
       this.youtubeVideo,
-      this.episode})
-      : assert(episodeId != null && program != null);
+      required this.episode});
 
   @override
   _EpisodePageState createState() => _EpisodePageState();
@@ -47,12 +42,12 @@ class EpisodePage extends StatefulWidget {
 
 class _EpisodePageState extends State<EpisodePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  double width;
+  late double width;
   final _bloc = locator<EpisodeBloc>();
   //EpisodeResponse episode = new EpisodeResponse();
-  AnimationController _animationController;
+  late AnimationController _animationController;
   bool isPlaying = false;
-  Duration duration;
+  Duration? duration;
   Player.AudioPlayer audioPlayer = locator<Player.AudioPlayer>();
   bool audioLoaded = false;
   String audioUrl = "";
@@ -60,9 +55,7 @@ class _EpisodePageState extends State<EpisodePage>
 
   bool containsVideo = false;
   String youtubeUrl = "";
-
-////YoutubePlayer
-  YoutubePlayerController _youtubeController;
+  bool _youtubeControllerInitialized = false;
 
   /// Optional
   int timeProgress = 0;
@@ -73,7 +66,7 @@ class _EpisodePageState extends State<EpisodePage>
     WidgetsBinding.instance.addObserver(this);
     _bloc.add(FetchEpisode(episode: widget.episode));
     super.initState();
-    episodes = widget.program.episodes;
+    episodes = widget.program.episodes ?? [];
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // Triggers the onDurationChanged listener and sets the max duration string
@@ -84,14 +77,14 @@ class _EpisodePageState extends State<EpisodePage>
         });
       }
     });
-    audioPlayer.onAudioPositionChanged.listen((Duration position) async {
+    audioPlayer.onPositionChanged.listen((Duration position) async {
       if (mounted) {
         setState(() {
           timeProgress = position.inSeconds;
         });
       }
     });
-    audioPlayer.onPlayerCompletion.listen((event) {
+    audioPlayer.onPlayerComplete.listen((event) {
       if (mounted) {
         setState(() {
           audioPlayer.seek(Duration(seconds: 0));
@@ -101,7 +94,7 @@ class _EpisodePageState extends State<EpisodePage>
     });
 
     audioPlayer.onPlayerStateChanged.listen((state) async {
-      if (audioPlayer.state == Player.PlayerState.PAUSED) {
+      if (audioPlayer.state == Player.PlayerState.paused) {
         if (mounted) {
           setState(() {
             isPlaying = false;
@@ -154,17 +147,10 @@ class _EpisodePageState extends State<EpisodePage>
             containsVideo = (widget.episode.video != "");
 
             if (containsVideo) {
-              _youtubeController = YoutubePlayerController(
-                initialVideoId: _getYoutubeId(widget.episode.video),
-                params: YoutubePlayerParams(
-                  startAt: Duration(seconds: 30),
-                  showControls: true,
-                  showFullscreenButton: true,
-                ),
-              );
+              _youtubeControllerInitialized = true;
             }
             if (state.episode.audio != '')
-              _bloc.add(FetchAudio(audioKey: widget.episode.audio));
+              _bloc.add(FetchAudio(audioKey: widget.episode.audio ?? ''));
             return screenUi(state.episode.audio == '');
           }
 
@@ -201,7 +187,7 @@ class _EpisodePageState extends State<EpisodePage>
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        widget.episode.image.medium),
+                                        widget.episode.image?.medium ?? ''),
                                     fit: BoxFit.cover)),
                           ),
                           // CachedNetworkImage(
@@ -254,7 +240,7 @@ class _EpisodePageState extends State<EpisodePage>
                           size: 50,
                           color: Colors.white,
                           onClick: () {
-                            Share.share(widget.episode.link);
+                            Share.share(widget.episode.link ?? '');
                           },
                           iconImage: FilePath.SHARE,
                         ),
@@ -284,7 +270,7 @@ class _EpisodePageState extends State<EpisodePage>
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: Text(
-                              '${Bidi.stripHtmlIfNeeded(widget.program.title)}',
+                              '${Bidi.stripHtmlIfNeeded(widget.program.title ?? '')}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -294,7 +280,7 @@ class _EpisodePageState extends State<EpisodePage>
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: Text(
-                              '${Bidi.stripHtmlIfNeeded(widget.episode.title)}',
+                              '${Bidi.stripHtmlIfNeeded(widget.episode.title ?? '')}',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 20,
@@ -331,7 +317,7 @@ class _EpisodePageState extends State<EpisodePage>
                                     isPlaying = false;
                                     isPlaying = false;
                                     audioLoaded = true;
-                                    audioUrl = state.audio.file.url;
+                                    audioUrl = state.audio.file?.url ?? '';
                                   });
                                 }
                               },
@@ -461,7 +447,7 @@ class _EpisodePageState extends State<EpisodePage>
                           containsVideo
                               ? VideoPlayer(
                                   path: 'https://embed.kwikmotion.com/Embed/' +
-                                      widget.episode.video,
+                                      (widget.episode.video ?? ''),
                                 )
 
                               // Padding(
@@ -492,8 +478,7 @@ class _EpisodePageState extends State<EpisodePage>
                               //     ),
                               //   )
                               : Container(),
-                          if (widget.youtubeVideo != null &&
-                              widget.youtubeVideo != '')
+                          if (widget.youtubeVideo != '')
                             Card(
                               elevation: 1,
                               shape: RoundedRectangleBorder(
@@ -565,33 +550,30 @@ class _EpisodePageState extends State<EpisodePage>
   }
 
   resume() async {
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    await audioPlayer.setUrl(audioUrl);
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.setSource(Player.UrlSource(audioUrl));
     audioPlayer.resume();
   }
 
   /// Compulsory
   playMusic() async {
-    await audioPlayer.setUrl(
-        audioUrl); // prepare the player with this audio but do not start playing
-    await audioPlayer.setReleaseMode(Player.ReleaseMode.STOP);
-    int result = await audioPlayer.play(audioUrl);
-    if (result == 1) {
-      // success
-    }
+    await audioPlayer.setSource(
+        Player.UrlSource(audioUrl)); // prepare the player with this audio but do not start playing
+    await audioPlayer.setReleaseMode(Player.ReleaseMode.stop);
+    await audioPlayer.play(Player.UrlSource(audioUrl));
     audioPlayer.onDurationChanged.listen((Duration d) {
       print('Max duration: $d');
-      setState(() => {print(d)});
+      setState(() {print(d);});
     });
   }
 
   /// Compulsory
   pauseMusic() async {
-    int result = await audioPlayer.pause();
+    await audioPlayer.pause();
   }
 
   stopMusic() async {
-    int result = await audioPlayer.stop();
+    await audioPlayer.stop();
   }
 
   String getTimeString(int seconds) {
@@ -604,17 +586,10 @@ class _EpisodePageState extends State<EpisodePage>
   /// Compulsory
   @override
   void dispose() {
-    if (_youtubeController != null) {
-      _youtubeController.close();
-    }
     audioPlayer.pause();
     _bloc.close();
     super.dispose();
   }
-
-  void _launchURL(String _url) async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
 
   void _handleOnPressed() {
     setState(() {
@@ -632,13 +607,4 @@ class _EpisodePageState extends State<EpisodePage>
     });
   }
 
-  String _getYoutubeId(String link) {
-    if (link.contains('&')) {
-      return link.substring(link.indexOf('=') + 1, link.indexOf('&'));
-    } else if (link.contains('?')) {
-      return link.substring(link.indexOf('=') + 1).trim();
-    } else {
-      return link.substring(17).trim();
-    }
-  }
 }

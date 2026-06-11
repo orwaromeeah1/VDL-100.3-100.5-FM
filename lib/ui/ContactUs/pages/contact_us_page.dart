@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:vdl/core/Manager.dart';
-import 'package:vdl/ui/Articles/bloc/articles_state.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ContactUsPage extends StatefulWidget {
-  const ContactUsPage({Key key}) : super(key: key);
+  const ContactUsPage({Key? key}) : super(key: key);
 
   @override
   _ContactUsPageState createState() => _ContactUsPageState();
@@ -21,11 +18,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   final _country = TextEditingController();
   final _message = TextEditingController();
-  String name, email, country, message;
+  String? name, email, country, message;
   final formKey = GlobalKey<FormState>();
 
   final username = "";
-  Personalization personalization;
+  late Personalization personalization;
 
   final mailer = Mailer(
       'YOUR_SENDGRID_API_KEY');
@@ -33,8 +30,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
   final toAddress = Address('info@vdl.me');
   final fromAddress = Address('apps2@dlimits.com');
 
-  Content content;
-  String subject;
+  late Content content;
+  late String subject;
   bool loading = false;
   String type = 'General inquiry';
   @override
@@ -277,13 +274,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none,
                                       ),
-                                      onSaved: (String value) {
+                                      onSaved: (String? value) {
                                         name = _name.text.trim();
                                       },
-                                      validator: (String value) {
-                                        if (value.length == 0) {
+                                      validator: (String? value) {
+                                        if ((value ?? '').isEmpty) {
                                           return "Required Field";
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -323,10 +321,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none,
                                       ),
-                                      onSaved: (String value) {
+                                      onSaved: (String? value) {
                                         email = _email.text.trim();
                                       },
-                                      validator: (String value) {
+                                      validator: (String? value) {
                                         return EmailValidator.validate(
                                                 value ?? "")
                                             ? null
@@ -362,7 +360,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                   ),
                                   child: Padding(
                                       padding: const EdgeInsets.all(2.0),
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         hint: Text('نوع الطلب'),
                                         isExpanded: true,
                                         underline: Container(),
@@ -370,7 +368,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                         items: types,
                                         onChanged: (value) {
                                           setState(() {
-                                            type = value;
+                                            type = value as String;
                                           });
                                         },
                                       )),
@@ -410,13 +408,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none,
                                       ),
-                                      onSaved: (String value) {
+                                      onSaved: (String? value) {
                                         country = _country.text.trim();
                                       },
-                                      validator: (String value) {
-                                        if (value.length == 0) {
+                                      validator: (String? value) {
+                                        if ((value ?? '').isEmpty) {
                                           return "Required Field";
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -460,10 +459,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                     onSaved: (value) {
                                       message = _message.text.trim();
                                     },
-                                    validator: (String value) {
-                                      if (value.length == 0) {
+                                    validator: (String? value) {
+                                      if ((value ?? '').isEmpty) {
                                         return "Required Field";
                                       }
+                                      return null;
                                     },
                                   ),
                                 ),
@@ -568,8 +568,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
   }
 
   void _submit() {
-    if (formKey.currentState.validate()) {
-      formKey.currentState.save();
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
       setState(() {
         loading = true;
       });
@@ -585,19 +585,19 @@ class _ContactUsPageState extends State<ContactUsPage> {
           loading = false;
         });
         result.isError
-            ? print(result.asError.error)
+            ? print(result.asError!.error)
             : Manager.toastMessage(
                 'Message sent Thank your for contacting us', green);
       });
     }
   }
 
-  List<DropdownMenuItem> types = [
-    DropdownMenuItem(
+  List<DropdownMenuItem<String>> types = [
+    DropdownMenuItem<String>(
       child: Text('General inquiry'),
       value: 'General inquiry',
     ),
-    DropdownMenuItem(
+    DropdownMenuItem<String>(
       child: Text('Advertising'),
       value: 'Advertising',
     ),

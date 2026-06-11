@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:vdl/utils/project_colors/project_color.dart';
 import 'dart:collection';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_svg/svg.dart';
 //import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:focus_detector/focus_detector.dart';
 //import 'package:fwfh_webview/fwfh_webview.dart';
-import 'package:vdl/ui/live_broadcast/widget/audio_play_widget.dart';
-import 'package:vdl/utils/file_path/file_path.dart';
-import 'package:vdl/utils/project_colors/project_color.dart';
 //import 'package:webview_flutter/webview_flutter.dart';
 
 class VideoPlayer extends StatefulWidget {
-  final String path;
-  VideoPlayer({Key key, this.path}) : super(key: key);
+  final String? path;
+  VideoPlayer({Key? key, this.path}) : super(key: key);
 
   @override
   _VideoPlayerState createState() => _VideoPlayerState();
 }
 
 class _VideoPlayerState extends State<VideoPlayer> {
-  double width;
+  late double width;
   bool viewStream = true;
   final GlobalKey webViewKey = GlobalKey();
 
-  InAppWebViewController webViewController;
+  late InAppWebViewController webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
         useShouldOverrideUrlLoading: true,
@@ -57,7 +50,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
         child: InAppWebView(
           key: webViewKey,
           // contextMenu: contextMenu,
-          initialUrlRequest: URLRequest(url: Uri.parse(widget.path)),
+          initialUrlRequest: URLRequest(url: WebUri(widget.path ?? '')),
           // initialFile: "assets/index.html",
           initialUserScripts: UnmodifiableListView<UserScript>([]),
           initialOptions: options,
@@ -86,13 +79,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
               "data",
               "javascript",
               "about"
-            ].contains(uri.scheme)) {
-              if (false) {
-                // Launch the App
-
-                // and cancel the request
-                return NavigationActionPolicy.CANCEL;
-              }
+            ].contains(uri?.scheme)) {
+              // URL scheme handled — allow navigation
             }
 
             return NavigationActionPolicy.ALLOW;

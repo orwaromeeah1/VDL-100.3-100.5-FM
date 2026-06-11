@@ -1,29 +1,27 @@
-import 'dart:convert';
 
-import 'dart:developer';
 
 class ProgramsResponse {
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
-  String status;
-  String link;
-  String title;
-  String content;
-  String excerpt;
-  int author;
-  int menuOrder;
-  String format;
-  String programInfoDescription;
-  List<TimeProgramm> timeProgramm;
-  String programTextTime;
-  Image image;
-  String humanDate;
-  String sinceDate;
-  Categories categories;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
+  String? status;
+  String? link;
+  String? title;
+  String? content;
+  String? excerpt;
+  int? author;
+  int? menuOrder;
+  String? format;
+  String? programInfoDescription;
+  List<TimeProgramm>? timeProgramm;
+  String? programTextTime;
+  Image? image;
+  String? humanDate;
+  String? sinceDate;
+  Categories? categories;
 //  Featured featured;
 
   ProgramsResponse({this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format, this.programInfoDescription, this.timeProgramm, this.programTextTime, this.image, this.humanDate, this.sinceDate, this.categories});
@@ -74,14 +72,10 @@ class ProgramsResponse {
     data['menu_order'] = this.menuOrder;
     data['format'] = this.format;
     data['program_info_description'] = this.programInfoDescription;
-    if (this.timeProgramm != null) {
-      data['time_programm'] = this.timeProgramm.map((v) => v.toJson()).toList();
-    }
-    data['program_text_time'] = this.programTextTime;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
-    data['human_date'] = this.humanDate;
+    data['time_programm'] = this.timeProgramm?.map((v) => v.toJson()).toList();
+      data['program_text_time'] = this.programTextTime;
+    data['image'] = this.image?.toJson();
+      data['human_date'] = this.humanDate;
     data['since_date'] = this.sinceDate;
 //    if (this.categories != null) {
 //      data['categories'] = this.categories.toJson();
@@ -94,9 +88,9 @@ class ProgramsResponse {
 }
 
 class TimeProgramm {
-  String timeFrom;
-  String timeTo;
-  String daysOfTheWeek;
+  String? timeFrom;
+  String? timeTo;
+  String? daysOfTheWeek;
 
   TimeProgramm({this.timeFrom, this.timeTo, this.daysOfTheWeek});
 
@@ -116,10 +110,10 @@ class TimeProgramm {
 }
 
 class Image {
-  String original;
-  String large;
-  String medium;
-  String thumbnail;
+  String? original;
+  String? large;
+  String? medium;
+  String? thumbnail;
 
   Image({this.original, this.large, this.medium, this.thumbnail});
 
@@ -141,7 +135,7 @@ class Image {
 }
 
 class Categories {
-  Category category;
+  Category? category;
 
   Categories({this.category});
 
@@ -156,8 +150,8 @@ class Categories {
 }
 
 class Category {
-String name;
-String programs;
+String? name;
+String? programs;
 
 Category({this.name, this.programs});
 

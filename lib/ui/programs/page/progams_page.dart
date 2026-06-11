@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,9 +13,7 @@ import 'package:vdl/data/models/category_model.dart';
 import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/ui/shared_widget/app_progress_indicator.dart';
 import 'package:vdl/ui/shared_widget/error_screen.dart';
-import 'package:vdl/ui/shared_widget/glowing_circular_button.dart';
 import 'package:vdl/ui/shared_widget/loading_screen.dart';
-import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 import '../../../injection.dart';
@@ -27,7 +24,7 @@ class ProgramsPage extends StatefulWidget {
 }
 
 class _ProgramsPageState extends State<ProgramsPage> {
-  double width;
+  late double width;
   final GlobalKey<FormState> _searchFormKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   List<Widget> categoriesWidget = [];
@@ -85,7 +82,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
     return Scaffold(
 //      appBar: AppBar(),
         body: RefreshIndicator(
-      onRefresh: () {
+      onRefresh: () async {
         _bloc.add(FetchPrograms());
       },
       child: Stack(
@@ -229,9 +226,9 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                   ))),
                       child: Container(
                         child: ProgramCard(
-                          image: '${programs[index].image.large}',
+                          image: '${programs[index].image?.large ?? ''}',
                           category:
-                              '${programs[index].categories.category.name}',
+                              '${programs[index].categories?.category?.name ?? ''}',
                           name: '${programs[index].title}',
                           date: '${programs[index].humanDate}',
                         ),
@@ -346,11 +343,11 @@ class _ProgramsPageState extends State<ProgramsPage> {
                                           setState(() {
 //                                          categories[index].isSelected = !categories[index].isSelected;
                                             selectedCategoryId =
-                                                categories[index].id;
+                                                categories[index].id ?? 0;
                                           });
                                         },
                                         child: CategoryWidget(
-                                            name: categories[index].name,
+                                            name: categories[index].name ?? '',
                                             isSelected: categories[index].id ==
                                                 selectedCategoryId
 //                                        categories[index].isSelected,
@@ -388,7 +385,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
             )),
         padding: EdgeInsets.all(5),
         child: new Center(
-          child: Text(element.name),
+          child: Text(element.name ?? ''),
         ),
       ));
     });

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class AboutUsPage extends StatefulWidget {
-  const AboutUsPage({Key key}) : super(key: key);
+  const AboutUsPage({Key? key}) : super(key: key);
 
   @override
   _AboutUsPageState createState() => _AboutUsPageState();

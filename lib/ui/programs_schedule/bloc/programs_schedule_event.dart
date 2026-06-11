@@ -5,11 +5,11 @@ abstract class ProgramsScheduleEvent extends Equatable {
 }
 
 class FetchProgramsSchedule extends ProgramsScheduleEvent {
-  final String day;
-  final int dayNum;
+  final String? day;
+  final int? dayNum;
 
-  FetchProgramsSchedule({this.dayNum,this.day});
+  const FetchProgramsSchedule({this.dayNum, this.day});
 
   @override
-  List<Object> get props => [day,dayNum];
+  List<Object?> get props => [day, dayNum];
 }

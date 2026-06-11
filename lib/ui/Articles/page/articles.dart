@@ -1,12 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:vdl/data/models/news_model.dart';
-import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/Articles/bloc/articles_bloc.dart';
 import 'package:vdl/ui/Articles/bloc/articles_event.dart';
@@ -16,7 +12,7 @@ import 'package:vdl/ui/shared_widget/loading_screen.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class ArticlesPage extends StatefulWidget {
-  const ArticlesPage({Key key}) : super(key: key);
+  const ArticlesPage({Key? key}) : super(key: key);
 
   @override
   _ArticlesPageState createState() => _ArticlesPageState();
@@ -91,6 +87,9 @@ class _ArticlesPageState extends State<ArticlesPage> {
                       }
 
                       if (state is Loaded || state is LoadingNextPage) {
+                        final articles = state is Loaded
+                            ? state.articles
+                            : (state as LoadingNextPage).articles;
                         return Padding(
                           padding: const EdgeInsets.only(top: 101.0),
                           child: Container(
@@ -113,7 +112,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                     Container(
                                         child: LimitedBox(
                                       maxHeight:
-                                          (state.articles.length * 145.5 + 50)
+                                          (articles.length * 145.5 + 50)
                                               .toDouble(),
                                       child: ListView.builder(
                                           shrinkWrap: true,
@@ -121,9 +120,9 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                               NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) =>
                                               ArticleCardWidget(
-                                                model: state.articles[index],
+                                                model: articles[index],
                                               ),
-                                          itemCount: state.articles.length),
+                                          itemCount: articles.length),
                                     )),
                                     state is LoadingNextPage
                                         ? Container(
@@ -158,7 +157,6 @@ class _ArticlesPageState extends State<ArticlesPage> {
                             ),
                           ),
                         );
-                        ;
                       }
                       return Container();
                     },

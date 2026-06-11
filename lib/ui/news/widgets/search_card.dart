@@ -1,17 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/color_helper/color_helper.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class SearchCardWidget extends StatelessWidget {
-  final String image;
-  final String title;
-  final String date;
-  final String category;
-  final int id;
+  final String? image;
+  final String? title;
+  final String? date;
+  final String? category;
+  final int? id;
 
  SearchCardWidget({
     this.image,
@@ -24,9 +24,9 @@ class SearchCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => pushNewScreen(
+      onTap: () => PersistentNavBarNavigator.pushNewScreen(
         context,
-        screen: NewsPageDetails(newsId:id ,isSpecial: false,),
+        screen: NewsPageDetails(newsId: id ?? 0, isSpecial: false,),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       ),
@@ -73,7 +73,7 @@ class SearchCardWidget extends StatelessWidget {
                             height: 4,
                           ),
                           Text(
-                            '${Bidi.stripHtmlIfNeeded(title)}',
+                            '${Bidi.stripHtmlIfNeeded(title ?? '')}',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
                             maxLines: 2,
@@ -105,7 +105,7 @@ class SearchCardWidget extends StatelessWidget {
                     ),
                   ),
                   decoration: BoxDecoration(
-                     color: ColorHelper.getColor(category),
+                     color: ColorHelper.getColor(category ?? ''),
                       borderRadius: BorderRadius.circular(13)),
                 ),
               )

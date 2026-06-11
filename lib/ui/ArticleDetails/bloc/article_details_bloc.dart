@@ -6,30 +6,32 @@ import 'package:vdl/ui/ArticleDetails/bloc/article_details_event.dart';
 import 'package:vdl/ui/ArticleDetails/bloc/article_details_state.dart';
 
 
-
 class ArticleDetailsBloc
     extends Bloc<ArticleDetailsEvent, ArticleDetailsState> {
   final Repository repo;
+  late NewsModel newsModel;
 
-  ArticleDetailsBloc(ArticleDetailsState initialState, this.repo)
-      : super(initialState);
-  NewsModel newsModel;
-  @override
-  Stream<ArticleDetailsState> mapEventToState(
-      ArticleDetailsEvent event) async* {
-    if (event is FetchArticleDetails) {
-      yield Loading();
-      newsModel = await repo.getSingleArticle(event.id);
-      yield Loaded(newsModel);
-    } else if (event is FetchAudio) {
-      try {
-        AudioResponseModel audio = await repo.getAudioModel(event.id);
-        yield AudioLoaded(audio, newsModel);
-        yield Loaded(newsModel);
-      } catch (e) {
-        yield Loaded(newsModel);
-        print(e);
-      }
+  ArticleDetailsBloc(this.repo) : super(ArticleDetailsState()) {
+    on<FetchArticleDetails>(_onFetchArticleDetails);
+    on<FetchAudio>(_onFetchAudio);
+  }
+
+  Future<void> _onFetchArticleDetails(
+      FetchArticleDetails event, Emitter<ArticleDetailsState> emit) async {
+    emit(Loading());
+    newsModel = await repo.getSingleArticle(event.id);
+    emit(Loaded(newsModel));
+  }
+
+  Future<void> _onFetchAudio(
+      FetchAudio event, Emitter<ArticleDetailsState> emit) async {
+    try {
+      AudioResponseModel audio = await repo.getAudioModel(event.id);
+      emit(AudioLoaded(audio, newsModel));
+      emit(Loaded(newsModel));
+    } catch (e) {
+      emit(Loaded(newsModel));
+      print(e);
     }
   }
 }

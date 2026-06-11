@@ -3,9 +3,9 @@ import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 class tabBarCell extends StatelessWidget {
-  NewsCategoryModel cat;
+  final NewsCategoryModel? cat;
   tabBarCell({
-    Key key,
+    Key? key,
     this.cat,
   }) : super(key: key);
 
@@ -18,19 +18,18 @@ class tabBarCell extends StatelessWidget {
         children: [
           Container(
             height: 25,
-            child: Text(cat.name,
+            child: Text(cat?.name ?? '',
                 style: TextStyle(
                     fontFamily: "TheSans",
-                    color: cat.selected ? green : black,
-                    fontWeight:
-                        cat.selected ? FontWeight.bold : FontWeight.normal,
+                    color: (cat?.selected ?? false) ? green : black,
+                    fontWeight: (cat?.selected ?? false)
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                     fontSize: 14)),
           ),
-          SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Container(
-            color: cat.selected ? green : Colors.white,
+            color: (cat?.selected ?? false) ? green : Colors.white,
             height: 3,
             width: 55,
           )
@@ -41,8 +40,8 @@ class tabBarCell extends StatelessWidget {
 }
 
 class NewsType {
-  bool selected;
-  String name;
+  bool? selected;
+  String? name;
 
   NewsType({this.selected, this.name});
 }

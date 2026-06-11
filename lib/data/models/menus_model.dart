@@ -14,8 +14,8 @@ class Menus {
     this.sideBarMenu,
   });
 
-  List<BarMenu> topBarMenu;
-  List<BarMenu> sideBarMenu;
+  List<BarMenu>? topBarMenu;
+  List<BarMenu>? sideBarMenu;
 
   factory Menus.fromJson(Map<String, dynamic> json) => Menus(
         topBarMenu: List<BarMenu>.from(
@@ -25,8 +25,8 @@ class Menus {
       );
 
   Map<String, dynamic> toJson() => {
-        "top_bar_menu": List<dynamic>.from(topBarMenu.map((x) => x.toJson())),
-        "side_bar_menu": List<dynamic>.from(sideBarMenu.map((x) => x.toJson())),
+        "top_bar_menu": topBarMenu != null ? List<dynamic>.from(topBarMenu!.map((x) => x.toJson())) : null,
+        "side_bar_menu": sideBarMenu != null ? List<dynamic>.from(sideBarMenu!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -38,10 +38,10 @@ class BarMenu {
     this.id,
   });
 
-  String name;
-  int count;
-  String posts;
-  int id;
+  String? name;
+  int? count;
+  String? posts;
+  int? id;
 
   factory BarMenu.fromJson(Map<String, dynamic> json) => BarMenu(
         name: json["name"],

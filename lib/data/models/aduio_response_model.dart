@@ -18,10 +18,10 @@ class AudioResponseModel {
     this.data,
   });
 
-  String status;
-  String message;
-  FileClass file;
-  Data data;
+  String? status;
+  String? message;
+  FileClass? file;
+  Data? data;
 
   factory AudioResponseModel.fromJson(Map<String, dynamic> json) =>
       AudioResponseModel(
@@ -32,10 +32,10 @@ class AudioResponseModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status == null ? null : status,
-        "message": message == null ? null : message,
-        "file": file == null ? null : file.toJson(),
-        "data": data == null ? null : data.toJson(),
+        "status": status,
+        "message": message,
+        "file": file?.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -81,44 +81,44 @@ class Data {
     this.source,
   });
 
-  int id;
-  String uploadDate;
-  String uploadtime;
-  String title;
-  String key;
-  String modificationDate;
-  String processingStatus;
-  String size;
-  String uploadSpeed;
-  String status;
-  List<dynamic> allResolutions;
-  String aspectRatio;
-  String mediaType;
-  String duration;
-  int durationInSeconds;
-  String thumbnail;
-  List<dynamic> moreThumbnails;
-  List<dynamic> promos;
-  int season;
-  int episode;
-  String subscriptionType;
-  String genre;
-  String actors;
-  String yearofproduction;
-  String dateofrelease;
-  String producer;
-  String description;
-  String keywords;
-  String tags;
-  List<dynamic> geoblocking;
-  String embedUrl;
-  List<Folder> folder;
-  String fullfolderpath;
-  List<dynamic> vtts;
-  String ischapter;
-  String videoparentkey;
-  List<dynamic> chapters;
-  List<Source> source;
+  int? id;
+  String? uploadDate;
+  String? uploadtime;
+  String? title;
+  String? key;
+  String? modificationDate;
+  String? processingStatus;
+  String? size;
+  String? uploadSpeed;
+  String? status;
+  List<dynamic>? allResolutions;
+  String? aspectRatio;
+  String? mediaType;
+  String? duration;
+  int? durationInSeconds;
+  String? thumbnail;
+  List<dynamic>? moreThumbnails;
+  List<dynamic>? promos;
+  int? season;
+  int? episode;
+  String? subscriptionType;
+  String? genre;
+  String? actors;
+  String? yearofproduction;
+  String? dateofrelease;
+  String? producer;
+  String? description;
+  String? keywords;
+  String? tags;
+  List<dynamic>? geoblocking;
+  String? embedUrl;
+  List<Folder>? folder;
+  String? fullfolderpath;
+  List<dynamic>? vtts;
+  String? ischapter;
+  String? videoparentkey;
+  List<dynamic>? chapters;
+  List<Source>? source;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["Id"] == null ? null : json["Id"],
@@ -187,58 +187,45 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "Id": id == null ? null : id,
-        "UploadDate": uploadDate == null ? null : uploadDate,
-        "Uploadtime": uploadtime == null ? null : uploadtime,
-        "Title": title == null ? null : title,
-        "Key": key == null ? null : key,
-        "ModificationDate": modificationDate == null ? null : modificationDate,
-        "ProcessingStatus": processingStatus == null ? null : processingStatus,
-        "Size": size == null ? null : size,
-        "UploadSpeed": uploadSpeed == null ? null : uploadSpeed,
-        "Status": status == null ? null : status,
-        "AllResolutions": allResolutions == null
-            ? null
-            : List<dynamic>.from(allResolutions.map((x) => x)),
-        "AspectRatio": aspectRatio == null ? null : aspectRatio,
-        "MediaType": mediaType == null ? null : mediaType,
-        "Duration": duration == null ? null : duration,
+        "Id": id,
+        "UploadDate": uploadDate,
+        "Uploadtime": uploadtime,
+        "Title": title,
+        "Key": key,
+        "ModificationDate": modificationDate,
+        "ProcessingStatus": processingStatus,
+        "Size": size,
+        "UploadSpeed": uploadSpeed,
+        "Status": status,
+        "AllResolutions": allResolutions != null ? List<dynamic>.from(allResolutions!.map((x) => x)) : null,
+        "AspectRatio": aspectRatio,
+        "MediaType": mediaType,
+        "Duration": duration,
         "DurationInSeconds":
-            durationInSeconds == null ? null : durationInSeconds,
-        "Thumbnail": thumbnail == null ? null : thumbnail,
-        "moreThumbnails": moreThumbnails == null
-            ? null
-            : List<dynamic>.from(moreThumbnails.map((x) => x)),
-        "Promos":
-            promos == null ? null : List<dynamic>.from(promos.map((x) => x)),
-        "Season": season == null ? null : season,
-        "Episode": episode == null ? null : episode,
-        "SubscriptionType": subscriptionType == null ? null : subscriptionType,
-        "Genre": genre == null ? null : genre,
-        "Actors": actors == null ? null : actors,
-        "Yearofproduction": yearofproduction == null ? null : yearofproduction,
-        "Dateofrelease": dateofrelease == null ? null : dateofrelease,
-        "Producer": producer == null ? null : producer,
-        "Description": description == null ? null : description,
-        "Keywords": keywords == null ? null : keywords,
-        "Tags": tags == null ? null : tags,
-        "Geoblocking": geoblocking == null
-            ? null
-            : List<dynamic>.from(geoblocking.map((x) => x)),
-        "EmbedURL": embedUrl == null ? null : embedUrl,
-        "folder": folder == null
-            ? null
-            : List<dynamic>.from(folder.map((x) => x.toJson())),
-        "fullfolderpath": fullfolderpath == null ? null : fullfolderpath,
-        "vtts": vtts == null ? null : List<dynamic>.from(vtts.map((x) => x)),
-        "ischapter": ischapter == null ? null : ischapter,
-        "videoparentkey": videoparentkey == null ? null : videoparentkey,
-        "Chapters": chapters == null
-            ? null
-            : List<dynamic>.from(chapters.map((x) => x)),
-        "Source": source == null
-            ? null
-            : List<dynamic>.from(source.map((x) => x.toJson())),
+            durationInSeconds,
+        "Thumbnail": thumbnail,
+        "moreThumbnails": moreThumbnails != null ? List<dynamic>.from(moreThumbnails!.map((x) => x)) : null,
+        "Promos": promos != null ? List<dynamic>.from(promos!.map((x) => x)) : null,
+        "Season": season,
+        "Episode": episode,
+        "SubscriptionType": subscriptionType,
+        "Genre": genre,
+        "Actors": actors,
+        "Yearofproduction": yearofproduction,
+        "Dateofrelease": dateofrelease,
+        "Producer": producer,
+        "Description": description,
+        "Keywords": keywords,
+        "Tags": tags,
+        "Geoblocking": geoblocking != null ? List<dynamic>.from(geoblocking!.map((x) => x)) : null,
+        "EmbedURL": embedUrl,
+        "folder": folder != null ? List<dynamic>.from(folder!.map((x) => x.toJson())) : null,
+        "fullfolderpath": fullfolderpath,
+        "vtts": vtts != null ? List<dynamic>.from(vtts!.map((x) => x)) : null,
+        "ischapter": ischapter,
+        "videoparentkey": videoparentkey,
+        "Chapters": chapters != null ? List<dynamic>.from(chapters!.map((x) => x)) : null,
+        "Source": source != null ? List<dynamic>.from(source!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -248,8 +235,8 @@ class Folder {
     this.name,
   });
 
-  int id;
-  String name;
+  int? id;
+  String? name;
 
   factory Folder.fromJson(Map<String, dynamic> json) => Folder(
         id: json["id"] == null ? null : json["id"],
@@ -257,8 +244,8 @@ class Folder {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": name == null ? null : name,
+        "id": id,
+        "name": name,
       };
 }
 
@@ -270,10 +257,10 @@ class Source {
     this.advertisement,
   });
 
-  List<Hl> hls;
-  List<Hl> smooth;
-  List<Hl> mpegDashLink;
-  List<dynamic> advertisement;
+  List<Hl>? hls;
+  List<Hl>? smooth;
+  List<Hl>? mpegDashLink;
+  List<dynamic>? advertisement;
 
   factory Source.fromJson(Map<String, dynamic> json) => Source(
         hls: json["HLS"] == null
@@ -291,17 +278,10 @@ class Source {
       );
 
   Map<String, dynamic> toJson() => {
-        "HLS":
-            hls == null ? null : List<dynamic>.from(hls.map((x) => x.toJson())),
-        "smooth": smooth == null
-            ? null
-            : List<dynamic>.from(smooth.map((x) => x.toJson())),
-        "mpeg-dashLink": mpegDashLink == null
-            ? null
-            : List<dynamic>.from(mpegDashLink.map((x) => x.toJson())),
-        "advertisement": advertisement == null
-            ? null
-            : List<dynamic>.from(advertisement.map((x) => x)),
+        "HLS": hls != null ? List<dynamic>.from(hls!.map((x) => x.toJson())) : null,
+        "smooth": smooth != null ? List<dynamic>.from(smooth!.map((x) => x.toJson())) : null,
+        "mpeg-dashLink": mpegDashLink != null ? List<dynamic>.from(mpegDashLink!.map((x) => x.toJson())) : null,
+        "advertisement": advertisement != null ? List<dynamic>.from(advertisement!.map((x) => x)) : null,
       };
 }
 
@@ -311,8 +291,8 @@ class Hl {
     this.link,
   });
 
-  String name;
-  String link;
+  String? name;
+  String? link;
 
   factory Hl.fromJson(Map<String, dynamic> json) => Hl(
         name: json["Name"] == null ? null : json["Name"],
@@ -320,8 +300,8 @@ class Hl {
       );
 
   Map<String, dynamic> toJson() => {
-        "Name": name == null ? null : name,
-        "Link": link == null ? null : link,
+        "Name": name,
+        "Link": link,
       };
 }
 
@@ -337,14 +317,14 @@ class FileClass {
     this.duration,
   });
 
-  String type;
-  String title;
-  String size;
-  String embed;
-  String status;
-  String processingStatus;
-  String url;
-  String duration;
+  String? type;
+  String? title;
+  String? size;
+  String? embed;
+  String? status;
+  String? processingStatus;
+  String? url;
+  String? duration;
 
   factory FileClass.fromJson(Map<String, dynamic> json) => FileClass(
         type: json["type"] == null ? null : json["type"],
@@ -360,13 +340,13 @@ class FileClass {
       );
 
   Map<String, dynamic> toJson() => {
-        "type": type == null ? null : type,
-        "title": title == null ? null : title,
-        "size": size == null ? null : size,
-        "embed": embed == null ? null : embed,
-        "status": status == null ? null : status,
-        "processing_status": processingStatus == null ? null : processingStatus,
-        "url": url == null ? null : url,
-        "duration": duration == null ? null : duration,
+        "type": type,
+        "title": title,
+        "size": size,
+        "embed": embed,
+        "status": status,
+        "processing_status": processingStatus,
+        "url": url,
+        "duration": duration,
       };
 }

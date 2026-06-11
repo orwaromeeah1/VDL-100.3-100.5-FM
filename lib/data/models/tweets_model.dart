@@ -12,8 +12,8 @@ class Timeline {
     this.meta,
   });
 
-  List<Tweet> data;
-  Meta meta;
+  List<Tweet>? data;
+  Meta? meta;
 
   factory Timeline.fromJson(Map<String, dynamic> json) => Timeline(
         data: json["data"] == null
@@ -23,10 +23,8 @@ class Timeline {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data.map((x) => x.toJson())),
-        "meta": meta == null ? null : meta.toJson(),
+        "data": data != null ? List<dynamic>.from(data!.map((x) => x.toJson())) : null,
+        "meta": meta?.toJson(),
       };
 }
 
@@ -37,9 +35,9 @@ class Tweet {
     this.text,
   });
 
-  DateTime createdAt;
-  String id;
-  String text;
+  DateTime? createdAt;
+  String? id;
+  String? text;
 
   factory Tweet.fromJson(Map<String, dynamic> json) => Tweet(
         createdAt: json["created_at"] == null
@@ -50,9 +48,9 @@ class Tweet {
       );
 
   Map<String, dynamic> toJson() => {
-        "created_at": createdAt == null ? null : createdAt,
-        "id": id == null ? null : id,
-        "text": text == null ? null : text,
+        "created_at": createdAt,
+        "id": id,
+        "text": text,
       };
 }
 
@@ -64,10 +62,10 @@ class Meta {
     this.nextToken,
   });
 
-  String oldestId;
-  String newestId;
-  int resultCount;
-  String nextToken;
+  String? oldestId;
+  String? newestId;
+  int? resultCount;
+  String? nextToken;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
         oldestId: json["oldest_id"] == null ? null : json["oldest_id"],
@@ -77,9 +75,9 @@ class Meta {
       );
 
   Map<String, dynamic> toJson() => {
-        "oldest_id": oldestId == null ? null : oldestId,
-        "newest_id": newestId == null ? null : newestId,
-        "result_count": resultCount == null ? null : resultCount,
-        "next_token": nextToken == null ? null : nextToken,
+        "oldest_id": oldestId,
+        "newest_id": newestId,
+        "result_count": resultCount,
+        "next_token": nextToken,
       };
 }

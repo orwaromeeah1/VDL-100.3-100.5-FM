@@ -26,7 +26,7 @@ class ISharedPrefs implements ASharedPrefs {
   }
 
   @override
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     return (await getPrefs()).getString('token');
   }
 }

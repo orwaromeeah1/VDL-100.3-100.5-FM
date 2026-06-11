@@ -45,38 +45,38 @@ class NewsModel {
       this.selectAuthor,
       this.kwikmotion});
 
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
-  String status;
-  String link;
-  String title;
-  String content;
-  String excerpt;
-  int author;
-  int menuOrder;
-  String format;
-  Map<String, Category> tags;
-  String sliderDescriptionText;
-  String audiowatFile;
-  String audiowatEmbedIframe;
-  Image image;
-  Map<String, Category> categories;
-  SelectAuthor selectAuthor;
-  String humanDate;
-  String sinceDate;
-  String source;
-  String time;
-  String audioTitle;
-  String audio;
-  String video;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
+  String? status;
+  String? link;
+  String? title;
+  String? content;
+  String? excerpt;
+  int? author;
+  int? menuOrder;
+  String? format;
+  Map<String, Category>? tags;
+  String? sliderDescriptionText;
+  String? audiowatFile;
+  String? audiowatEmbedIframe;
+  Image? image;
+  Map<String, Category>? categories;
+  SelectAuthor? selectAuthor;
+  String? humanDate;
+  String? sinceDate;
+  String? source;
+  String? time;
+  String? audioTitle;
+  String? audio;
+  String? video;
   dynamic vimeo;
-  String youtube;
-  String kwikmotion;
-  List<RelatedArticle> relatedArticles;
+  String? youtube;
+  String? kwikmotion;
+  List<RelatedArticle>? relatedArticles;
 
   factory NewsModel.fromJson(Map<String, dynamic> json) => NewsModel(
         id: json["id"],
@@ -144,14 +144,14 @@ class NewsModel {
         "author": author,
         "menu_order": menuOrder,
         "format": format,
-        "tags": Map.from(tags)
-            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "tags": tags != null ? Map.from(tags!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())) : null,
         "slider_description_text": sliderDescriptionText,
         "audiowat_file": audiowatFile,
         "audiowat_embed_iframe": audiowatEmbedIframe,
-        "image": image.toJson(),
-        "categories": Map.from(categories)
-            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "image": image?.toJson(),
+        "categories": categories != null ? Map.from(categories!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())) : null,
         "human_date": humanDate,
         "since_date": sinceDate,
         "source": source,
@@ -160,7 +160,7 @@ class NewsModel {
         "audio": audio,
         "video": video,
         "vimeo": vimeo,
-        "youtube": youtube == null ? null : youtube,
+        "youtube": youtube,
       };
 }
 
@@ -170,8 +170,8 @@ class Category {
     this.news,
   });
 
-  String name;
-  String news;
+  String? name;
+  String? news;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         name: json["name"],
@@ -189,14 +189,14 @@ class Exclusive {
     this.the11,
   });
 
-  Category the11;
+  Category? the11;
 
   factory Exclusive.fromJson(Map<String, dynamic> json) => Exclusive(
         the11: json["11"] == null ? null : Category.fromJson(json["11"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "11": the11 == null ? null : the11.toJson(),
+        "11": the11?.toJson(),
       };
 }
 
@@ -208,10 +208,10 @@ class Image {
     this.thumbnail,
   });
 
-  String original;
-  String large;
-  String medium;
-  String thumbnail;
+  String? original;
+  String? large;
+  String? medium;
+  String? thumbnail;
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
         original: json["original"],
@@ -247,21 +247,21 @@ class RelatedArticle {
     this.image,
   });
 
-  int id;
-  String link;
-  int author;
-  int date;
-  int dateGmt;
-  String content;
-  String title;
-  String excerpt;
-  String status;
-  String name;
-  int modified;
-  int modifiedGmt;
-  String humanDate;
-  String sinceDate;
-  Image image;
+  int? id;
+  String? link;
+  int? author;
+  int? date;
+  int? dateGmt;
+  String? content;
+  String? title;
+  String? excerpt;
+  String? status;
+  String? name;
+  int? modified;
+  int? modifiedGmt;
+  String? humanDate;
+  String? sinceDate;
+  Image? image;
 
   factory RelatedArticle.fromJson(Map<String, dynamic> json) => RelatedArticle(
         id: json["id"],
@@ -296,7 +296,7 @@ class RelatedArticle {
         "modified_gmt": modifiedGmt,
         "human_date": humanDate,
         "since_date": sinceDate,
-        "image": image.toJson(),
+        "image": image?.toJson(),
       };
 }
 
@@ -312,9 +312,9 @@ class SelectAuthor {
     this.image,
   });
 
-  int id;
-  String name;
-  Image image;
+  int? id;
+  String? name;
+  Image? image;
 
   factory SelectAuthor.fromJson(Map<String, dynamic> json) => SelectAuthor(
         id: json["id"] == null ? null : json["id"],
@@ -323,8 +323,8 @@ class SelectAuthor {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": name == null ? null : name,
-        "image": image == null ? null : image.toJson(),
+        "id": id,
+        "name": name,
+        "image": image?.toJson(),
       };
 }

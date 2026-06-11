@@ -28,13 +28,13 @@ class LiveAudioPage extends StatefulWidget {
 
 class _LiveAudioPageState extends State<LiveAudioPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  double width;
+  late double width;
   String audioUrl = "https://l3.itworkscdn.net/itwaudio/9054/stream";
-  double height;
-  AnimationController _animationController;
+  late double height;
+  late AnimationController _animationController;
   bool isPlaying = false;
   bool hasAudio = true;
-  Duration duration;
+  Duration? duration;
   bool audioLoaded = false;
   bool viewYoutube = false;
   final bloc = locator<LivePodcastBloc>();

@@ -1,34 +1,34 @@
 class SearchResponse {
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
-  String status;
-  String link;
-  String title;
-  String content;
-  String excerpt;
-  int author;
-  int menuOrder;
-  String format;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
+  String? status;
+  String? link;
+  String? title;
+  String? content;
+  String? excerpt;
+  int? author;
+  int? menuOrder;
+  String? format;
 //  Tags tags;
-  String sliderDescriptionText;
-  String audiowatFile;
-  String audiowatEmbedIframe;
-  Image image;
-  Categories categories;
+  String? sliderDescriptionText;
+  String? audiowatFile;
+  String? audiowatEmbedIframe;
+  Image? image;
+  Categories? categories;
 //  Exclusive exclusive;
-  String humanDate;
-  String sinceDate;
-  String source;
-  String time;
-  String audioTitle;
-  String audio;
-  String video;
+  String? humanDate;
+  String? sinceDate;
+  String? source;
+  String? time;
+  String? audioTitle;
+  String? audio;
+  String? video;
 //  Null vimeo;
-  String youtube;
+  String? youtube;
 
   SearchResponse({this.id, this.date, this.dateGmt, this.modified, this.modifiedGmt, this.slug, this.status, this.link, this.title, this.content, this.excerpt, this.author, this.menuOrder, this.format,
 //    this.tags,
@@ -94,10 +94,8 @@ class SearchResponse {
     data['slider_description_text'] = this.sliderDescriptionText;
     data['audiowat_file'] = this.audiowatFile;
     data['audiowat_embed_iframe'] = this.audiowatEmbedIframe;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
-//    if (this.categories != null) {
+    data['image'] = this.image?.toJson();
+  //    if (this.categories != null) {
 //      data['categories'] = this.categories.toJson();
 //    }
 //    if (this.exclusive != null) {
@@ -184,10 +182,10 @@ class SearchResponse {
 //}
 
 class Image {
-String original;
-String large;
-String medium;
-String thumbnail;
+String? original;
+String? large;
+String? medium;
+String? thumbnail;
 
 Image({this.original, this.large, this.medium, this.thumbnail});
 
@@ -209,7 +207,7 @@ return data;
 }
 
 class Categories {
-  Category category;
+  Category? category;
 
   Categories({this.category});
 
@@ -223,8 +221,8 @@ class Categories {
 
 }
 class Category {
-  String name;
-  String programs;
+  String? name;
+  String? programs;
 
   Category({this.name, this.programs});
 

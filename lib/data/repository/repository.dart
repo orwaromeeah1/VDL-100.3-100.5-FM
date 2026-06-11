@@ -6,7 +6,6 @@ import 'package:vdl/data/models/news_category.dart';
 import 'package:vdl/data/models/news_model.dart';
 
 import 'package:vdl/data/models/category_model.dart';
-import 'package:vdl/data/models/notification_model.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
 import 'package:vdl/data/models/tweets_model.dart';
 import 'package:vdl/data/networking/http_client.dart';
@@ -51,8 +50,8 @@ class Repository {
       authRequest.toJson(),
     );
 
-    AuthResponse res = AuthResponse.fromJson(response);
-    await this._authPrefsHelper.setToken(res.accessToken, res.expiresIn);
+    AuthResponse res = AuthResponse.fromJson(response!);
+    await this._authPrefsHelper.setToken(res.accessToken!, res.expiresIn!);
   }
 
   Future<String> getToken() async {
@@ -77,8 +76,8 @@ class Repository {
     try {
       //  String token = await getToken();
 
-      String response = await _client.getMethods(Urls.MENUS, "");
-      menus = menusFromJson(response);
+      String? response = await _client.getMethods(Urls.MENUS, "");
+      menus = menusFromJson(response!);
     } catch (e) {
       print(e);
     }
@@ -88,9 +87,10 @@ class Repository {
   ///   All news
   Future<List<NewsModel>> getAllNews(int page) async {
     //  String token = await getToken();
-    String response = await _client.getMethods(
+    String? response = await _client.getMethods(
         Urls.All_NEWS + '?page=${page}&per_page=10', "");
-    news = allNewsFromJson(response);
+    news = allNewsFromJson(response!);
+    return news;
   }
 
   ///
@@ -98,16 +98,16 @@ class Repository {
   Future<List<NewsModel>> getNewsByCategory(int page, int id) async {
     //  String token = await getToken();
     if (id == 0) {
-      String response = await _client.getMethods(
+      String? response = await _client.getMethods(
           Urls.All_NEWS + '?page=${page}&per_page=10', "");
 
-      news = allNewsFromJson(response);
+      news = allNewsFromJson(response!);
       return news;
     } else {
-      String response = await _client.getMethods(
+      String? response = await _client.getMethods(
           Urls.BASE_API + 'news/?news-category=$id&page=$page&per_page=10', "");
 
-      news = allNewsFromJson(response);
+      news = allNewsFromJson(response!);
       return news;
     }
   }
@@ -116,10 +116,10 @@ class Repository {
   ///   Special Reports
   Future<List<NewsModel>> getSpecialReports(int page) async {
     //  String token = await getToken();
-    String response = await _client.getMethods(
+    String? response = await _client.getMethods(
         Urls.Special_reports_url + '?page=${page}&per_page=10', "");
     try {
-      special = allNewsFromJson(response);
+      special = allNewsFromJson(response!);
     } catch (e) {
       print(e);
     }
@@ -130,15 +130,15 @@ class Repository {
   ///   All news
   Future<void> getNewsCategories() async {
     //  String token = await getToken();
-    String response =
+    String? response =
         await _client.getMethods(Urls.News_Categories + "/?page=1", "");
-    categories = categories + newsCategoriesFromJson(response);
-    String response2 =
+    categories = categories + newsCategoriesFromJson(response!);
+    String? response2 =
         await _client.getMethods(Urls.News_Categories + "/?page=2", "");
-    categories = categories + newsCategoriesFromJson(response2);
-    String response3 =
+    categories = categories + newsCategoriesFromJson(response2!);
+    String? response3 =
         await _client.getMethods(Urls.News_Categories + "/?page=3", "");
-    categories = categories + newsCategoriesFromJson(response3);
+    categories = categories + newsCategoriesFromJson(response3!);
   }
 
   ///
@@ -149,9 +149,9 @@ class Repository {
   ///  getSingleNewsPage
   Future<NewsModel> getSingleSpecialReportPage(int id) async {
     //  String token = await getToken();
-    String response =
+    String? response =
         await _client.getMethods(Urls.Special_reports_url + '$id', "");
-    return NewsModel.fromJson(convert.jsonDecode(response));
+    return NewsModel.fromJson(convert.jsonDecode(response!));
   }
 
   ///
@@ -162,9 +162,9 @@ class Repository {
   ///  getSingleNewsPage
   Future<NewsModel> getSingleNewsPage(int id) async {
     //  String token = await getToken();
-    String response =
+    String? response =
         await _client.getMethods(Urls.Single_news_url + '$id', "");
-    return NewsModel.fromJson(convert.jsonDecode(response));
+    return NewsModel.fromJson(convert.jsonDecode(response!));
   }
 
   //////
@@ -202,17 +202,17 @@ class Repository {
   ///  getArticles
   Future<List<NewsModel>> getArticles(int page) async {
     //  String token = await getToken();
-    String response =
+    String? response =
         await _client.getMethods(Urls.Articles_Url + '?page=${page}', '');
-    return allNewsFromJson(response);
+    return allNewsFromJson(response!);
   }
 
   ///  getArticles
   Future<void> getStartUpArticles(int page) async {
     //  String token = await getToken();
-    String response =
+    String? response =
         await _client.getMethods(Urls.Articles_Url + '?page=${page}', '');
-    articles = allNewsFromJson(response);
+    articles = allNewsFromJson(response!);
   }
 
   ///
@@ -223,8 +223,8 @@ class Repository {
   ///  getSingleArticle
   Future<NewsModel> getSingleArticle(int id) async {
     //  String token = await getToken();
-    String response = await _client.getMethods(Urls.Articles_Url + '/$id', "");
-    return NewsModel.fromJson(convert.jsonDecode(response));
+    String? response = await _client.getMethods(Urls.Articles_Url + '/$id', "");
+    return NewsModel.fromJson(convert.jsonDecode(response!));
   }
 
   Future<List<ProgramsResponse>> getPrograms(int page, int perPage) async {
@@ -363,12 +363,13 @@ class Repository {
   ///
   Future<Timeline> getLatestTweets() async {
     try {
-      dynamic response = await _client.getTweetsMethod(
+      String? response = await _client.getTweetsMethod(
           Urls.Latest_tweets_url, TwitterKeys.Bearer_token);
-      timeline = tweetsFromJson(response);
+      timeline = tweetsFromJson(response!);
     } catch (e) {
       print(e);
     }
+    return timeline;
   }
 
   ////
@@ -376,17 +377,17 @@ class Repository {
   ///
   ///
   Future<AudioResponseModel> getAudioModel(String id) async {
-    dynamic response = await _client.getMethods(Urls.AudioUrl + id, "");
-    return audioResponseFromJson(response);
+    String? response = await _client.getMethods(Urls.AudioUrl + id, "");
+    return audioResponseFromJson(response!);
   }
 
   Future<List<AudioResponseModel>> getBroadcastsAudios(
       String intoId, String fullAudioId) async {
-    dynamic intro = await _client.getMethods(Urls.AudioUrl + intoId, "");
-    dynamic fullAudio =
+    String? intro = await _client.getMethods(Urls.AudioUrl + intoId, "");
+    String? fullAudio =
         await _client.getMethods(Urls.AudioUrl + fullAudioId, "");
 
-    return [audioResponseFromJson(intro), audioResponseFromJson(fullAudio)];
+    return [audioResponseFromJson(intro!), audioResponseFromJson(fullAudio!)];
   }
 
   Future<EpisodeResponse> getEpisodeDetails(int episodeId) async {
@@ -401,11 +402,12 @@ class Repository {
   Future<List<NewsModel>> getLiveNotifications(int page) async {
     try {
       //  String token = await getToken();
-      String response =
+      String? response =
           await _client.getMethods(Urls.LIVE_NOTIFICATIONS + "&page=$page", "");
-      return allNewsFromJson(response);
+      return allNewsFromJson(response!);
     } catch (e) {
       print(e);
+      return [];
     }
   }
 }

@@ -1,8 +1,8 @@
 
 
 class DayModel{
-  String name;
-  int number;
+  String? name;
+  int? number;
 
   DayModel({
     this.name,

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
-  double width;
+  late double width;
   String searchQuery = 'ابحث';
   List<SearchResponse> searchResult = [];
   final _bloc = locator<SearchBloc>();
@@ -145,10 +144,10 @@ class _SearchPageState extends State<SearchPage> {
                   child: ListView.builder(
                       itemBuilder: (context, int index) => SearchCardWidget(
                           title: searchResult[index].title,
-                          image: searchResult[index].image.thumbnail,
+                          image: searchResult[index].image?.thumbnail,
                           date: searchResult[index].humanDate,
                           category:
-                              searchResult[index].categories.category.name,
+                              searchResult[index].categories?.category?.name,
                           id: searchResult[index].id),
                       itemCount: searchResult.length)),
         ],

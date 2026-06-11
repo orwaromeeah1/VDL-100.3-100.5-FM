@@ -1,8 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vdl/data/models/days_news_broadcasts_model.dart';
-import 'package:vdl/data/models/news_broadcast_model.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_bloc.dart';
 import 'package:vdl/ui/news_broadcasts/bloc/news_cast_event.dart';
@@ -15,15 +13,15 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import '../../../injection.dart';
 
 class NewsBroadcastsPage extends StatefulWidget {
-  AudioPlayer introductionAudioPlayer;
-  NewsBroadcastsPage({this.introductionAudioPlayer});
+  final AudioPlayer? introductionAudioPlayer;
+  const NewsBroadcastsPage({this.introductionAudioPlayer, Key? key}) : super(key: key);
   @override
   _NewsBroadcastsPageState createState() => _NewsBroadcastsPageState();
 }
 
 class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
     with TickerProviderStateMixin<NewsBroadcastsPage> {
-  double width;
+  late double width;
 
   List<NewsCastResponse> newsCasts = [];
   final _bloc = locator<NewsCastBloc>();
@@ -135,7 +133,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
                               onTap: () {
                                 setState(() {
                                   newsCasts[index].isOpened =
-                                      !newsCasts[index].isOpened;
+                                      !(newsCasts[index].isOpened ?? false);
                                 });
                               },
                               child: Container(
@@ -143,7 +141,7 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
                                 height: 55,
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 15),
-                                color: newsCasts[index].isOpened
+                                color: (newsCasts[index].isOpened ?? false)
                                     ? ProjectColors.ThemeColor
                                     : Colors.white,
                                 child: Row(
@@ -155,16 +153,16 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: newsCasts[index].isOpened
+                                        color: (newsCasts[index].isOpened ?? false)
                                             ? Colors.white
                                             : Colors.black,
                                       ),
                                     ),
                                     Icon(
-                                      newsCasts[index].isOpened
+                                      (newsCasts[index].isOpened ?? false)
                                           ? Icons.keyboard_arrow_up
                                           : Icons.keyboard_arrow_down,
-                                      color: newsCasts[index].isOpened
+                                      color: (newsCasts[index].isOpened ?? false)
                                           ? Colors.white
                                           : ProjectColors.ThemeColor,
                                     )
@@ -172,18 +170,17 @@ class _NewsBroadcastsPageState extends State<NewsBroadcastsPage>
                                 ),
                               )),
                           new AnimatedSize(
-                              vsync: this,
                               duration: const Duration(milliseconds: 500),
                               child: new ConstrainedBox(
-                                  constraints: newsCasts[index].isOpened
+                                  constraints: (newsCasts[index].isOpened ?? false)
                                       ? new BoxConstraints()
                                       : new BoxConstraints(maxHeight: 0.0),
                                   child: DaysNewsBroadcastsWidget(
-                                    broadcasts: newsCasts[index].timeSlots,
-                                    date: newsCasts[index].slug,
+                                    broadcasts: newsCasts[index].timeSlots ?? [],
+                                    date: newsCasts[index].slug ?? '',
                                     newsCast: newsCasts[index],
                                     introductionAudioPlayer:
-                                        widget.introductionAudioPlayer,
+                                        widget.introductionAudioPlayer!,
                                   ))),
                         ],
                       ),

@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/data/shared_preferences/auth_prefes_helper.dart';
 import 'package:vdl/ui/Aboutus/pages/about_us_page.dart';
@@ -15,23 +12,20 @@ import 'package:vdl/ui/TermsOfUse/terms_of_use.dart';
 import 'package:vdl/ui/menu/widget/menu_item_widget.dart';
 import 'package:vdl/ui/menu/widget/social_buttons.dart';
 import 'package:vdl/ui/news_broadcasts/page/news_broadcasts_page.dart';
-import 'package:vdl/ui/programs/page/historical_programs/historical_programs_page.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
 
 import '../../../injection.dart';
 
 class MenuPage extends StatefulWidget {
-  AudioPlayer introductionAudioPlayer;
+  final AudioPlayer introductionAudioPlayer;
 
-  MenuPage(AudioPlayer introductionAudioPlayer) {
-    this.introductionAudioPlayer = introductionAudioPlayer;
-  }
+  const MenuPage(this.introductionAudioPlayer, {Key? key}) : super(key: key);
   @override
   _MenuPageState createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
-  double width;
+  late double width;
 
   final _helper = locator<AuthPrefsHelper>();
   var notification = true;
@@ -42,14 +36,23 @@ class _MenuPageState extends State<MenuPage> {
     getNotification();
   }
 
-  void _launchURL(String _url) async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL(String _url) async {
+    final uri = Uri.parse(_url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $_url';
+    }
+  }
 
   void getNotification() async {
-    bool n = await _helper.getNotification();
+    bool n = await _helper.getNotification() ?? false;
 
-    OneSignal.shared.disablePush(!notification);
+    if (!n) {
+      OneSignal.User.pushSubscription.optOut();
+    } else {
+      OneSignal.User.pushSubscription.optIn();
+    }
     setState(() {
       notification = n;
     });
@@ -57,7 +60,11 @@ class _MenuPageState extends State<MenuPage> {
 
   void setNotifications(bool value) async {
     await _helper.setNotification(value);
-    OneSignal.shared.disablePush(!notification);
+    if (!value) {
+      OneSignal.User.pushSubscription.optOut();
+    } else {
+      OneSignal.User.pushSubscription.optIn();
+    }
   }
 
   @override
@@ -87,7 +94,7 @@ class _MenuPageState extends State<MenuPage> {
               MenuButtonItem(
                 title: 'مقالات',
                 onClick: () {
-                  pushNewScreen(
+                  PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: ArticlesPage(),
                     withNavBar: true,
@@ -98,7 +105,7 @@ class _MenuPageState extends State<MenuPage> {
               MenuButtonItem(
                 title: 'نشرة الاخبار',
                 onClick: () {
-                  pushNewScreen(
+                  PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: NewsBroadcastsPage(
                       introductionAudioPlayer: widget.introductionAudioPlayer,
@@ -111,7 +118,7 @@ class _MenuPageState extends State<MenuPage> {
 //              MenuButtonItem(
 //                title: 'برامج تاريخية',
 //                onClick: () {
-//                  pushNewScreen(
+//                  PersistentNavBarNavigator.pushNewScreen(
 //                    context,
 //                    screen: HistoricalPrograms(),
 //                    withNavBar: true,
@@ -122,7 +129,7 @@ class _MenuPageState extends State<MenuPage> {
               MenuButtonItem(
                 title: 'من نحن',
                 onClick: () {
-                  pushNewScreen(
+                  PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: AboutUsPage(),
                     withNavBar: true,
@@ -133,7 +140,7 @@ class _MenuPageState extends State<MenuPage> {
               MenuButtonItem(
                 title: 'اتصل بنا',
                 onClick: () {
-                  pushNewScreen(
+                  PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: ContactUsPage(),
                     withNavBar: true,
@@ -144,7 +151,7 @@ class _MenuPageState extends State<MenuPage> {
               MenuButtonItem(
                 title: 'شروط الإستخدام',
                 onClick: () {
-                  pushNewScreen(
+                  PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: TermsOfUsePage(),
                     withNavBar: true,
@@ -169,7 +176,7 @@ class _MenuPageState extends State<MenuPage> {
                             ),
                           ),
                           CupertinoSwitch(
-                              activeColor: green,
+                              activeTrackColor: green,
                               value: notification,
                               onChanged: (value) {
                                 setNotifications(value);

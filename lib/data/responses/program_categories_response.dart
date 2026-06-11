@@ -1,14 +1,14 @@
 class ProgramCategoriesResponse {
-  int id;
-  int count;
-  String description;
-  String link;
-  String name;
-  String slug;
-  String taxonomy;
-  int parent;
+  int? id;
+  int? count;
+  String? description;
+  String? link;
+  String? name;
+  String? slug;
+  String? taxonomy;
+  int? parent;
 //  List<Null> meta;
-  String programs;
+  String? programs;
 
   ProgramCategoriesResponse(
       {this.id,

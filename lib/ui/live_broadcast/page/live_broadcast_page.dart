@@ -15,7 +15,7 @@ class LiveBroadcastPage extends StatefulWidget {
 }
 
 class _LiveBroadcastPageState extends State<LiveBroadcastPage> {
-  double width;
+  late double width;
 
   @override
   Widget build(BuildContext context) {

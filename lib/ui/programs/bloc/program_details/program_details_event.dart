@@ -5,8 +5,8 @@ abstract class ProgramDetailsEvent extends Equatable {
 }
 
 class FetchProgramDetails extends ProgramDetailsEvent {
-  final int programId;
-  final bool isRadio;
+  final int? programId;
+  final bool? isRadio;
   FetchProgramDetails({this.programId, this.isRadio});
 
   @override

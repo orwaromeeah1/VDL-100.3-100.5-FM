@@ -3,11 +3,9 @@ import 'package:vdl/utils/file_path/file_path.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LogoWidget extends StatelessWidget {
-  final double size;
+  final double? size;
 
-  LogoWidget({
-    this.size,
-  });
+  const LogoWidget({Key? key, this.size}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +23,8 @@ class LogoWidget extends StatelessWidget {
             ),
           ),
           Center(
-            heightFactor: size * 0.4,
-            widthFactor: size * 0.4,
+            heightFactor: (size ?? 1.0) * 0.4,
+            widthFactor: (size ?? 1.0) * 0.4,
             child: Image.asset(
               FilePath.LOGO,
               height: MediaQuery.of(context).size.height / 2.5 * 0.3,

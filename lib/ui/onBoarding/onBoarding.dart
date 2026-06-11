@@ -8,7 +8,7 @@ import 'package:vdl/utils/project_colors/project_color.dart';
 import '../../injection.dart';
 
 class OnBoarding extends StatefulWidget {
-  const OnBoarding({Key key}) : super(key: key);
+  const OnBoarding({Key? key}) : super(key: key);
 
   @override
   _OnBoardingState createState() => _OnBoardingState();

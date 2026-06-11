@@ -9,7 +9,7 @@ class HistoricalPrograms extends StatefulWidget {
 }
 
 class _HistoricalProgramsState extends State<HistoricalPrograms> {
-  double width;
+  late double width;
 
   @override
   Widget build(BuildContext context) {

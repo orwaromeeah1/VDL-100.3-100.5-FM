@@ -6,7 +6,7 @@ typedef RetryCallBack = void Function();
 class ErrorScreen extends StatelessWidget {
   final RetryCallBack onRetry;
 
-  ErrorScreen({this.onRetry});
+  ErrorScreen({required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

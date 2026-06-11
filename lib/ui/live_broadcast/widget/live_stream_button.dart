@@ -7,11 +7,12 @@ class LiveStreamButton extends StatelessWidget {
   final String text;
   final OnClickCallBack onClick;
 
-  LiveStreamButton({
-    this.image,
-    this.text,
-    this.onClick,
-});
+  const LiveStreamButton({
+    Key? key,
+    required this.image,
+    required this.text,
+    required this.onClick,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

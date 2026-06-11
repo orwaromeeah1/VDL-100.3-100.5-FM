@@ -1,12 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vdl/core/Manager.dart';
 import 'package:vdl/data/models/news_model.dart';
-import 'package:vdl/data/repository/repository.dart';
 
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
 import 'package:vdl/utils/category_color_helper/category_color_helper.dart';
@@ -16,21 +13,21 @@ class NewsCardWidget extends StatelessWidget {
   final NewsModel newsModel;
 
   NewsCardWidget({
-    Key key,
-    @required this.newsModel,
+    Key? key,
+    required this.newsModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final bool hasVideo =
-        ((newsModel.video != null && newsModel.video.contains('youtube')) ||
-            (newsModel.kwikmotion != null && newsModel.kwikmotion != ''));
+        ((newsModel.video?.contains('youtube') ?? false) ||
+            ((newsModel.kwikmotion ?? '') != ''));
     return InkWell(
-      onTap: () => pushNewScreen(
+      onTap: () => PersistentNavBarNavigator.pushNewScreen(
         context,
         screen: NewsPageDetails(
           isSpecial: false,
-          newsId: this.newsModel.id,
+          newsId: this.newsModel.id ?? 0,
         ),
         withNavBar: true,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -60,9 +57,7 @@ class NewsCardWidget extends StatelessWidget {
                         topLeft: const Radius.circular(14.0),
                       ),
                       image: DecorationImage(
-                          image: this.newsModel.image.large == null
-                              ? AssetImage('assets/images/Lebanon.jpg')
-                              : NetworkImage(this.newsModel.image.large),
+                          image: NetworkImage(this.newsModel.image?.large ?? ''),
                           fit: BoxFit.cover),
                       //  DecorationImage(
                       //     image: AssetImage("assets/images/Lebanon.jpg"),
@@ -79,7 +74,7 @@ class NewsCardWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  this.newsModel.humanDate,
+                                  this.newsModel.humanDate ?? '',
                                   style: TextStyle(
                                       fontSize: 11,
                                       color: black.withOpacity(0.41)),
@@ -89,7 +84,7 @@ class NewsCardWidget extends StatelessWidget {
                                 ),
                                 Text(
                                   Manager.removeAllHtmlTags(
-                                      this.newsModel.title),
+                                      this.newsModel.title ?? ''),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14),
@@ -115,8 +110,7 @@ class NewsCardWidget extends StatelessWidget {
                                                 size: 27,
                                                 color: ProjectColors.ThemeColor,
                                               )
-                                            : (newsModel.audio != null &&
-                                                    newsModel.audio != "")
+                                            : ((newsModel.audio ?? '') != "")
                                                 ? Icon(
                                                     CupertinoIcons
                                                         .speaker_2_fill,
@@ -134,9 +128,7 @@ class NewsCardWidget extends StatelessWidget {
                   )
                 ],
               ),
-              this.newsModel.categories == null
-                  ? Container()
-                  : this.newsModel.categories.isEmpty
+              (this.newsModel.categories?.isEmpty ?? true)
                       ? Container()
                       : Positioned(
                           top: 215,
@@ -150,9 +142,9 @@ class NewsCardWidget extends StatelessWidget {
                                 child: AutoSizeText(
                                   this
                                       .newsModel
-                                      .categories[
-                                          this.newsModel.categories.keys.first]
-                                      .name,
+                                      .categories![
+                                          this.newsModel.categories!.keys.first]
+                                      ?.name ?? '',
                                   textAlign: TextAlign.center,
                                   maxLines: 1,
                                   presetFontSizes: [11, 8],
@@ -164,7 +156,7 @@ class NewsCardWidget extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                                 color: colorHelper(
-                                    int.parse(newsModel.categories.keys.first)),
+                                    int.parse(newsModel.categories!.keys.first)),
                                 borderRadius: BorderRadius.circular(13)),
                           ),
                         )

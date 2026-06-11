@@ -1,25 +1,25 @@
 class ProgramDetailsResponse {
-  int id;
-  int date;
-  int dateGmt;
-  int modified;
-  int modifiedGmt;
-  String slug;
-  String status;
-  String link;
-  String title;
-  String content;
-  String excerpt;
-  int author;
-  int menuOrder;
-  String format;
-  String programInfoDescription;
-  List<TimeProgramm> timeProgramm;
-  String programTextTime;
-  Image image;
-  String humanDate;
-  String sinceDate;
-  List<Episodes> episodes;
+  int? id;
+  int? date;
+  int? dateGmt;
+  int? modified;
+  int? modifiedGmt;
+  String? slug;
+  String? status;
+  String? link;
+  String? title;
+  String? content;
+  String? excerpt;
+  int? author;
+  int? menuOrder;
+  String? format;
+  String? programInfoDescription;
+  List<TimeProgramm>? timeProgramm;
+  String? programTextTime;
+  Image? image;
+  String? humanDate;
+  String? sinceDate;
+  List<Episodes>? episodes;
 
   ProgramDetailsResponse(
       {this.id,
@@ -63,9 +63,9 @@ class ProgramDetailsResponse {
     if (json['time_programm'] != null) {
       if (json['time_programm'] == false) {
       } else {
-        timeProgramm = new List<TimeProgramm>();
+        timeProgramm = <TimeProgramm>[];
         json['time_programm'].forEach((v) {
-          timeProgramm.add(new TimeProgramm.fromJson(v));
+          timeProgramm!.add(TimeProgramm.fromJson(v));
         });
       }
     }
@@ -74,9 +74,9 @@ class ProgramDetailsResponse {
     humanDate = json['human_date'];
     sinceDate = json['since_date'];
     if (json['episodes'] != null) {
-      episodes = new List<Episodes>();
+      episodes = <Episodes>[];
       json['episodes'].forEach((v) {
-        episodes.add(new Episodes.fromJson(v));
+        episodes!.add(Episodes.fromJson(v));
       });
     }
   }
@@ -98,26 +98,20 @@ class ProgramDetailsResponse {
     data['menu_order'] = this.menuOrder;
     data['format'] = this.format;
     data['program_info_description'] = this.programInfoDescription;
-    if (this.timeProgramm != null) {
-      data['time_programm'] = this.timeProgramm.map((v) => v.toJson()).toList();
-    }
-    data['program_text_time'] = this.programTextTime;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
-    data['human_date'] = this.humanDate;
+    data['time_programm'] = this.timeProgramm?.map((v) => v.toJson()).toList();
+      data['program_text_time'] = this.programTextTime;
+    data['image'] = this.image?.toJson();
+      data['human_date'] = this.humanDate;
     data['since_date'] = this.sinceDate;
-    if (this.episodes != null) {
-      data['episodes'] = this.episodes.map((v) => v.toJson()).toList();
-    }
-    return data;
+    data['episodes'] = this.episodes?.map((v) => v.toJson()).toList();
+      return data;
   }
 }
 
 class TimeProgramm {
-  String timeFrom;
-  String timeTo;
-  String daysOfTheWeek;
+  String? timeFrom;
+  String? timeTo;
+  String? daysOfTheWeek;
 
   TimeProgramm({this.timeFrom, this.timeTo, this.daysOfTheWeek});
 
@@ -137,10 +131,10 @@ class TimeProgramm {
 }
 
 class Image {
-  String original;
-  String large;
-  String medium;
-  String thumbnail;
+  String? original;
+  String? large;
+  String? medium;
+  String? thumbnail;
 
   Image({this.original, this.large, this.medium, this.thumbnail});
 
@@ -162,27 +156,27 @@ class Image {
 }
 
 class Episodes {
-  int id;
-  String link;
-  int author;
-  int date;
-  int dateGmt;
-  String content;
-  String title;
-  String excerpt;
-  String status;
-  String name;
-  int modified;
-  int modifiedGmt;
-  String humanDate;
-  String sinceDate;
-  Image image;
-  String time;
-  String audio;
-  bool containAudio;
-  String video;
-  bool containVideo;
-  String youtubeKey;
+  int? id;
+  String? link;
+  int? author;
+  int? date;
+  int? dateGmt;
+  String? content;
+  String? title;
+  String? excerpt;
+  String? status;
+  String? name;
+  int? modified;
+  int? modifiedGmt;
+  String? humanDate;
+  String? sinceDate;
+  Image? image;
+  String? time;
+  String? audio;
+  bool? containAudio;
+  String? video;
+  bool? containVideo;
+  String? youtubeKey;
 
   Episodes(
       {this.id,
@@ -247,10 +241,8 @@ class Episodes {
     data['modified_gmt'] = this.modifiedGmt;
     data['human_date'] = this.humanDate;
     data['since_date'] = this.sinceDate;
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
-    }
-    data['time'] = this.time;
+    data['image'] = this.image?.toJson();
+      data['time'] = this.time;
     data['audio'] = this.audio;
     data['contain_audio'] = this.containAudio;
     data['video'] = this.video;

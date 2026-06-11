@@ -1,10 +1,10 @@
 class AuthRequest {
-  String grantType;
-  String clientId;
-  String clientSecret;
+  String? grantType;
+  String? clientId;
+  String? clientSecret;
 
   AuthRequest({
-    this.grantType:'client_credentials'
+    this.grantType ='client_credentials'
     , this.clientId
     , this.clientSecret
   });

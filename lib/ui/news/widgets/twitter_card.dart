@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdl/data/models/tweets_model.dart';
@@ -8,18 +7,20 @@ import 'package:timeago/timeago.dart' as timeago;
 class twitterCard extends StatelessWidget {
   final Tweet tweet;
   const twitterCard({
-    Key key,
-    @required this.tweet,
+    Key? key,
+    required this.tweet,
   }) : super(key: key);
 
-  void _launchURL(String _url) async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     timeago.setLocaleMessages('ar', timeago.ArMessages());
-    // print(timeago.format(tweet.createdAt));
     return InkWell(
       onTap: () {
         _launchURL("https://twitter.com/sawtlebnan?lang=en");
@@ -43,7 +44,7 @@ class twitterCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  timeago.format(tweet.createdAt, locale: 'ar') ?? "",
+                  timeago.format(tweet.createdAt ?? DateTime.now(), locale: 'ar'),
                   style:
                       TextStyle(fontSize: 11, color: black.withOpacity(0.41)),
                 ),
@@ -51,7 +52,7 @@ class twitterCard extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  tweet.text,
+                  tweet.text ?? '',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,

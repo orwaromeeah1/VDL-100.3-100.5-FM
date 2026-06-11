@@ -23,7 +23,7 @@ class AppKeys{
       );
     }
 
-    return null;
+    throw UnsupportedError('Unsupported platform');
 
   }
 

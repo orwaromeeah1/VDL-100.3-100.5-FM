@@ -9,11 +9,9 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/news/bloc/news_bloc.dart';
 import 'package:vdl/utils/project_colors/project_color.dart';
-/////import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:math' as math;
 
 class LiveStreamWidget extends StatefulWidget {
-  const LiveStreamWidget({Key key}) : super(key: key);
+  const LiveStreamWidget({Key? key}) : super(key: key);
 
   @override
   _LiveStreamWidgetState createState() => _LiveStreamWidgetState();
@@ -24,7 +22,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
 
   final GlobalKey webViewKey = GlobalKey();
 
-  InAppWebViewController webViewController;
+  late InAppWebViewController webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
         useShouldOverrideUrlLoading: true,
@@ -166,7 +164,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                                           // contextMenu: contextMenu,
                                                           initialUrlRequest:
                                                               URLRequest(
-                                                                  url: Uri.parse(
+                                                                  url: WebUri(
                                                                       "http://player.l1vetv.com/vdltv")),
                                                           // initialFile: "assets/index.html",
                                                           initialUserScripts:
@@ -218,14 +216,8 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                                               "javascript",
                                                               "about"
                                                             ].contains(
-                                                                uri.scheme)) {
-                                                              if (false) {
-                                                                // Launch the App
-
-                                                                // and cancel the request
-                                                                return NavigationActionPolicy
-                                                                    .CANCEL;
-                                                              }
+                                                                uri?.scheme)) {
+                                                              // URL scheme handled — allow navigation
                                                             }
 
                                                             return NavigationActionPolicy

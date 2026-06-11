@@ -6,8 +6,8 @@ class CategoryWidget extends StatelessWidget {
   final bool isSelected;
 
   CategoryWidget({
-    this.name,
-    this.isSelected,
+    required this.name,
+    required this.isSelected,
 });
 
   @override

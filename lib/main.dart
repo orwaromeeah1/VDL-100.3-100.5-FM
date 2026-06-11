@@ -1,23 +1,15 @@
 import 'dart:io';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:vdl/firebase_options.dart';
 import 'package:vdl/injection.dart';
 import 'package:vdl/ui/NewsDetails/page/news_detials_page_s.dart';
-import 'package:vdl/ui/live_broadcast/page/live_audio/live_audio_page.dart';
-import 'package:vdl/ui/news/bloc/news_bloc.dart';
-import 'package:vdl/ui/news/bloc/news_event.dart';
 import 'package:vdl/ui/notifications/page/notifications_page.dart';
 import 'package:vdl/ui/onBoarding/onBoarding.dart';
-import 'package:audioplayers/audioplayers.dart';
-
-import 'injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,11 +17,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   MobileAds.instance.initialize();
-  ////
-  ///
-  ///
-  ///
-  ///
+
   if (Platform.isIOS) {
     await JustAudioBackground.init(
       androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
@@ -37,43 +25,41 @@ void main() async {
       androidNotificationOngoing: true,
     );
   }
-  await setLocator(/*futureInit*/);
+  await setLocator();
 
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
-    initPlatformState(context);
+    initPlatformState();
     super.initState();
   }
-
-  final GlobalKey<NavigatorState> navigatorKey =
-      new GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      locale: Locale('ar'),
-      builder: (BuildContext context, Widget child) {
+      locale: const Locale('ar'),
+      builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaleFactor: 1.0,
-          ), //set desired text scale factor here
-          child: child,
+            textScaler: TextScaler.noScaling,
+          ),
+          child: child!,
         );
       },
       title: 'VDL',
       theme: ThemeData(
-        pageTransitionsTheme: PageTransitionsTheme(builders: {
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
@@ -82,47 +68,42 @@ class _MyAppState extends State<MyApp> {
         secondaryHeaderColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Platform.isAndroid
-          ? Directionality(
-              textDirection: TextDirection.rtl, child: OnBoarding())
-          : AudioServiceWidget(
-              child: Directionality(
-                  textDirection: TextDirection.rtl, child: OnBoarding())),
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: OnBoarding(),
+      ),
     );
   }
 
-  Future<void> initPlatformState(BuildContext context) async {
-    //Remove this method to stop OneSignal Debugging
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    OneSignal.shared.setAppId('56917385-48bf-4670-bf10-2df27fc640c1');
+  Future<void> initPlatformState() async {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    await OneSignal.initialize('56917385-48bf-4670-bf10-2df27fc640c1');
 
-    OneSignal.shared.setNotificationOpenedHandler((notification) async {
+    OneSignal.Notifications.addClickListener((event) async {
       try {
-        final source = await notification.notification.additionalData;
+        final source = event.notification.additionalData;
         await Future.delayed(const Duration(seconds: 2));
-        navigatorKey.currentState.push(
+        navigatorKey.currentState?.push(
           MaterialPageRoute(
             builder: (context) => Directionality(
               textDirection: TextDirection.rtl,
               child: NewsPageDetails(
-                  newsId: int.parse(source['post_id']), isSpecial: false),
+                  newsId: int.parse(source!['post_id']), isSpecial: false),
             ),
           ),
         );
       } catch (e) {
-        navigatorKey.currentState.push(
+        navigatorKey.currentState?.push(
           MaterialPageRoute(
-            builder: (context) => Directionality(
+            builder: (context) => const Directionality(
                 textDirection: TextDirection.rtl, child: NotificationPage()),
           ),
         );
       }
     });
 
-    // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    OneSignal.Notifications.requestPermission(false).then((accepted) {
       print("Accepted permission: $accepted");
     });
-// OneSignal.shared.pauseInAppMessages(!isNotificationOn);
   }
 }

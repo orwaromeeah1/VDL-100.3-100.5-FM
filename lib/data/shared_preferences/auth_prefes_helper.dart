@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPrefsHelper {
@@ -65,9 +64,9 @@ class AuthPrefsHelper {
     await prefs.setBool('notification', isOn);
   }
 
-  Future<bool> getNotification() async {
+  Future<bool?> getNotification() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool res = prefs.getBool('notification');
-    return res != null ? res : true;
+    bool? res = prefs.getBool('notification');
+    return res;
   }
 }

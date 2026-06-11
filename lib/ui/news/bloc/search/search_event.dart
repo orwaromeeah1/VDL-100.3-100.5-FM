@@ -7,9 +7,9 @@ abstract class SearchEvent extends Equatable {
 class FetchSearchResult extends SearchEvent {
   final String searchQuery;
 
-   FetchSearchResult({
-    this.searchQuery
-});
+  FetchSearchResult({
+    required this.searchQuery,
+  });
 
   @override
   List<Object> get props => [];

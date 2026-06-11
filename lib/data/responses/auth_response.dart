@@ -1,8 +1,8 @@
 class AuthResponse {
-  String accessToken;
-  int expiresIn;
-  String tokenType;
-  String scope;
+  String? accessToken;
+  int? expiresIn;
+  String? tokenType;
+  String? scope;
 
   AuthResponse({this.accessToken, this.expiresIn, this.tokenType, this.scope});
 

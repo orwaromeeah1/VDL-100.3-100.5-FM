@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vdl/data/responses/news_cast_response.dart';
@@ -16,10 +15,10 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
   final AudioPlayer introductionAudioPlayer;
 
   DaysNewsBroadcastsWidget({
-    this.broadcasts,
-    this.date,
-    this.newsCast,
-    this.introductionAudioPlayer,
+    required this.broadcasts,
+    required this.date,
+    required this.newsCast,
+    required this.introductionAudioPlayer,
   });
 
   @override
@@ -121,65 +120,25 @@ class DaysNewsBroadcastsWidget extends StatelessWidget {
   bool hasVideo(int index) {
     switch (index) {
       case 0:
-        {
-          if (newsCast.videoKwikMotionKeyBlock715 != '' ||
-              newsCast.videoYoutubeKeyBlock715 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock715 != '' ||
+            newsCast.videoYoutubeKeyBlock715 != '';
       case 1:
-        {
-          if (newsCast.videoKwikMotionKeyBlock815 != '' ||
-              newsCast.videoYoutubeKeyBlock815 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock815 != '' ||
+            newsCast.videoYoutubeKeyBlock815 != '';
       case 2:
-        {
-          if (newsCast.videoKwikMotionKeyBlock1015 != '' ||
-              newsCast.videoYoutubeKeyBlock1015 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock1015 != '' ||
+            newsCast.videoYoutubeKeyBlock1015 != '';
       case 3:
-        {
-          if (newsCast.videoKwikMotionKeyBlock1415 != '' ||
-              newsCast.videoYoutubeKeyBlock1415 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock1415 != '' ||
+            newsCast.videoYoutubeKeyBlock1415 != '';
       case 4:
-        {
-          if (newsCast.videoKwikMotionKeyBlock1715 != '' ||
-              newsCast.videoYoutubeKeyBlock1715 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock1715 != '' ||
+            newsCast.videoYoutubeKeyBlock1715 != '';
       case 5:
-        {
-          if (newsCast.videoKwikMotionKeyBlock1915 != '' ||
-              newsCast.videoYoutubeKeyBlock1915 != '') {
-            return true;
-          } else {
-            return false;
-          }
-          break;
-        }
+        return newsCast.videoKwikMotionKeyBlock1915 != '' ||
+            newsCast.videoYoutubeKeyBlock1915 != '';
+      default:
+        return false;
     }
   }
 

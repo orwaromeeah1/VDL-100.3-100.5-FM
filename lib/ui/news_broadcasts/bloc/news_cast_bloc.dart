@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:vdl/data/repository/repository.dart';
@@ -11,31 +10,18 @@ import 'news_cast_state.dart';
 class NewsCastBloc extends Bloc<NewsCastEvent, NewsCastState> {
   final Repository repository;
 
-  @override
-  NewsCastBloc(NewsCastState initialState, this.repository) : super(initialState);
-
-  @override
-  NewsCastState get initialState => NewsCastEmpty();
-
-  @override
-  Future<void> close() {
-    //cancel streams
-    super.close();
+  NewsCastBloc(this.repository) : super(NewsCastEmpty()) {
+    on<FetchNewsCast>(_onFetchNewsCast);
   }
 
-  @override
-  Stream<NewsCastState> mapEventToState(NewsCastEvent event) async* {
-
-    if (event is FetchNewsCast) {
-      yield NewsCastLoading();
-      try {
-        final List<NewsCastResponse> newsCasts = await repository.getNewsCasts();
-        yield NewsCastLoaded(newsCasts: newsCasts);
-      } catch (_) {
-        yield NewsCastError();
-      }
+  Future<void> _onFetchNewsCast(
+      FetchNewsCast event, Emitter<NewsCastState> emit) async {
+    emit(NewsCastLoading());
+    try {
+      final List<NewsCastResponse> newsCasts = await repository.getNewsCasts();
+      emit(NewsCastLoaded(newsCasts: newsCasts));
+    } catch (_) {
+      emit(NewsCastError());
     }
-
   }
-
 }

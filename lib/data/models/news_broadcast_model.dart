@@ -2,12 +2,12 @@
 
 class NewsBroadcast{
 
-  String time;
+  String? time;
   bool isSelected;
 
   NewsBroadcast({
     this.time,
-    this.isSelected : false,
+    this.isSelected = false,
 });
 
 }

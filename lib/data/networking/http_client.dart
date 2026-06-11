@@ -5,22 +5,15 @@ import 'package:vdl/core/Exceptions.dart';
 import 'dart:convert' as convert;
 
 class HttpClient {
-  Future get(String url, {String token}) async {
+  Future get(String url, {String? token}) async {
     try {
       log('GET :' + url);
       var response;
-      token != null
-          ? response = await http.get(
+      response = await http.get(
               Uri.parse(url),
               headers: {
                 "Accept": "application/json",
                 "Authorization": "Bearer $token",
-              },
-            )
-          : response = await http.get(
-              Uri.parse(url),
-              headers: {
-                "Accept": "application/json",
               },
             );
 
@@ -40,24 +33,19 @@ class HttpClient {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
-  Future<Map<String, dynamic>> post(String url, Map<String, dynamic> payLoad,
-      {String token}) async {
+  Future<Map<String, dynamic>?> post(String url, Map<String, dynamic> payLoad,
+      {String? token}) async {
     try {
       log('POST :' + url);
       log('body :' + payLoad.toString());
       var response;
-      token != null
-          ? response = await http.post(Uri.parse(url),
+      response = await http.post(Uri.parse(url),
               headers: {
                 "Accept": "application/json",
                 "Authorization": "Bearer $token",
-              },
-              body: convert.jsonEncode(payLoad))
-          : response = await http.post(Uri.parse(url),
-              headers: {
-                "Accept": "application/json",
               },
               body: convert.jsonEncode(payLoad));
 
@@ -76,13 +64,14 @@ class HttpClient {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   ////
   ///
   ///
   /// Get menus
-  Future<String> getMethods(String url, String token) async {
+  Future<String?> getMethods(String url, String token) async {
     try {
       log('GET :' + url);
       var response = await http.get(
@@ -105,10 +94,11 @@ class HttpClient {
           }
       }
     } on TimeoutException catch (_) {}
+    return null;
   }
 
   /// Get menus
-  Future<String> getTweetsMethod(String url, String token) async {
+  Future<String?> getTweetsMethod(String url, String token) async {
     try {
       log('GET :' + url);
       var response = await http.get(
@@ -136,5 +126,6 @@ class HttpClient {
       print(e);
       throw BadRequestError("");
     }
+    return null;
   }
 }

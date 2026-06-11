@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:vdl/data/models/aduio_response_model.dart';
-import 'package:vdl/data/models/news_model.dart';
 
 class NewsCastDetailsState extends Equatable {
   @override
@@ -14,7 +13,7 @@ class AudiosLoaded extends NewsCastDetailsState {
   final AudioResponseModel introAudio;
   final AudioResponseModel fullAudio;
 
-  AudiosLoaded({this.introAudio,this.fullAudio});
+  AudiosLoaded({required this.introAudio, required this.fullAudio});
 }
 
 class AudiosError extends NewsCastDetailsState {}

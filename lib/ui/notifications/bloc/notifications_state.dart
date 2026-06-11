@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:vdl/data/models/notification_model.dart';
 
 import '../../../data/models/news_model.dart';
 

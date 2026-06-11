@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vdl/data/models/day_model.dart';
 import 'package:vdl/data/models/programs_schedule.dart';
-import 'package:vdl/ui/programs/page/program_details/program_details_page.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_event.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programs_schedule_state.dart';
 import 'package:vdl/ui/programs_schedule/bloc/programsschedule_bloc.dart';
@@ -23,7 +22,7 @@ class ProgramsSchedulePage extends StatefulWidget {
 }
 
 class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
-  double width;
+  late double width;
   List<DayModel> currentMonthDays = [];
   int selectedDay = DateTime.now().day;
   int totalDays = 0;
@@ -198,12 +197,12 @@ class _ProgramsSchedulePageState extends State<ProgramsSchedulePage> {
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: ProgramScheduleCard(
-                isDisplayingNow: programsSchedule[index].active,
+                isDisplayingNow: programsSchedule[index].active ?? false,
                 isRadio: isSetToRadio,
                 name: '${programsSchedule[index].title}',
                 duration: '${programsSchedule[index].time}',
-                id: programsSchedule[index].id,
-                link: programsSchedule[index].link,
+                id: programsSchedule[index].id ?? 0,
+                link: programsSchedule[index].link ?? '',
                 image: '${programsSchedule[index].image}',
               ),
             );
